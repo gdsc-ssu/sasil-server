@@ -1,0 +1,37 @@
+{
+  "name": "sasil-server",
+  "version": "1.0.0",
+  "repository": "https://github.com/gdsc-ssu/sasil-server.git",
+  "license": "ISC",
+  "scripts": {
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
+    "start": "tsc && cross-env NODE_ENV=production node dist/src/app.js"
+  },
+  "dependencies": {
+    "cross-env": "7.0.3",
+    "dotenv": "16.0.0",
+    "express": "4.17.3",
+    "mysql2": "2.3.3",
+    "sequelize": "6.17.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "16.2.1",
+    "@commitlint/config-conventional": "16.2.1",
+    "@types/express": "4.17.13",
+    "@types/node": "17.0.21",
+    "@typescript-eslint/eslint-plugin": "5.13.0",
+    "@typescript-eslint/parser": "5.13.0",
+    "eslint": "8.10.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.4.0",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-prettier": "4.0.0",
+    "husky": "7.0.4",
+    "nodemon": "2.0.15",
+    "prettier": "2.5.1",
+    "sequelize-cli": "6.4.1",
+    "ts-node": "10.5.0",
+    "tsconfig-paths": "3.12.0",
+    "typescript": "4.6.2"
+  }
+}
