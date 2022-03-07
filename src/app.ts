@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
-import db from '@/database/models';
+import models from '@/database/models';
 
 dotenv.config();
 
@@ -9,8 +9,8 @@ const prod: boolean = process.env.NODE_ENV === 'production';
 const app = express();
 app.set('port', prod ? process.env.PORT : 3065);
 
-db.sequelize
-  .sync() // { force: true }
+models.sequelize
+  .sync({ force: true }) // { force: true }
   .then(() => {
     console.log('db연결 성공!');
   })
