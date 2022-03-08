@@ -11,9 +11,6 @@ import Notification from './notification';
 import User from './user';
 
 type EnvType = 'production' | 'test' | 'development';
-type DBType = {
-  [key: string]: any; // 추가해야함!
-};
 
 const env = (process.env.NODE_ENV as EnvType) || 'development';
 
@@ -24,7 +21,7 @@ const sequelize = new Sequelize(
   config[env],
 );
 
-const models: DBType = {
+const models = {
   Commission,
   CommCategory,
   CommComment,
@@ -35,11 +32,13 @@ const models: DBType = {
   User,
 };
 
-Object.keys(models).forEach((model) => {
+const modelKeys = Object.keys(models) as Array<keyof typeof models>;
+
+modelKeys.forEach((model) => {
   models[model].initModel(sequelize);
 });
 
-Object.keys(models).forEach((model) => {
+modelKeys.forEach((model) => {
   if (models[model].associate) {
     models[model].associate(models);
   }
