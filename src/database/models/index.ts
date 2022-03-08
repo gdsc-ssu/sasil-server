@@ -2,10 +2,9 @@ import { Sequelize } from 'sequelize';
 
 import config from '@/database/config/config';
 import Commission from './commission';
-import CommCategory from './comm-category';
+import Category from './category';
 import CommComment from './comm-comment';
 import Experiment from './experiment';
-import ExpCategory from './exp-category';
 import ExpComment from './exp-comment';
 import Notification from './notification';
 import User from './user';
@@ -21,12 +20,11 @@ const sequelize = new Sequelize(
   config[env],
 );
 
-const models = {
+const models: any = {
   Commission,
-  CommCategory,
+  Category,
   CommComment,
   Experiment,
-  ExpCategory,
   ExpComment,
   Notification,
   User,

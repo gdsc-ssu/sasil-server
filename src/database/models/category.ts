@@ -1,8 +1,8 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
-class CommCategory extends Model {
+class Category extends Model {
   static initModel(sequelize: Sequelize) {
-    return CommCategory.init(
+    return Category.init(
       {
         category: {
           type: DataTypes.STRING(30),
@@ -11,8 +11,8 @@ class CommCategory extends Model {
         },
       },
       {
-        modelName: 'comm_category',
-        tableName: 'comm_category',
+        modelName: 'category',
+        tableName: 'category',
         charset: 'utf8',
         collate: 'utf8_general_ci',
         sequelize,
@@ -21,10 +21,13 @@ class CommCategory extends Model {
   }
 
   static associate(models: any) {
-    models.CommCategory.belongsToMany(models.Commission, {
-      through: 'comm_category_rel',
+    models.Category.belongsToMany(models.Commission, {
+      through: 'comm_category',
+    });
+    models.Category.belongsToMany(models.Experiment, {
+      through: 'exp_category',
     });
   }
 }
 
-export default CommCategory;
+export default Category;

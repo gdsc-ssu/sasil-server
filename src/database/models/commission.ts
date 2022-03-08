@@ -42,8 +42,8 @@ class Commission extends Model {
       through: 'comm_like',
       as: 'CommLike_User',
     });
-    models.Commission.belongsToMany(models.CommCategory, {
-      through: 'comm_category_rel',
+    models.Commission.belongsToMany(models.Category, {
+      through: 'comm_category',
     });
   }
 }

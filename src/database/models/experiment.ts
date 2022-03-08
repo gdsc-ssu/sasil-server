@@ -42,8 +42,8 @@ class Experiment extends Model {
       through: 'exp_like',
       as: 'ExpLike_User',
     });
-    models.Experiment.belongsToMany(models.ExpCategory, {
-      through: 'exp_category_rel',
+    models.Experiment.belongsToMany(models.Category, {
+      through: 'exp_category',
     });
   }
 }
