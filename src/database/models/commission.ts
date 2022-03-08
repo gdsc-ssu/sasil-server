@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes, Sequelize } from '@sequelize/core';
 
 class Commission extends Model {
   static initModel(sequelize: Sequelize) {

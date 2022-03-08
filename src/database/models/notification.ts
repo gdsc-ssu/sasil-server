@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes, Sequelize } from '@sequelize/core';
 
 class Notification extends Model {
   static initModel(sequelize: Sequelize) {
