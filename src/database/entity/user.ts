@@ -1,13 +1,7 @@
 /* eslint-disable import/no-cycle */
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
+import BasicEntity from './basic-entity';
 import Experiment from './experiment';
 import Commission from './commission';
 import CommComment from './comm-comment';
@@ -15,10 +9,7 @@ import ExpComment from './exp-comment';
 import Notification from './notification';
 
 @Entity()
-class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+class User extends BasicEntity {
   @Column('varchar', { length: 255 })
   email!: string;
 

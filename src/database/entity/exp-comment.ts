@@ -1,13 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import { Entity, ManyToOne, Column } from 'typeorm';
+
+import BasicEntity from './basic-entity';
 import User from './user';
 import Experiment from './experiment';
 
 @Entity()
-class ExpComment {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+class ExpComment extends BasicEntity {
   @Column('text')
   content!: string;
 

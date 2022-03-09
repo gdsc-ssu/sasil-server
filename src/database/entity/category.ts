@@ -1,19 +1,12 @@
 /* eslint-disable import/no-cycle */
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
+
+import BasicEntity from './basic-entity';
 import Commission from './commission';
 import Experiment from './experiment';
 
 @Entity()
-class Category {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+class Category extends BasicEntity {
   @Column('varchar', { length: 30 })
   name!: string;
 

@@ -1,22 +1,14 @@
 /* eslint-disable import/no-cycle */
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+
+import BasicEntity from './basic-entity';
 import User from './user';
 import Experiment from './experiment';
 import CommComment from './comm-comment';
 import Category from './category';
 
 @Entity()
-class Commission {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+class Commission extends BasicEntity {
   @Column('varchar', { length: 255 })
   title!: string;
 

@@ -1,12 +1,11 @@
 /* eslint-disable import/no-cycle */
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
+
+import BasicEntity from './basic-entity';
 import User from './user';
 
 @Entity()
-class Notification {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+class Notification extends BasicEntity {
   @Column({ type: 'enum', enum: ['exp', 'comm', 'comm-exp', 'recomment'] })
   noti_type!: string;
 
