@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import User from './user';
 

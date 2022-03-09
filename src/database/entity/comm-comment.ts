@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import User from './user';
 import Commission from './commission';
