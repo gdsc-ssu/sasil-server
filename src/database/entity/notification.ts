@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -16,9 +16,15 @@ class Notification extends BasicEntity {
   post_type!: string;
 
   @ManyToOne(() => User, (user) => user.senderId)
+  @JoinColumn({
+    name: 'sender_id',
+  })
   senderId!: User;
 
   @ManyToOne(() => User, (user) => user.receiverId)
+  @JoinColumn({
+    name: 'receiver_id',
+  })
   receiverId!: User;
 }
 

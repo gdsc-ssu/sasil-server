@@ -1,5 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToOne, ManyToMany, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -18,18 +25,21 @@ class Experiment extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @ManyToOne(() => User, (user) => user.experiment)
-  @ManyToMany(() => User, (user) => user.experiment)
-  user!: User;
-
-  @ManyToMany(() => Category, (category) => category.expCategory)
-  expCategory!: Category;
-
-  @ManyToOne(() => Commission, (commission) => commission.experiment)
-  commission!: Commission;
-
   @OneToMany(() => ExpComment, (expComment) => expComment.experiment)
   expComment!: ExpComment;
+
+  @ManyToOne(() => Commission, (commission) => commission.experiment)
+  @JoinColumn({
+    name: 'comm_id',
+  })
+  commission!: Commission;
+
+  @ManyToOne(() => User, (user) => user.experiment)
+  @ManyToMany(() => User, (user) => user.experiment) // exp_bookmark, exp_like
+  user!: User;
+
+  @ManyToMany(() => Category, (category) => category.expCategory) // exp_category
+  expCategory!: Category;
 }
 
 export default Experiment;

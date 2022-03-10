@@ -25,24 +25,8 @@ class User extends BasicEntity {
   @OneToMany(() => Experiment, (experiment) => experiment.user)
   experiment!: Experiment;
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.user)
-  @JoinTable({ name: 'expBookmark' })
-  expBookmark!: Experiment;
-
-  @ManyToMany(() => Experiment, (experiment) => experiment.user)
-  @JoinTable({ name: 'expLike' })
-  expLike!: Experiment;
-
   @OneToMany(() => Commission, (commission) => commission.user)
   commission!: Commission;
-
-  @ManyToMany(() => Commission, (commission) => commission.user)
-  @JoinTable({ name: 'commBookmark' })
-  commBookmark!: Commission;
-
-  @ManyToMany(() => Commission, (commission) => commission.user)
-  @JoinTable({ name: 'commLike' })
-  commLike!: Commission;
 
   @OneToMany(() => CommComment, (commComment) => commComment.user)
   commComment!: CommComment;
@@ -55,6 +39,54 @@ class User extends BasicEntity {
 
   @OneToMany(() => Notification, (notification) => notification.receiverId)
   receiverId!: Notification;
+
+  @ManyToMany(() => Experiment, (experiment) => experiment.user)
+  @JoinTable({
+    name: 'exp_bookmark',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'exp_id',
+    },
+  })
+  expBookmark!: Experiment;
+
+  @ManyToMany(() => Experiment, (experiment) => experiment.user)
+  @JoinTable({
+    name: 'exp_like',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'exp_id',
+    },
+  })
+  expLike!: Experiment;
+
+  @ManyToMany(() => Commission, (commission) => commission.user)
+  @JoinTable({
+    name: 'comm_bookmark',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'comm_id',
+    },
+  })
+  commBookmark!: Commission;
+
+  @ManyToMany(() => Commission, (commission) => commission.user)
+  @JoinTable({
+    name: 'comm_like',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'comm_id',
+    },
+  })
+  commLike!: Commission;
 }
 
 export default User;

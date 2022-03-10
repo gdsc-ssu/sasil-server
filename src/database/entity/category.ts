@@ -11,11 +11,27 @@ class Category extends BasicEntity {
   name!: string;
 
   @ManyToMany(() => Commission, (commission) => commission.commCategory)
-  @JoinTable({ name: 'comm_category' })
+  @JoinTable({
+    name: 'comm_category',
+    joinColumn: {
+      name: 'category_id',
+    },
+    inverseJoinColumn: {
+      name: 'comm_id',
+    },
+  })
   commCategory!: string;
 
   @ManyToMany(() => Experiment, (experiment) => experiment.expCategory)
-  @JoinTable({ name: 'exp_category' })
+  @JoinTable({
+    name: 'exp_category',
+    joinColumn: {
+      name: 'category_id',
+    },
+    inverseJoinColumn: {
+      name: 'exp_id',
+    },
+  })
   expCategory!: string;
 }
 

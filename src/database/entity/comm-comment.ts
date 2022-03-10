@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { Entity, ManyToOne, Column } from 'typeorm';
+import { Entity, ManyToOne, Column, JoinColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -11,12 +11,18 @@ class CommComment extends BasicEntity {
   content!: string;
 
   @Column('int', { nullable: true })
-  parentId!: number;
+  parent_id!: number;
 
   @ManyToOne(() => User, (user) => user.commComment)
+  @JoinColumn({
+    name: 'user_id',
+  })
   user!: User;
 
   @ManyToOne(() => Commission, (commission) => commission.commComment)
+  @JoinColumn({
+    name: 'comm_id',
+  })
   commission!: Commission;
 }
 

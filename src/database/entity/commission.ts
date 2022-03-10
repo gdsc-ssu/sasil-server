@@ -21,15 +21,15 @@ class Commission extends BasicEntity {
   @OneToMany(() => Experiment, (experiment) => experiment.commission)
   experiment!: Experiment;
 
-  @ManyToOne(() => User, (user) => user.commission)
-  @ManyToMany(() => User, (user) => user.commission)
-  user!: User;
-
-  @ManyToMany(() => Category, (category) => category.commCategory)
-  commCategory!: Category;
-
   @OneToMany(() => CommComment, (commComment) => commComment.commission)
   commComment!: CommComment;
+
+  @ManyToOne(() => User, (user) => user.commission)
+  @ManyToMany(() => User, (user) => user.commission) // comm_bookmark, comm_like
+  user!: User;
+
+  @ManyToMany(() => Category, (category) => category.commCategory) // comm_category
+  commCategory!: Category;
 }
 
 export default Commission;
