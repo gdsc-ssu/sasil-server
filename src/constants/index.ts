@@ -1,12 +1,18 @@
-// dev
-export const DEV_PORT = '3065';
-export const DEV_DB_HOST = 'localhost';
-export const DEV_DB_PORT = '3306';
-export const DEV_DB_DATABASE = 'sasil-dev';
+export const DEV_SETTING = {
+  port: '3065',
+  db: {
+    host: 'localhost',
+    port: '3306',
+    database: 'sasil-dev',
+  },
+};
 
 // TODO 배포 모드 시 설정 추가
-// prod
-export const PORT = '';
-export const DB_HOST = 'localhost';
-export const DB_PORT = '3306';
-export const DB_DATABASE = 'sasil';
+export const PROD_SETTING = {
+  port: '',
+  db: {
+    host: 'localhost',
+    port: '3306',
+    database: 'sasil',
+  },
+};
