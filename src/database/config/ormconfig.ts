@@ -1,6 +1,15 @@
 import dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
 
+import {
+  DEV_DB_HOST,
+  DEV_DB_PORT,
+  DEV_DB_DATABASE,
+  DB_HOST,
+  DB_PORT,
+  DB_DATABASE,
+} from '@/constants/index';
+
 dotenv.config();
 
 interface ormconfigType {
@@ -11,11 +20,11 @@ interface ormconfigType {
 const ormconfig: ormconfigType = {
   development: {
     type: 'mysql',
-    host: process.env.DEV_DB_HOST,
-    port: Number(process.env.DEV_DB_PORT),
+    host: DEV_DB_HOST,
+    port: Number(DEV_DB_PORT),
     username: process.env.DEV_DB_USERNAME,
     password: process.env.DEV_DB_PASSWORD,
-    database: process.env.DEV_DB_DATABASE,
+    database: DEV_DB_DATABASE,
     synchronize: true,
     logging: false,
     entities: ['src/database/entity/**/*.ts'],
@@ -29,11 +38,11 @@ const ormconfig: ormconfigType = {
   },
   production: {
     type: 'mysql',
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
+    host: DB_HOST,
+    port: Number(DB_PORT),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
+    database: DB_DATABASE,
     synchronize: true,
     logging: false,
     entities: ['src/database/entity/**/*.ts'],
