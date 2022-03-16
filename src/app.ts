@@ -5,6 +5,8 @@ import { createConnection } from 'typeorm';
 
 import ormconfig from '@/database/config/ormconfig';
 
+import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
+
 dotenv.config();
 const isProdMode: boolean = process.env.NODE_ENV === 'production';
 const env = isProdMode ? 'production' : 'development';
@@ -14,7 +16,7 @@ createConnection(ormconfig[env]).then(() => {
 });
 
 const app = express();
-app.set('port', isProdMode ? process.env.PORT : process.env.DEV_PORT);
+app.set('port', isProdMode ? PROD_SETTING.port : DEV_SETTING.port);
 
 app.listen(app.get('port'), () => {
   console.log(`server is running on ${app.get('port')}`);
