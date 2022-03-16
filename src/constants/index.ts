@@ -10,6 +10,7 @@ export const DEV_SETTING = {
 // TODO 배포 모드 시 설정 추가
 export const PROD_SETTING = {
   port: '',
+  url: 'https://sasil.com',
   db: {
     host: 'localhost',
     port: '3306',
