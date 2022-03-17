@@ -10,9 +10,10 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@/database/*": ["./src/database/*"],
-      "@/routes/*": ["./src/routes/*"],
-      "@/constants/*": ["./src/constants/*"]
+      "@/database/*": ["src/database/*"],
+      "@/routes/*": ["src/routes/*"],
+      "@/auth/*": ["src/auth/*"],
+      "@/constants/*": ["src/constants/*"]
     }
   },
   "include": ["src/**/*.ts"],
