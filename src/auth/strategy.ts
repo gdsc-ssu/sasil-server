@@ -23,15 +23,18 @@ export const KakaoStrategy = (isProdMode: boolean) => {
           : DEV_SETTING.redirectURIKakao,
       },
       (accessToken, refreshToken, profile, done) => {
-        const email = profile.emails[0].value;
-        const loginType = 'kakao';
+        if (profile.emails) {
+          const email = profile.emails[0].value;
+          const loginType = 'kakao';
 
-        let userData = getUserDataByEmailAndType(email, loginType);
-        if (!userData) {
-          userData = addUser(email, loginType);
+          // email, loginType으로 유저 찾고, 없으면 생성
+          let userData = getUserDataByEmailAndType(email, loginType);
+          if (!userData) {
+            userData = addUser(email, loginType);
+          }
+
+          done(null, userData);
         }
-
-        done(null, userData);
       },
     ),
   );
@@ -48,15 +51,17 @@ export const GoogleStrategy = (isProdMode: boolean) => {
           : DEV_SETTING.redirectURIGoogle,
       },
       (accessToken, refreshToken, profile, done) => {
-        const email = profile.emails[0].value;
-        const loginType = 'google';
+        if (profile.emails) {
+          const email = profile.emails[0].value;
+          const loginType = 'google';
 
-        let userData = getUserDataByEmailAndType(email, loginType);
-        if (!userData) {
-          userData = addUser(email, loginType);
+          let userData = getUserDataByEmailAndType(email, loginType);
+          if (!userData) {
+            userData = addUser(email, loginType);
+          }
+
+          done(null, userData);
         }
-
-        done(null, userData);
       },
     ),
   );
