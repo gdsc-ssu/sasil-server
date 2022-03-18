@@ -3,7 +3,7 @@ import passport from 'passport';
 
 import { KakaoStrategy, GoogleStrategy, AppleStrategy } from '@/auth/strategy';
 import User from '@/database/entity/user';
-import { getUser } from '@/database/controllers/user';
+import { getUserDataById } from '@/database/controllers/user';
 
 const configurePassport = (app: Application, isProdMode: boolean) => {
   app.use(passport.initialize());
@@ -15,9 +15,9 @@ const configurePassport = (app: Application, isProdMode: boolean) => {
 
   passport.deserializeUser(async (id: number, done) => {
     try {
-      const userInfo = await getUser(id);
-      if (userInfo) {
-        done(null, userInfo);
+      const userData = await getUserDataById(id);
+      if (userData) {
+        done(null, userData);
       } else {
         throw new Error('User does not exist');
       }
