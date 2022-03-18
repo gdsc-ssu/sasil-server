@@ -4,7 +4,7 @@
   "repository": "https://github.com/gdsc-ssu/sasil-server.git",
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
     "start": "tsc && cross-env NODE_ENV=production node dist/src/app.js"
   },
   "dependencies": {
