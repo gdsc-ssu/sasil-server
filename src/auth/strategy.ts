@@ -5,10 +5,7 @@ import AppleLoginStrategy from 'passport-apple';
 import dotenv from 'dotenv';
 
 import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
-import {
-  getUserDataByEmailAndType,
-  addUser,
-} from '@/database/controllers/user';
+import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
 dotenv.config();
 
@@ -28,7 +25,7 @@ export const KakaoStrategy = (isProdMode: boolean) => {
           const loginType = 'kakao';
 
           // email, loginType으로 유저 찾고, 없으면 생성
-          let userData = getUserDataByEmailAndType(email, loginType);
+          let userData = getUserByLoginInfo(email, loginType);
           if (!userData) {
             userData = addUser(email, loginType);
           }
@@ -55,7 +52,7 @@ export const GoogleStrategy = (isProdMode: boolean) => {
           const email = profile.emails[0].value;
           const loginType = 'google';
 
-          let userData = getUserDataByEmailAndType(email, loginType);
+          let userData = getUserByLoginInfo(email, loginType);
           if (!userData) {
             userData = addUser(email, loginType);
           }

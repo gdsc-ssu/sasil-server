@@ -4,7 +4,7 @@ import UserEntity from '@/database/entity/user';
 
 type LoginTypes = 'kakao' | 'google' | 'apple';
 
-export const getUserDataById = async (id: number) => {
+export const getUserById = async (id: number) => {
   const userData = await getRepository(UserEntity)
     .createQueryBuilder('user')
     .where('user.id = :id', { id })
@@ -13,7 +13,7 @@ export const getUserDataById = async (id: number) => {
   return userData;
 };
 
-export const getUserDataByEmailAndType = async (
+export const getUserByLoginInfo = async (
   email: string,
   loginType: LoginTypes,
 ) => {
