@@ -8,13 +8,15 @@ import CommComment from './comm-comment';
 import ExpComment from './exp-comment';
 import Notification from './notification';
 
+export type LoginTypes = 'apple' | 'google' | 'kakao';
+
 @Entity()
 class User extends BasicEntity {
   @Column('varchar', { length: 255 })
   email!: string;
 
   @Column({ type: 'enum', enum: ['kakao', 'google', 'apple'] })
-  login_type!: string;
+  login_type!: LoginTypes;
 
   @Column('varchar', { length: 30 })
   nickname!: string;

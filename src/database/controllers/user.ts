@@ -1,8 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import UserEntity from '@/database/entity/user';
-
-type LoginTypes = 'kakao' | 'google' | 'apple';
+import UserEntity, { LoginTypes } from '@/database/entity/user';
 
 export const getUserById = async (id: number) => {
   const userData = await getRepository(UserEntity)
