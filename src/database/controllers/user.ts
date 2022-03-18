@@ -2,9 +2,8 @@ import { getRepository } from 'typeorm';
 
 import UserEntity from '@/database/entity/user';
 
-const userRepository = getRepository(UserEntity);
-
 export const getUser = async (id: number) => {
+  const userRepository = getRepository(UserEntity);
   const userInfo = await userRepository.findOne({ where: { id } });
   return userInfo;
 };
