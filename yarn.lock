@@ -378,7 +378,7 @@
     "@types/passport" "*"
     "@types/passport-oauth2" "*"
 
-"@types/passport-google-oauth@^1.0.42":
+"@types/passport-google-oauth@1.0.42":
   version "1.0.42"
   resolved "https://registry.yarnpkg.com/@types/passport-google-oauth/-/passport-google-oauth-1.0.42.tgz#27aa2df9e838e69e702cfc759f860cdb8d2c59d7"
   integrity sha512-0M9Wezbbkgn4VZtHdtEbQru5Kl3qeb2CHoKYvAD2svJDAg8nK1bLG4uBQPudOUuux56igXkFfNGR3gBlsSlTCg==
@@ -2809,7 +2809,7 @@ passport-google-oauth20@2.x.x:
   dependencies:
     passport-oauth2 "1.x.x"
 
-passport-google-oauth@^2.0.0:
+passport-google-oauth@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/passport-google-oauth/-/passport-google-oauth-2.0.0.tgz#f6eb4bc96dd6c16ec0ecfdf4e05ec48ca54d4dae"
   integrity sha512-JKxZpBx6wBQXX1/a1s7VmdBgwOugohH+IxCy84aPTZNq/iIPX6u7Mqov1zY7MKRz3niFPol0KJz8zPLBoHKtYA==
