@@ -23,6 +23,10 @@ createConnection(ormconfig[env]).then(() => {
 const app = express();
 app.set('port', isProdMode ? PROD_SETTING.port : DEV_SETTING.port);
 
+// parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // CORS
 app.use(
   cors({
