@@ -10,7 +10,7 @@ export const DEV_SETTING = {
     port: '3306',
     database: 'sasil-dev',
   },
-};
+} as const;
 
 // TODO 배포 모드 시 설정 추가
 export const PROD_SETTING = {
@@ -26,4 +26,4 @@ export const PROD_SETTING = {
     port: '3306',
     database: 'sasil',
   },
-};
+} as const;
