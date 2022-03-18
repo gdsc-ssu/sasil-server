@@ -16,8 +16,8 @@ export const KakaoStrategy = (isProdMode: boolean) => {
         clientID: process.env.KAKAO_CLIENT_ID!,
         clientSecret: process.env.KAKAO_CLIENT_SECRET!,
         callbackURL: isProdMode
-          ? PROD_SETTING.redirectURIKakao
-          : DEV_SETTING.redirectURIKakao,
+          ? PROD_SETTING.redirectURI.kakao
+          : DEV_SETTING.redirectURI.kakao,
       },
       (accessToken, refreshToken, profile, done) => {
         if (profile.emails) {
@@ -44,8 +44,8 @@ export const GoogleStrategy = (isProdMode: boolean) => {
         clientID: process.env.GOOGLE_CLIENT_ID!,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         callbackURL: isProdMode
-          ? PROD_SETTING.redirectURIGoogle
-          : DEV_SETTING.redirectURIGoogle,
+          ? PROD_SETTING.redirectURI.google
+          : DEV_SETTING.redirectURI.google,
       },
       (accessToken, refreshToken, profile, done) => {
         if (profile.emails) {
@@ -73,8 +73,8 @@ export const AppleStrategy = (isProdMode: boolean) => {
         teamID: process.env.APPLE_TEAM_ID!,
         keyID: process.env.APPLE_KEY_ID!,
         callbackURL: isProdMode
-          ? PROD_SETTING.redirectURIApple
-          : DEV_SETTING.redirectURIApple,
+          ? PROD_SETTING.redirectURI.apple
+          : DEV_SETTING.redirectURI.apple,
         privateKeyLocation: '', // or privateKeyString
       },
       (req, accessToken, refreshToken, decodedIdToken, profile) => {
