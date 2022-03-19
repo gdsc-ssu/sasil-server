@@ -17,33 +17,24 @@ router.get('/apple', passport.authenticate('apple'));
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: '/login',
-    // successRedirect: '/', // TODO: 이거?
+    failureRedirect: 'http://localhost:3000/login',
+    successRedirect: 'http://localhost:3000',
   }),
-  (req, res) => {
-    console.log(req);
-    res.status(200).json(req.user);
-    // res.redirect('/'); // TODO: 이거?
-  },
 );
 
 router.get(
   '/kakao/callback',
   passport.authenticate('kakao', {
-    successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: 'http://localhost:3000/login',
+    successRedirect: 'http://localhost:3000',
   }),
-  (req, res) => {
-    console.log(req.user);
-    res.redirect('http://localhost:3000');
-  },
 );
 
 router.get(
   '/apple/callback',
   passport.authenticate('apple', {
-    successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: 'http://localhost:3000/login',
+    successRedirect: 'http://localhost:3000',
   }),
 );
 
