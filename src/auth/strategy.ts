@@ -47,17 +47,15 @@ export const GoogleStrategy = (isProdMode: boolean) => {
           : DEV_SETTING.redirectURI.google,
       },
       async (accessToken, refreshToken, profile, done) => {
-        if (profile.emails) {
-          const email = profile.emails[0].value;
-          const loginType = 'google';
+        const { email } = profile._json;
+        const loginType = 'google';
 
-          let userData = await getUserByLoginInfo(email, loginType);
-          if (!userData) {
-            userData = await addUser(email, loginType);
-          }
-
-          done(null, userData);
+        let userData = await getUserByLoginInfo(email, loginType);
+        if (!userData) {
+          userData = await addUser(email, loginType);
         }
+
+        done(null, userData);
       },
     ),
   );
