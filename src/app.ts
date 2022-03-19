@@ -6,9 +6,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 
+import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 import ormconfig from '@/database/config/ormconfig';
 import configurePassport from '@/auth/index';
-import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
+import authRouter from '@/routes/auth';
+import userRouter from '@/routes/user';
 
 dotenv.config();
 const isProdMode: boolean = process.env.NODE_ENV === 'production';
@@ -53,6 +55,10 @@ app.use(
 
 // passport
 configurePassport(app, isProdMode);
+
+// routers
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
 
 app.listen(app.get('port'), () => {
   console.log(`server is running on ${app.get('port')}`);
