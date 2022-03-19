@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import passport from 'passport';
 import { OAuth2Strategy as GoogleLoginStrategy } from 'passport-google-oauth';
 import { Strategy as KakaoLoginStrategy } from 'passport-kakao';
@@ -20,18 +21,16 @@ export const KakaoStrategy = (isProdMode: boolean) => {
           : DEV_SETTING.redirectURI.kakao,
       },
       (accessToken, refreshToken, profile, done) => {
-        if (profile.emails) {
-          const email = profile.emails[0].value;
-          const loginType = 'kakao';
+        const { email } = profile._json.kakao_account;
+        const loginType = 'kakao';
 
-          // email, loginType으로 유저 찾고, 없으면 생성
-          let userData = getUserByLoginInfo(email, loginType);
-          if (!userData) {
-            userData = addUser(email, loginType);
-          }
-
-          done(null, userData);
+        // email, loginType으로 유저 찾고, 없으면 생성
+        let userData = getUserByLoginInfo(email, loginType);
+        if (!userData) {
+          userData = addUser(email, loginType);
         }
+
+        done(null, userData);
       },
     ),
   );

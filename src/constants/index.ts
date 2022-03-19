@@ -1,9 +1,9 @@
 export const DEV_SETTING = {
   port: '3065',
   redirectURI: {
-    google: 'http://localhost:3000/auth/google/callback',
-    kakao: 'http://localhost:3000/auth/kakao/callback',
-    apple: 'http://localhost:3000/auth/apple/callback',
+    google: 'http://localhost:3065/auth/google/callback',
+    kakao: 'http://localhost:3065/auth/kakao/callback',
+    apple: 'http://localhost:3065/auth/apple/callback',
   },
   db: {
     host: '127.0.0.1',
