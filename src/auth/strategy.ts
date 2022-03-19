@@ -20,14 +20,14 @@ export const KakaoStrategy = (isProdMode: boolean) => {
           ? PROD_SETTING.redirectURI.kakao
           : DEV_SETTING.redirectURI.kakao,
       },
-      (accessToken, refreshToken, profile, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         const { email } = profile._json.kakao_account;
         const loginType = 'kakao';
 
         // email, loginType으로 유저 찾고, 없으면 생성
-        let userData = getUserByLoginInfo(email, loginType);
+        let userData = await getUserByLoginInfo(email, loginType);
         if (!userData) {
-          userData = addUser(email, loginType);
+          userData = await addUser(email, loginType);
         }
 
         done(null, userData);
@@ -46,14 +46,14 @@ export const GoogleStrategy = (isProdMode: boolean) => {
           ? PROD_SETTING.redirectURI.google
           : DEV_SETTING.redirectURI.google,
       },
-      (accessToken, refreshToken, profile, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         if (profile.emails) {
           const email = profile.emails[0].value;
           const loginType = 'google';
 
-          let userData = getUserByLoginInfo(email, loginType);
+          let userData = await getUserByLoginInfo(email, loginType);
           if (!userData) {
-            userData = addUser(email, loginType);
+            userData = await addUser(email, loginType);
           }
 
           done(null, userData);
