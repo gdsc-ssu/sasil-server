@@ -6,7 +6,7 @@ export const DEV_SETTING = {
     apple: 'http://localhost:3000/auth/apple/callback',
   },
   db: {
-    host: 'localhost',
+    host: '127.0.0.1',
     port: '3306',
     database: 'sasil-dev',
   },
@@ -22,7 +22,7 @@ export const PROD_SETTING = {
     apple: '',
   },
   db: {
-    host: 'localhost',
+    host: '127.0.0.1',
     port: '3306',
     database: 'sasil',
   },
