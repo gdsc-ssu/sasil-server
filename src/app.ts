@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 // CORS
 app.use(
   cors({
-    origin: isProdMode ? PROD_SETTING.url : true,
+    origin: isProdMode ? PROD_SETTING.clientURL : true,
     credentials: true,
   }),
 );
