@@ -35,7 +35,6 @@ export const addUser = async (
     email,
     login_type: loginType,
     nickname: name, // TODO: random 생성
-    profile: 'test', // TODO: random 생성
   });
 
   await userRepository.save(newUserData);
