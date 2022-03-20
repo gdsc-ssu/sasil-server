@@ -8,11 +8,13 @@
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "typeRoots": ["./src/types/index.d.ts", "./node_modules/@types"],
     "baseUrl": ".",
     "paths": {
-      "@/database/*": ["./src/database/*"],
-      "@/routes/*": ["./src/routes/*"],
-      "@/constants/*": ["./src/constants/*"]
+      "@/database/*": ["src/database/*"],
+      "@/routes/*": ["src/routes/*"],
+      "@/auth/*": ["src/auth/*"],
+      "@/constants/*": ["src/constants/*"]
     }
   },
   "include": ["src/**/*.ts"],

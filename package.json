@@ -4,7 +4,7 @@
   "repository": "https://github.com/gdsc-ssu/sasil-server.git",
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
     "start": "tsc && cross-env NODE_ENV=production node dist/src/app.js"
   },
   "dependencies": {
@@ -15,6 +15,10 @@
     "express": "4.17.3",
     "express-session": "1.17.2",
     "mysql2": "2.3.3",
+    "passport": "0.5.2",
+    "passport-apple": "2.0.1",
+    "passport-google-oauth": "2.0.0",
+    "passport-kakao": "1.0.1",
     "reflect-metadata": "0.1.13",
     "typeorm": "0.2.45"
   },
@@ -26,6 +30,10 @@
     "@types/express": "4.17.13",
     "@types/express-session": "1.17.4",
     "@types/node": "17.0.21",
+    "@types/passport": "1.0.7",
+    "@types/passport-apple": "1.1.1",
+    "@types/passport-google-oauth": "1.0.42",
+    "@types/passport-kakao": "0.2.1",
     "@typescript-eslint/eslint-plugin": "5.13.0",
     "@typescript-eslint/parser": "5.13.0",
     "eslint": "8.10.0",

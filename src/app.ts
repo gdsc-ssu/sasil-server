@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 
 import ormconfig from '@/database/config/ormconfig';
-
+import configurePassport from '@/auth/index';
 import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.set('port', isProdMode ? PROD_SETTING.port : DEV_SETTING.port);
 // CORS
 app.use(
   cors({
-    origin: isProdMode ? PROD_SETTING.url : true, // Dev Mode에서는 전부 허용
+    origin: isProdMode ? PROD_SETTING.url : true,
     credentials: true,
   }),
 );
@@ -42,10 +42,13 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: isProdMode, // Dev Mode에서는 http도 가능하게
+      secure: isProdMode,
     },
   }),
 );
+
+// passport
+configurePassport(app, isProdMode);
 
 app.listen(app.get('port'), () => {
   console.log(`server is running on ${app.get('port')}`);
