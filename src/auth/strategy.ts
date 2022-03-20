@@ -22,12 +22,13 @@ export const KakaoStrategy = (isProdMode: boolean) => {
       },
       async (accessToken, refreshToken, profile, done) => {
         const { email } = profile._json.kakao_account;
+        const name = profile.displayName;
         const loginType = 'kakao';
 
         // email, loginType으로 유저 찾고, 없으면 생성
         let userData = await getUserByLoginInfo(email, loginType);
         if (!userData) {
-          userData = await addUser(email, loginType);
+          userData = await addUser(email, name, loginType);
         }
 
         done(null, userData);
@@ -49,10 +50,11 @@ export const GoogleStrategy = (isProdMode: boolean) => {
       async (accessToken, refreshToken, profile, done) => {
         const { email } = profile._json;
         const loginType = 'google';
+        const name = profile.displayName;
 
         let userData = await getUserByLoginInfo(email, loginType);
         if (!userData) {
-          userData = await addUser(email, loginType);
+          userData = await addUser(email, name, loginType);
         }
 
         done(null, userData);
