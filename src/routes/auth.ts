@@ -11,8 +11,6 @@ const clientURL =
     ? PROD_SETTING.clientURL
     : DEV_SETTING.clientURL;
 
-// TODO: 로그인 성공 후, 넘겨줄 데이터를 어떻게 처리할지!
-
 router.get(
   '/google',
   checkLoggedout,

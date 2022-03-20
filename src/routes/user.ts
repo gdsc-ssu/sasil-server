@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/me', checkLoggedin, (req, res) => {
   try {
     if (req.user) {
-      res.status(200).json({ user: req.user }); // TODO: 받아올 데이터 수정
+      res.status(200).json({ user: req.user });
     } else {
       res.status(200).json(null);
     }
