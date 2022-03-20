@@ -5,8 +5,14 @@ import { checkLoggedin, checkLoggedout } from '@/routes/middlewares';
 const router = express.Router();
 
 router.get('/me', checkLoggedin, (req, res) => {
-  if (req.user) {
-    res.status(200).json({ user: req.user });
+  try {
+    if (req.user) {
+      res.status(200).json({ user: req.user }); // TODO: 받아올 데이터 수정
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 
