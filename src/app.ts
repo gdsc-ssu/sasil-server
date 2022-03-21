@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import passport from 'passport';
 import dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 
 import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 import ormconfig from '@/database/config/ormconfig';
-import configurePassport from '@/auth/index';
+import passportConfig from '@/auth/index';
 import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
 
@@ -36,11 +36,8 @@ app.use(
   }),
 );
 
-// TODO: Cookie??
-app.use(cookieParser(process.env.COOKIE_SECRET));
-
-// passport
-configurePassport(app, isProdMode);
+app.use(passport.initialize());
+passportConfig();
 
 // routers
 app.use('/auth', authRouter);

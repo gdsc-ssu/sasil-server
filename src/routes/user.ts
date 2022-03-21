@@ -1,10 +1,8 @@
 import express from 'express';
 
-import checkLoggedin from '@/routes/middlewares';
-
 const router = express.Router();
 
-router.get('/me', checkLoggedin, (req, res) => {
+router.get('/me', (req, res) => {
   try {
     if (req.user) {
       res.status(200).json({ user: req.user });

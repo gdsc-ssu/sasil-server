@@ -1,67 +1,21 @@
 import express from 'express';
-import passport from 'passport';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 
-import checkLoggedin from '@/routes/middlewares';
-import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
+import { makeJWTToken } from '@/auth/jwt';
+import verifyGoogle from '@/auth/social/google';
 
-dotenv.config();
 const router = express.Router();
 
-const clientURL =
-  process.env.NODE_ENV === 'production'
-    ? PROD_SETTING.clientURL
-    : DEV_SETTING.clientURL;
-
-const loginResponse = (req: any, res: any, err: any, user: any) => {
-  if (err) {
-    return res.status(400);
-  }
-  if (!user) {
-    return res.status(200).json({
-      success: false,
-    });
-  }
-  req.login(user, { session: false }, (error: any) => {
-    if (error) {
-      res.send(error);
+router.post('/login', async (req, res, next) => {
+  try {
+    const userData = await verifyGoogle(req.body.token);
+    if (userData) {
+      const token = makeJWTToken(userData.email, userData.login_type);
+      return res.json({ token, userData });
     }
-    const token = jwt.sign(
-      { email: user.email, loginType: user.loginType },
-      process.env.JWT_SECRET!,
-    );
-    // TODO: userToken을 어떻게 유저한테 넘겨줄건지, redirect
-    return res.status(200).json({ userToken: token, success: true });
-  });
-};
-
-router.get(
-  '/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-    session: false,
-  }),
-);
-router.get('/kakao', passport.authenticate('kakao', { session: false }));
-router.get('/apple', passport.authenticate('apple', { session: false }));
-
-router.get('/google/callback', (req, res, next) => {
-  passport.authenticate('google', (err, user) => {
-    loginResponse(req, res, err, user);
-  })(req, res, next);
-});
-
-router.get('/kakao/callback', (req, res, next) => {
-  passport.authenticate('kakao', (err, user) => {
-    loginResponse(req, res, err, user);
-  })(req, res, next);
-});
-
-router.get('/apple/callback', (req, res, next) => {
-  passport.authenticate('apple', (err, user) => {
-    loginResponse(req, res, err, user);
-  })(req, res, next);
+    return res.status(400).json({ message: '유저 확인 및 생성 오류' });
+  } catch (error) {
+    return next(error);
+  }
 });
 
 export default router;
