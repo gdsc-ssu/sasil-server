@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { checkLoggedin, checkLoggedout } from '@/routes/middlewares';
+import checkLoggedin from '@/routes/middlewares';
 
 const router = express.Router();
 
@@ -16,11 +16,8 @@ router.get('/me', checkLoggedin, (req, res) => {
   }
 });
 
-router.post('/logout', checkLoggedin, (req, res) => {
+router.post('/logout', (req, res) => {
   req.logout();
-  if (req.session) {
-    req.session.destroy((e) => console.log(e));
-  }
 });
 
 export default router;

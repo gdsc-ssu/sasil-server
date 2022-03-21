@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import express from 'express';
-import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -37,21 +36,8 @@ app.use(
   }),
 );
 
-// Cookie(sessionId 생성)
+// TODO: Cookie??
 app.use(cookieParser(process.env.COOKIE_SECRET));
-
-// Session
-app.use(
-  session({
-    secret: process.env.COOKIE_SECRET!,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: isProdMode,
-    },
-  }),
-);
 
 // passport
 configurePassport(app, isProdMode);
