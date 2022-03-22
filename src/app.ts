@@ -1,13 +1,11 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
-import passport from 'passport';
 import dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 
 import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 import ormconfig from '@/database/config/ormconfig';
-import passportConfig from '@/auth/index';
 import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
 
@@ -35,9 +33,6 @@ app.use(
     credentials: true,
   }),
 );
-
-app.use(passport.initialize());
-passportConfig();
 
 // routers
 app.use('/auth', authRouter);
