@@ -14,7 +14,7 @@ export const makeJWTToken = (email: string, loginType: LoginTypes) => {
 };
 
 const jwtOpts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromHeader('authorization'),
   secretOrKey: process.env.JWT_SECRET,
 };
 
