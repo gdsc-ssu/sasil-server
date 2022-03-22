@@ -1,9 +1,9 @@
 import express from 'express';
-import checkLoggedin from './middleware';
+import checkLoggedIn from './middleware';
 
 const router = express.Router();
 
-router.get('/myInfo', checkLoggedin, async (req, res) => {
+router.get('/myInfo', checkLoggedIn, async (req, res) => {
   try {
     if (req.user) {
       res.status(200).json(req.user);
@@ -13,10 +13,6 @@ router.get('/myInfo', checkLoggedin, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
-
-router.post('/logout', (req, res) => {
-  req.logout();
 });
 
 export default router;
