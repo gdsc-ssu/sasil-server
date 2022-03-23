@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { jwtVerify } from '@/auth/jwt';
 
-/*
+/**
 checkLoggedIn 미들웨어로 jwt가 검증되고, 유저데이터를 req.user에 전달해준다.
 각 router에서는 req.user로 받아온 id값을 가지고 controller를 불러와 원하는 결과를 전송한다.
 */
