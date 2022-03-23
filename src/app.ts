@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import hpp from 'hpp';
 import dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 
@@ -21,6 +23,12 @@ createConnection(ormconfig[env]).then(() => {
 
 // Express
 const app = express();
+
+// 보안
+if (isProdMode) {
+  app.use(hpp());
+  app.use(helmet());
+}
 
 // parser
 app.use(express.json());
