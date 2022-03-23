@@ -12,6 +12,7 @@ import userRouter from '@/routes/user';
 dotenv.config();
 const isProdMode: boolean = process.env.NODE_ENV === 'production';
 const env = isProdMode ? 'production' : 'development';
+const port = isProdMode ? PROD_SETTING.port : DEV_SETTING.port;
 
 // DB
 createConnection(ormconfig[env]).then(() => {
@@ -20,7 +21,6 @@ createConnection(ormconfig[env]).then(() => {
 
 // Express
 const app = express();
-app.set('port', isProdMode ? PROD_SETTING.port : DEV_SETTING.port);
 
 // parser
 app.use(express.json());
@@ -38,6 +38,6 @@ app.use(
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 
-app.listen(app.get('port'), () => {
-  console.log(`server is running on ${app.get('port')}`);
+app.listen(port, () => {
+  console.log(`server is running on ${port}`);
 });
