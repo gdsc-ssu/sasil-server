@@ -6,12 +6,12 @@ import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 dotenv.config();
 
 interface ormconfigType {
-  development: ConnectionOptions;
-  production: ConnectionOptions;
+  dev: ConnectionOptions;
+  prod: ConnectionOptions;
 }
 
 const ormconfig: ormconfigType = {
-  development: {
+  dev: {
     type: 'mysql',
     host: DEV_SETTING.db.host,
     port: Number(DEV_SETTING.db.port),
@@ -29,7 +29,7 @@ const ormconfig: ormconfigType = {
       subscribersDir: 'src/database/subscriber',
     },
   },
-  production: {
+  prod: {
     type: 'mysql',
     host: PROD_SETTING.db.host,
     port: Number(PROD_SETTING.db.port),

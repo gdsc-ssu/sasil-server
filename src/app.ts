@@ -11,7 +11,7 @@ import userRouter from '@/routes/user';
 
 dotenv.config();
 const isProdMode: boolean = process.env.NODE_ENV === 'production';
-const env = isProdMode ? 'production' : 'development';
+const env = isProdMode ? 'prod' : 'dev';
 const port = isProdMode ? PROD_SETTING.port : DEV_SETTING.port;
 
 // DB
