@@ -13,7 +13,7 @@ interface ormconfigType {
 const ormconfig: ormconfigType = {
   dev: {
     type: 'mysql',
-    host: DEV_SETTING.db.host,
+    host: process.env.DEV_DB_HOST,
     port: Number(DEV_SETTING.db.port),
     username: process.env.DEV_DB_USERNAME,
     password: process.env.DEV_DB_PASSWORD,
@@ -31,7 +31,7 @@ const ormconfig: ormconfigType = {
   },
   prod: {
     type: 'mysql',
-    host: PROD_SETTING.db.host,
+    host: process.env.DB_HOST,
     port: Number(PROD_SETTING.db.port),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,

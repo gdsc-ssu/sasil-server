@@ -7,7 +7,6 @@ export const DEV_SETTING = {
     apple: 'http://localhost:3065/auth/apple/callback',
   },
   db: {
-    host: '127.0.0.1',
     port: '3306',
     database: 'sasil-dev',
   },
@@ -15,15 +14,14 @@ export const DEV_SETTING = {
 
 // TODO 배포 모드 시 설정 추가
 export const PROD_SETTING = {
-  port: '',
+  port: '80',
   clientURL: 'https://sasil.app',
   redirectURI: {
-    google: '',
-    kakao: '',
-    apple: '',
+    google: 'https://api.sasil.app/auth/google/callback',
+    kakao: 'https://api.sasil.app/auth/kakao/callback',
+    apple: 'https://api.sasil.app/auth/apple/callback',
   },
   db: {
-    host: '127.0.0.1',
     port: '3306',
     database: 'sasil',
   },
