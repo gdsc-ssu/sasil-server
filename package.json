@@ -5,11 +5,10 @@
   "license": "ISC",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
-    "start": "tsc && cross-env NODE_ENV=production node dist/src/app.js"
+    "start": "tsc && NODE_ENV=production node -r dist/app.js"
   },
   "dependencies": {
     "cors": "2.8.5",
-    "cross-env": "7.0.3",
     "dotenv": "16.0.0",
     "express": "4.17.3",
     "google-auth-library": "7.14.0",
