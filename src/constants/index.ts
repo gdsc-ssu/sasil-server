@@ -12,7 +12,6 @@ export const DEV_SETTING = {
   },
 } as const;
 
-// TODO 배포 모드 시 설정 추가
 export const PROD_SETTING = {
   port: '4000',
   clientURL: 'https://sasil.app',

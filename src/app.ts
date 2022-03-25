@@ -31,6 +31,7 @@ const app = express();
 if (isProdMode) {
   app.use(hpp());
   app.use(helmet());
+  app.enable('trust proxy');
 }
 
 // logger

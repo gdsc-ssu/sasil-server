@@ -5,7 +5,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
-    "start": "NODE_ENV=production pm2 start ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts"
+    "start": "NODE_ENV=production pm2 start ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts && pm2 monit"
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -37,7 +37,6 @@
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "7.0.4",
-    "module-alias": "^2.2.2",
     "nodemon": "2.0.15",
     "prettier": "2.5.1",
     "ts-node": "10.5.0",
