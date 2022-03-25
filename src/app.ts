@@ -52,6 +52,11 @@ app.use(
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 
+// 연결 확인용
+app.get('/', (req, res) => {
+  res.send('Welcome to Sasil Server!');
+});
+
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
