@@ -21,7 +21,7 @@ class User extends BasicEntity {
   @Column('varchar', { length: 30 })
   nickname!: string;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   profile!: string;
 
   @OneToMany(() => Experiment, (experiment) => experiment.user)

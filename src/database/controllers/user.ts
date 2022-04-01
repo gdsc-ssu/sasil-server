@@ -24,14 +24,17 @@ export const getUserByLoginInfo = async (
   return userData;
 };
 
-export const addUser = async (email: string, loginType: LoginTypes) => {
+export const addUser = async (
+  email: string,
+  name: string,
+  loginType: LoginTypes,
+) => {
   const userRepository = getRepository(UserEntity);
 
   const newUserData = userRepository.create({
     email,
     login_type: loginType,
-    nickname: 'test', // TODO: random 생성
-    profile: 'test', // TODO: random 생성
+    nickname: name, // TODO: random 생성
   });
 
   await userRepository.save(newUserData);
