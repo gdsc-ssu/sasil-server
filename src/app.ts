@@ -11,6 +11,7 @@ import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 import ormconfig from '@/database/config/ormconfig';
 import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
+import swaggerRouter from '@/routes/docs';
 
 dotenv.config();
 
@@ -50,6 +51,7 @@ app.use(
 );
 
 // routers
+app.use('/docs', swaggerRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 
