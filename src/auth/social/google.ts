@@ -4,25 +4,33 @@ import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
 dotenv.config();
 
+interface UserAuthData {
+  email: string;
+  name: string;
+}
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const verifyGoogle = async (token: string) => {
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.GOOGLE_CLIENT_ID,
-  });
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload() as UserAuthData;
 
-  const payload = ticket.getPayload();
-  if (payload) {
-    const email = payload.email!;
-    const name = payload.name!;
-    const loginType = 'google';
+    if (payload) {
+      const { email, name } = payload;
+      const loginType = 'google';
 
-    let userData = await getUserByLoginInfo(email, loginType);
-    if (!userData) {
-      userData = await addUser(email, name, loginType);
+      let userData = await getUserByLoginInfo(email, loginType);
+      if (!userData) {
+        userData = await addUser(email, name, loginType);
+      }
+      return userData;
     }
-    return userData;
+  } catch (error) {
+    console.log(error);
   }
 
   return null;
