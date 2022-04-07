@@ -3,7 +3,7 @@ import checkLoggedIn from './middleware';
 
 const router = express.Router();
 
-router.get('/myInfo', checkLoggedIn, async (req, res) => {
+router.get('/me', checkLoggedIn, async (req, res) => {
   try {
     if (req.user) {
       res.status(200).json(req.user);
