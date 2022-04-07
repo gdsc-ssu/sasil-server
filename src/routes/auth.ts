@@ -9,13 +9,16 @@ const router = express.Router();
 
 router.post(`/login/:loginType`, async (req, res, next) => {
   try {
+    const authToken = req.headers.authorization;
     let userData;
-    if (req.params.loginType === 'google') {
-      userData = await verifyGoogle(req.body.token);
-    } else if (req.params.loginType === 'kakao') {
-      userData = await verifyKakao(req.body.token);
-    } else if (req.params.loginType === 'apple') {
-      userData = await verifyApple(req.body.token);
+    if (authToken) {
+      if (req.params.loginType === 'google') {
+        userData = await verifyGoogle(authToken);
+      } else if (req.params.loginType === 'kakao') {
+        userData = await verifyKakao(authToken);
+      } else if (req.params.loginType === 'apple') {
+        userData = await verifyApple(authToken);
+      }
     }
 
     // userData가 존재한다는 것은 소셜 인증 + 로그인(회원가입) 성공을 의미
