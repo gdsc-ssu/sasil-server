@@ -1,0 +1,31 @@
+tags:
+  - name: Auth
+    description: 로그인 관련 API
+
+paths:
+  /auth/login/{loginType}:
+    post:
+      summary: 소셜 로그인 후 받은 토큰 전송
+      tags:
+        - Auth
+      parameters:
+        - name: loginType
+          in: path
+          required: true
+          description: 소셜로그인 타입
+          schema:
+            type: string
+            enum: [google, kakao, apple]
+      security:
+        - social-login-token: []
+      responses:
+        '200':
+          description: 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: sasil-server에서 사용하는 jwt

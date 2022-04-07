@@ -1,0 +1,19 @@
+tags:
+  - name: User
+    description: 유저 정보 관련 API
+
+paths:
+  /user/me:
+    get:
+      summary: 유저 기본 정보 조회 (인증 필요)
+      tags:
+        - User
+      security:
+        - sasil-jwt: []
+      responses:
+        '200':
+          description: 유저 기본 정보 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
