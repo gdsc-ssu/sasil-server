@@ -1,4 +1,5 @@
 export const DEV_SETTING = {
+  mode: 'dev',
   port: '4000',
   clientURL: 'http://localhost:3000',
   redirectURI: {
@@ -10,9 +11,11 @@ export const DEV_SETTING = {
     port: '3306',
     database: 'sasil-dev',
   },
+  morganMode: 'dev',
 } as const;
 
 export const PROD_SETTING = {
+  mode: 'prod',
   port: '4000',
   clientURL: 'https://sasil.app',
   redirectURI: {
@@ -24,4 +27,5 @@ export const PROD_SETTING = {
     port: '3306',
     database: 'sasil',
   },
+  morganMode: 'combined',
 } as const;
