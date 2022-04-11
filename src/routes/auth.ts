@@ -9,15 +9,15 @@ const router = express.Router();
 
 router.post(`/login/:loginType`, async (req, res, next) => {
   try {
-    const authToken = req.headers.authorization;
+    const authValue = req.headers.authorization;
     let userData;
-    if (authToken) {
+    if (authValue) {
       if (req.params.loginType === 'google') {
-        userData = await verifyGoogle(authToken);
+        userData = await verifyGoogle(authValue);
       } else if (req.params.loginType === 'kakao') {
-        userData = await verifyKakao(authToken);
+        userData = await verifyKakao(authValue);
       } else if (req.params.loginType === 'apple') {
-        userData = await verifyApple(authToken);
+        userData = await verifyApple(authValue);
       }
     }
 
