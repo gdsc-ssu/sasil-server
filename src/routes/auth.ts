@@ -16,8 +16,10 @@ router.post(`/login/:loginType`, async (req, res, next) => {
         userData = await verifyGoogle(authValue);
       } else if (req.params.loginType === 'kakao') {
         userData = await verifyKakao(authValue);
-      } else if (req.params.loginType === 'apple') {
-        userData = await verifyApple(authValue);
+      } else if (req.params.loginType === 'apple-web') {
+        userData = await verifyApple(authValue, 'web');
+      } else if (req.params.loginType === 'apple-mobile') {
+        userData = await verifyApple(authValue, 'mobile');
       }
     }
 

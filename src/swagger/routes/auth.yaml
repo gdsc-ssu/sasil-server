@@ -15,7 +15,7 @@ paths:
           description: 소셜로그인 타입
           schema:
             type: string
-            enum: [google, kakao, apple]
+            enum: [google, kakao, apple-web, apple-mobile]
       security:
         - social-login-token: []
       responses:

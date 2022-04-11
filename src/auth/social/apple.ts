@@ -13,27 +13,34 @@ interface UserAuthData {
   name: string;
 }
 
-const createSignWithAppleSecret = () => {
+type DeviceTypes = 'web' | 'mobile';
+
+const createSignWithAppleSecret = (clientId: string) => {
   const token = jwt.sign({}, process.env.APPLE_SECRET_KEY!, {
     algorithm: 'ES256',
     expiresIn: '10h',
     audience: 'https://appleid.apple.com',
     issuer: process.env.APPLE_TEAM_ID!,
-    subject: process.env.APPLE_CLIENT_ID!,
+    subject: clientId,
     keyid: process.env.APPLE_KEY_ID!,
   });
 
   return token;
 };
 
-export const getAppleToken = async (code: string) =>
-  axios.post(
+export const getAppleToken = async (code: string, deviceType: DeviceTypes) => {
+  const clientId =
+    deviceType === 'web'
+      ? process.env.APPLE_CLIENT_ID_WEB!
+      : process.env.APPLE_CLIENT_ID_MOBILE!;
+
+  return axios.post(
     'https://appleid.apple.com/auth/token',
     qs.stringify({
       grant_type: 'authorization_code',
       code,
-      client_secret: createSignWithAppleSecret(),
-      client_id: process.env.APPLE_CLIENT_ID,
+      client_secret: createSignWithAppleSecret(clientId),
+      client_id: clientId,
       redirect_uri: PROD_SETTING.redirectURI.apple,
     }),
     {
@@ -42,15 +49,16 @@ export const getAppleToken = async (code: string) =>
       },
     },
   );
+};
 
-const verifyApple = async (token: string) => {
+const verifyApple = async (token: string, deviceType: DeviceTypes) => {
   try {
-    const response = await getAppleToken(token);
+    const response = await getAppleToken(token, deviceType);
     const idToken = jwt.decode(response.data.id_token) as UserAuthData;
 
     if (idToken) {
       const { email } = idToken;
-      const name = idToken.name ?? 'test'; // TODO: 첫 로그인 시에만 제공?
+      const name = 'test'; // TODO: 프론트의 idToken을 받아와야 이름 받아올 수 있음
       const loginType = 'apple';
 
       let userData = await getUserByLoginInfo(email, loginType);
