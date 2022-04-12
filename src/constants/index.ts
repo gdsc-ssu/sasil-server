@@ -21,7 +21,7 @@ export const PROD_SETTING = {
   redirectURI: {
     google: 'https://api.sasil.app/auth/google/callback',
     kakao: 'https://api.sasil.app/auth/kakao/callback',
-    apple: 'https://api.sasil.app/auth/apple/callback',
+    apple: 'https://sasil.app/login',
   },
   db: {
     port: '3306',
