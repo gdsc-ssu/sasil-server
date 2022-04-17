@@ -13,16 +13,16 @@ const options = {
       description: 'REST API with Express',
     },
     servers: [
-      { url: 'http://localhost:4000' },
-      { url: 'https://api.sasil.app' },
+      { url: 'http://localhost:4000', description: '개발 서버' },
+      { url: 'https://api.sasil.app', description: '배포 서버' },
     ],
   },
-  apis: [],
+  apis: ['./src/swagger/routes/*', './src/swagger/components/*'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 router.use('/', swaggerUi.serve);
-router.get('/', swaggerUi.setup(swaggerSpec));
+router.get('/', swaggerUi.setup(swaggerSpec, { explorer: true }));
 
 export default router;

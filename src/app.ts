@@ -16,12 +16,10 @@ import swaggerRouter from '@/routes/docs';
 dotenv.config();
 
 const isProdMode: boolean = process.env.NODE_ENV === 'production';
-const env = isProdMode ? 'prod' : 'dev';
-const port = isProdMode ? PROD_SETTING.port : DEV_SETTING.port;
-const morganMode = isProdMode ? 'combined' : 'dev';
+const REAL_SETTING = isProdMode ? PROD_SETTING : DEV_SETTING;
 
 // DB
-createConnection(ormconfig[env]).then(() => {
+createConnection(ormconfig[REAL_SETTING.mode]).then(() => {
   console.log('DB Connection is Successful!');
 });
 
@@ -36,7 +34,7 @@ if (isProdMode) {
 }
 
 // logger
-app.use(morgan(morganMode));
+app.use(morgan(REAL_SETTING.morganMode));
 
 // parser
 app.use(express.json());
@@ -60,6 +58,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to Sasil Server!');
 });
 
-app.listen(port, () => {
-  console.log(`server is running on ${port}`);
+app.listen(REAL_SETTING.port, () => {
+  console.log(`server is running on ${REAL_SETTING.port}`);
 });
