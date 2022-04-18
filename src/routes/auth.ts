@@ -39,7 +39,7 @@ router.post(`/login/:loginType`, async (req, res, next) => {
 
     // userData가 존재한다는 것은 소셜 인증 + 로그인(회원가입) 성공을 의미
     if (userData) {
-      const token = makeJWTToken(userData.email, userData.login_type);
+      const token = makeJWTToken({ ...userData });
       return res.json({ token });
     }
 

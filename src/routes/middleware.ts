@@ -13,10 +13,10 @@ const checkLoggedIn = async (
   const token = req.headers.authorization;
 
   if (token) {
-    const user = await jwtVerify(token);
+    const userId = await jwtVerify(token);
 
-    if (user) {
-      req.user = user;
+    if (userId) {
+      req.userId = userId;
       next();
     } else {
       res.status(401).send('로그인이 필요한 요청입니다.');
