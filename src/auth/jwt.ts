@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
+import { AuthenticationError } from '@/errors/customErrors';
 import User from '@/database/entity/user';
 
 dotenv.config();
@@ -16,8 +17,7 @@ export const jwtVerify = async (token: string) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as User;
     return decoded.id;
   } catch (error) {
-    console.log(error);
-    return null;
+    throw new AuthenticationError(403, '유효하지 않은 JWT 토큰입니다.');
   }
 };
 

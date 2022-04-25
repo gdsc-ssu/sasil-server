@@ -1,5 +1,7 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 
+import { AuthenticationError } from '@/errors/customErrors';
+import wrapAsync from '@/errors/util';
 import { makeJWTToken } from '@/auth/jwt';
 import verifyGoogle from '@/auth/social/google';
 import verifyKakao from '@/auth/social/kakao';
@@ -14,8 +16,9 @@ const LOGIN_TYPE = {
 
 const router = express.Router();
 
-router.post(`/login/:loginType`, async (req, res, next) => {
-  try {
+router.post(
+  `/login/:loginType`,
+  wrapAsync(async (req: Request, res: Response, next: NextFunction) => {
     const authValue = req.headers.authorization;
     let userData;
     if (authValue) {
@@ -33,20 +36,27 @@ router.post(`/login/:loginType`, async (req, res, next) => {
           userData = await verifyApple(authValue, 'mobile');
           break;
         default:
-          console.log('Login Type Error');
+          throw new AuthenticationError(
+            404,
+            '지원하지 않는 로그인 타입의 로그인 요청입니다.',
+          );
       }
+    } else {
+      throw new AuthenticationError(
+        401,
+        '요청의 Authorization Header에 소셜로그인 인증 토큰(access_token)이 포함되어 있지 않습니다.',
+      );
     }
 
-    // userData가 존재한다는 것은 소셜 인증 + 로그인(회원가입) 성공을 의미
+    // userData가 존재한다는 것은 SNS 인증 + sasil 로그인(회원가입) 성공을 의미
     if (userData) {
       const token = makeJWTToken({ ...userData });
       return res.json({ token });
     }
 
-    return res.status(400).json({ message: '유저 확인 및 생성 오류' });
-  } catch (error) {
-    return next(error);
-  }
-});
+    // 중간 과정에 문제가 없었는데도 userData에 값이 들어오지 않은 경우 에러 처리
+    throw new Error('userData가 존재하지 않습니다.');
+  }),
+);
 
 export default router;

@@ -3,6 +3,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 
+import { AuthenticationError } from '@/errors/customErrors';
 import { PROD_SETTING } from '@/constants/index';
 import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
@@ -75,22 +76,27 @@ export const getAppleToken = async (code: string, deviceType: DeviceTypes) => {
  * @returns 로그인/회원가입 처리 후 해당 유저 데이터 반환 (추후 jwt 토큰 생성)
  */
 const verifyApple = async (token: string, deviceType: DeviceTypes) => {
+  let idToken;
   try {
-    const idToken = await getAppleToken(token, deviceType);
-
-    if (idToken) {
-      const { email } = idToken;
-      const name = 'test'; // TODO: 프론트의 idToken을 받아와야 이름 받아올 수 있음
-      const loginType = 'apple';
-
-      let userData = await getUserByLoginInfo(email, loginType);
-      if (!userData) {
-        userData = await addUser(email, name, loginType);
-      }
-      return userData;
-    }
+    idToken = await getAppleToken(token, deviceType);
   } catch (error) {
-    console.log(error);
+    console.log(error); // TODO: 원래 에러는 어떻게 처리할지 정하기
+    throw new AuthenticationError(
+      403,
+      '프론트에서 애플 로그인 후 전달받은 토큰이 유효하지 않습니다.',
+    );
+  }
+
+  if (idToken) {
+    const { email } = idToken;
+    const name = 'test'; // TODO: 프론트의 idToken을 받아와야 이름 받아올 수 있음
+    const loginType = 'apple';
+
+    let userData = await getUserByLoginInfo(email, loginType);
+    if (!userData) {
+      userData = await addUser(email, name, loginType);
+    }
+    return userData;
   }
 
   return null;

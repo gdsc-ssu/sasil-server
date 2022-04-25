@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 
+import { DatabaseError } from '@/errors/customErrors';
 import UserEntity, { LoginTypes } from '@/database/entity/user';
 
 /**
@@ -13,6 +14,13 @@ export const getUserById = async (id: number) => {
     .createQueryBuilder('user')
     .where('user.id = :id', { id })
     .getOne();
+
+  if (!userData) {
+    throw new DatabaseError(
+      500,
+      'userId로 DB에서 유저 데이터를 가져오는데 실패하였습니다.',
+    );
+  }
 
   return userData;
 };
@@ -33,6 +41,13 @@ export const getUserByLoginInfo = async (
     .where('user.email = :email', { email })
     .andWhere('user.login_type = :loginType', { loginType })
     .getOne();
+
+  if (!userData) {
+    throw new DatabaseError(
+      500,
+      'email, loginType으로 DB에서 유저 데이터를 가져오는데 실패하였습니다.',
+    );
+  }
 
   return userData;
 };
@@ -57,6 +72,13 @@ export const addUser = async (
     login_type: loginType,
     nickname, // TODO: random 생성
   });
+
+  if (!newUserData) {
+    throw new DatabaseError(
+      500,
+      'DB에서 유저 데이터를 생성하는데 실패하였습니다.',
+    );
+  }
 
   await userRepository.save(newUserData);
 

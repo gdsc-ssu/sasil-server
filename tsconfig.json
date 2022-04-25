@@ -14,7 +14,8 @@
       "@/database/*": ["src/database/*"],
       "@/routes/*": ["src/routes/*"],
       "@/auth/*": ["src/auth/*"],
-      "@/constants/*": ["src/constants/*"]
+      "@/constants/*": ["src/constants/*"],
+      "@/errors/*": ["src/errors/*"]
     }
   },
   "include": ["src/**/*.ts"],

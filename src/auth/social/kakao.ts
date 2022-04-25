@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { AuthenticationError } from '@/errors/customErrors';
 import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
 const kakaoVerifyURL = 'https://kapi.kakao.com/v2/user/me';
@@ -11,6 +12,7 @@ const kakaoVerifyURL = 'https://kapi.kakao.com/v2/user/me';
  * @returns 로그인/회원가입 처리 후 해당 유저 데이터 반환 (추후 jwt 토큰 생성)
  */
 const verifyKakao = async (token: string) => {
+  let resData;
   try {
     const response = await axios.get(kakaoVerifyURL, {
       headers: {
@@ -19,20 +21,25 @@ const verifyKakao = async (token: string) => {
       },
     });
 
-    if (response) {
-      const resData = response.data;
-      const { email } = resData.kakao_account;
-      const name = resData.kakao_account.profile.nickname;
-      const loginType = 'kakao';
-
-      let userData = await getUserByLoginInfo(email, loginType);
-      if (!userData) {
-        userData = await addUser(email, name, loginType);
-      }
-      return userData;
-    }
+    resData = response.data;
   } catch (error) {
-    console.log(error);
+    console.log(error); // TODO: 원래 에러는 어떻게 처리할지 정하기
+    throw new AuthenticationError(
+      403,
+      '프론트에서 카카오 로그인 후 전달받은 토큰이 유효하지 않습니다.',
+    );
+  }
+
+  if (resData) {
+    const { email } = resData.kakao_account;
+    const name = resData.kakao_account.profile.nickname;
+    const loginType = 'kakao';
+
+    let userData = await getUserByLoginInfo(email, loginType);
+    if (!userData) {
+      userData = await addUser(email, name, loginType);
+    }
+    return userData;
   }
 
   return null;
