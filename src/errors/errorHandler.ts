@@ -21,11 +21,11 @@ const errorHandler = (
 
   if (err instanceof DatabaseError) {
     console.log(err);
-    return res.status(err.status).json({ msg: '데이터베이스 관련 오류' });
+    return res.status(err.status).json({ msg: '데이터베이스 관련 오류' }); // 503 고정
   }
 
   console.log(err);
-  return res.status(500).send('서버 오류');
+  return res.status(500).json({ msg: '서버 오류' });
 };
 
 /**
@@ -36,7 +36,7 @@ export const noExistReqErrorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  res.status(404).send('존재하지 않는 URL에 대한 요청 오류');
+  res.status(404).json({ msg: '존재하지 않는 URL에 대한 요청 오류' });
 };
 
 export default errorHandler;

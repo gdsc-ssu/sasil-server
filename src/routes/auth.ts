@@ -43,7 +43,7 @@ router.post(
       }
     } else {
       throw new AuthenticationError(
-        401,
+        403,
         '요청의 Authorization Header에 소셜로그인 인증 토큰(access_token)이 포함되어 있지 않습니다.',
       );
     }
@@ -51,7 +51,7 @@ router.post(
     // userData가 존재한다는 것은 SNS 인증 + sasil 로그인(회원가입) 성공을 의미
     if (userData) {
       const token = makeJWTToken({ ...userData });
-      return res.json({ token });
+      return res.status(200).json({ token });
     }
 
     // 중간 과정에 문제가 없었는데도 userData에 값이 들어오지 않은 경우 에러 처리

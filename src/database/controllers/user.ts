@@ -17,7 +17,6 @@ export const getUserById = async (id: number) => {
 
   if (!userData) {
     throw new DatabaseError(
-      500,
       'userId로 DB에서 유저 데이터를 가져오는데 실패하였습니다.',
     );
   }
@@ -44,7 +43,6 @@ export const getUserByLoginInfo = async (
 
   if (!userData) {
     throw new DatabaseError(
-      500,
       'email, loginType으로 DB에서 유저 데이터를 가져오는데 실패하였습니다.',
     );
   }
@@ -74,10 +72,7 @@ export const addUser = async (
   });
 
   if (!newUserData) {
-    throw new DatabaseError(
-      500,
-      'DB에서 유저 데이터를 생성하는데 실패하였습니다.',
-    );
+    throw new DatabaseError('DB에서 유저 데이터를 생성하는데 실패하였습니다.');
   }
 
   await userRepository.save(newUserData);
