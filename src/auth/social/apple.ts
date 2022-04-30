@@ -80,7 +80,6 @@ const verifyApple = async (token: string, deviceType: DeviceTypes) => {
   try {
     idToken = await getAppleToken(token, deviceType);
   } catch (error) {
-    console.log(error); // TODO: 원래 에러는 어떻게 처리할지 정하기
     throw new AuthenticationError(
       403,
       '프론트에서 애플 로그인 후 전달받은 토큰이 유효하지 않습니다.',

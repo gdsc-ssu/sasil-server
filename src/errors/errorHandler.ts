@@ -15,16 +15,16 @@ const errorHandler = (
   next: NextFunction,
 ) => {
   if (err instanceof AuthenticationError) {
-    console.log(err);
+    next(err);
     return res.status(err.status).json({ msg: '인증 관련 오류' });
   }
 
   if (err instanceof DatabaseError) {
-    console.log(err);
+    next(err);
     return res.status(err.status).json({ msg: '데이터베이스 관련 오류' }); // 503 고정
   }
 
-  console.log(err);
+  next(err);
   return res.status(500).json({ msg: '서버 오류' });
 };
 
