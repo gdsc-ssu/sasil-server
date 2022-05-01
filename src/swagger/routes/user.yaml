@@ -17,3 +17,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '401':
+          description: 인증 관련 오류 (로그인이 필요한 요청)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 인증 관련 오류 (유효하지 않은 요청)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 데이터베이스 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

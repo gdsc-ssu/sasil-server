@@ -12,6 +12,7 @@ import ormconfig from '@/database/config/ormconfig';
 import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
 import swaggerRouter from '@/routes/docs';
+import errorHandler, { noExistReqErrorHandler } from '@/errors/errorHandler';
 
 dotenv.config();
 
@@ -55,8 +56,12 @@ app.use('/user', userRouter);
 
 // 연결 확인용
 app.get('/', (req, res) => {
-  res.send('Welcome to Sasil Server!');
+  res.status(200).send('Welcome to Sasil Server!');
 });
+
+// 에러 처리
+app.use(noExistReqErrorHandler);
+app.use(errorHandler);
 
 app.listen(REAL_SETTING.port, () => {
   console.log(`server is running on ${REAL_SETTING.port}`);
