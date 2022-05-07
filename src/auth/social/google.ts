@@ -17,6 +17,7 @@ type DeviceTypes = 'web' | 'mobile';
  * 구글 소셜 로그인 인증 후 회원가입 및 로그인 처리하는 함수
  *
  * @param token 프론트에서 구글 로그인 후 받은 idToken
+ * @param deviceType mobile과 web 구분을 위한 인자
  * @returns 로그인/회원가입 처리 후 해당 유저 데이터 반환 (추후 jwt 토큰 생성)
  */
 const verifyGoogle = async (token: string, deviceType: DeviceTypes) => {
