@@ -39,7 +39,7 @@ const createSignWithAppleSecret = (clientId: string) => {
  * 프론트에서 애플 로그인 후 받은 인증 코드로 백엔드에서 재인증, 이후 받아온 idToken 반환하는 함수
  *
  * @param code 프론트에서 애플 로그인 후 받은 인증 코드
- * @param deviceType mobile과 web의 server id를 구분하기 위한 인자 ("apple-web" | "apple-mobile")
+ * @param deviceType mobile과 web 구분을 위한 인자
  * @returns 재인증을 통해 받은 idToken
  */
 export const getAppleToken = async (code: string, deviceType: DeviceTypes) => {

@@ -8,10 +8,11 @@ import verifyKakao from '@/auth/social/kakao';
 import verifyApple from '@/auth/social/apple';
 
 const LOGIN_TYPE = {
-  google: 'google',
-  kakao: 'kakao',
+  googleWeb: 'google-web',
+  googleMobile: 'google-mobile',
   appleWeb: 'apple-web',
   appleMobile: 'apple-mobile',
+  kakao: 'kakao',
 } as const;
 
 const router = express.Router();
@@ -23,17 +24,20 @@ router.post(
     let userData;
     if (authValue) {
       switch (req.params.loginType) {
-        case LOGIN_TYPE.google:
-          userData = await verifyGoogle(authValue);
+        case LOGIN_TYPE.googleWeb:
+          userData = await verifyGoogle(authValue, 'web');
           break;
-        case LOGIN_TYPE.kakao:
-          userData = await verifyKakao(authValue);
+        case LOGIN_TYPE.googleMobile:
+          userData = await verifyGoogle(authValue, 'mobile');
           break;
         case LOGIN_TYPE.appleWeb:
           userData = await verifyApple(authValue, 'web');
           break;
         case LOGIN_TYPE.appleMobile:
           userData = await verifyApple(authValue, 'mobile');
+          break;
+        case LOGIN_TYPE.kakao:
+          userData = await verifyKakao(authValue);
           break;
         default:
           throw new AuthenticationError(
