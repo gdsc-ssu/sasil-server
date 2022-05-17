@@ -24,6 +24,11 @@
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
     "import/no-unresolved": 0,
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ]
   }
 }
