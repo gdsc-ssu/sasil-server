@@ -1,0 +1,12 @@
+components:
+  securitySchemes:
+    sasil-jwt:
+      description: sasil에서 로그인 후 받은 jwt
+      in: header
+      name: Authorization
+      type: apiKey
+    social-login-token:
+      description: 프론트에서 소셜로그인 후 받은 토큰
+      in: header
+      name: Authorization
+      type: apiKey
