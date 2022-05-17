@@ -41,12 +41,6 @@ export const getUserByLoginInfo = async (
     .andWhere('user.login_type = :loginType', { loginType })
     .getOne();
 
-  if (!userData) {
-    throw new DatabaseError(
-      'email, loginType으로 DB에서 유저 데이터를 가져오는데 실패하였습니다.',
-    );
-  }
-
   return userData;
 };
 
