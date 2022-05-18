@@ -15,13 +15,15 @@ class Notification extends BasicEntity {
   @Column({ type: 'enum', enum: ['exp', 'comm'] })
   post_type!: string;
 
-  @ManyToOne(() => User, (user) => user.senderId)
+  // Notification:User = N:1 -> sender_id
+  @ManyToOne(() => User, (user) => user.sendNotifications)
   @JoinColumn({
     name: 'sender_id',
   })
   senderId!: User;
 
-  @ManyToOne(() => User, (user) => user.receiverId)
+  // Notification:User = N:1 -> receiver_id
+  @ManyToOne(() => User, (user) => user.receiveNotifications)
   @JoinColumn({
     name: 'receiver_id',
   })

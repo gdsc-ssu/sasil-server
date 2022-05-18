@@ -24,25 +24,32 @@ class User extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   profile!: string;
 
+  // User:Exp = 1:N
   @OneToMany(() => Experiment, (experiment) => experiment.user)
-  experiment!: Experiment;
+  experiments!: Experiment[];
 
+  // User:Comm = 1:N
   @OneToMany(() => Commission, (commission) => commission.user)
-  commission!: Commission;
+  commissions!: Commission[];
 
+  // User:CommComment = 1:N
   @OneToMany(() => CommComment, (commComment) => commComment.user)
-  commComment!: CommComment;
+  commComments!: CommComment[];
 
+  // User:ExpComment = 1:N
   @OneToMany(() => ExpComment, (expComment) => expComment.user)
-  expComment!: ExpComment;
+  expComments!: ExpComment[];
 
+  // User:Notification = 1:N -> sender_id
   @OneToMany(() => Notification, (notification) => notification.senderId)
-  senderId!: Notification;
+  sendNotifications!: Notification[];
 
+  // User:Notification = 1:N -> receiver_id
   @OneToMany(() => Notification, (notification) => notification.receiverId)
-  receiverId!: Notification;
+  receiveNotifications!: Notification[];
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.user)
+  // User:Exp = M:N -> exp_bookmark
+  @ManyToMany(() => Experiment, (experiment) => experiment.userBookmarks)
   @JoinTable({
     name: 'exp_bookmark',
     joinColumn: {
@@ -52,9 +59,10 @@ class User extends BasicEntity {
       name: 'exp_id',
     },
   })
-  expBookmark!: Experiment;
+  bookmarkExps!: Experiment[];
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.user)
+  // User:Exp = M:N -> exp_like
+  @ManyToMany(() => Experiment, (experiment) => experiment.likes)
   @JoinTable({
     name: 'exp_like',
     joinColumn: {
@@ -64,9 +72,10 @@ class User extends BasicEntity {
       name: 'exp_id',
     },
   })
-  expLike!: Experiment;
+  likeExps!: Experiment[];
 
-  @ManyToMany(() => Commission, (commission) => commission.user)
+  // User:Comm = M:N -> comm_bookmark
+  @ManyToMany(() => Commission, (commission) => commission.userBookmarks)
   @JoinTable({
     name: 'comm_bookmark',
     joinColumn: {
@@ -76,9 +85,10 @@ class User extends BasicEntity {
       name: 'comm_id',
     },
   })
-  commBookmark!: Commission;
+  bookmarkComms!: Commission[];
 
-  @ManyToMany(() => Commission, (commission) => commission.user)
+  // User:Comm = M:N -> comm_like
+  @ManyToMany(() => Commission, (commission) => commission.likes)
   @JoinTable({
     name: 'comm_like',
     joinColumn: {
@@ -88,7 +98,7 @@ class User extends BasicEntity {
       name: 'comm_id',
     },
   })
-  commLike!: Commission;
+  likeComms!: Commission[];
 }
 
 export default User;

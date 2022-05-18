@@ -25,21 +25,35 @@ class Experiment extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @OneToMany(() => ExpComment, (expComment) => expComment.experiment)
-  expComment!: ExpComment;
+  // Exp:User = N:1
+  @ManyToOne(() => User, (user) => user.experiments)
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user!: User;
 
-  @ManyToOne(() => Commission, (commission) => commission.experiment)
+  // Exp:Comm = N:1
+  @ManyToOne(() => Commission, (commission) => commission.experiments)
   @JoinColumn({
     name: 'comm_id',
   })
   commission!: Commission;
 
-  @ManyToOne(() => User, (user) => user.experiment)
-  @ManyToMany(() => User, (user) => user.experiment) // exp_bookmark, exp_like
-  user!: User;
+  // Exp:ExpComment = 1:N
+  @OneToMany(() => ExpComment, (expComment) => expComment.experiment)
+  expComments!: ExpComment[];
 
-  @ManyToMany(() => Category, (category) => category.expCategory) // exp_category
-  expCategory!: Category;
+  // Exp:User = M:N -> exp_like
+  @ManyToMany(() => User, (user) => user.likeExps)
+  likes!: User[];
+
+  // Exp:User = M:N -> exp_bookmark
+  @ManyToMany(() => User, (user) => user.bookmarkExps)
+  userBookmarks!: User[];
+
+  // Exp:Category = M:N -> exp_category
+  @ManyToMany(() => Category, (category) => category.experiments)
+  categories!: Category[];
 }
 
 export default Experiment;

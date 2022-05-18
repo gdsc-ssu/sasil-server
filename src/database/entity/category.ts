@@ -10,7 +10,8 @@ class Category extends BasicEntity {
   @Column('varchar', { length: 30 })
   name!: string;
 
-  @ManyToMany(() => Commission, (commission) => commission.commCategory)
+  // Category:Comm = M:N -> comm_category
+  @ManyToMany(() => Commission, (commission) => commission.categories)
   @JoinTable({
     name: 'comm_category',
     joinColumn: {
@@ -20,9 +21,10 @@ class Category extends BasicEntity {
       name: 'comm_id',
     },
   })
-  commCategory!: string;
+  commissions!: Commission[];
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.expCategory)
+  // Category:Exp = M:N -> exp_category
+  @ManyToMany(() => Experiment, (experiment) => experiment.categories)
   @JoinTable({
     name: 'exp_category',
     joinColumn: {
@@ -32,7 +34,7 @@ class Category extends BasicEntity {
       name: 'exp_id',
     },
   })
-  expCategory!: string;
+  experiments!: Experiment;
 }
 
 export default Category;

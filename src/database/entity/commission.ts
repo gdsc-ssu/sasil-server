@@ -1,5 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinColumn,
+} from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -18,18 +25,32 @@ class Commission extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @OneToMany(() => Experiment, (experiment) => experiment.commission)
-  experiment!: Experiment;
-
-  @OneToMany(() => CommComment, (commComment) => commComment.commission)
-  commComment!: CommComment;
-
-  @ManyToOne(() => User, (user) => user.commission)
-  @ManyToMany(() => User, (user) => user.commission) // comm_bookmark, comm_like
+  // Comm:User = N:1
+  @ManyToOne(() => User, (user) => user.commissions)
+  @JoinColumn({
+    name: 'user_id',
+  })
   user!: User;
 
-  @ManyToMany(() => Category, (category) => category.commCategory) // comm_category
-  commCategory!: Category;
+  // Comm:Exp = 1:N
+  @OneToMany(() => Experiment, (experiment) => experiment.commission)
+  experiments!: Experiment[];
+
+  // Comm: ExpComment = 1:N
+  @OneToMany(() => CommComment, (commComment) => commComment.commission)
+  commComments!: CommComment[];
+
+  // Comm:User = M:N -> comm_like
+  @ManyToMany(() => User, (user) => user.likeComms)
+  likes!: User[];
+
+  // Comm:User = M:N -> comm_bookmark
+  @ManyToMany(() => User, (user) => user.bookmarkComms)
+  userBookmarks!: User[];
+
+  // Comm:Category = M:N -> comm_category
+  @ManyToMany(() => Category, (category) => category.commissions) // comm_category
+  categories!: Category[];
 }
 
 export default Commission;

@@ -13,13 +13,15 @@ class CommComment extends BasicEntity {
   @Column('int', { nullable: true })
   parent_id!: number;
 
-  @ManyToOne(() => User, (user) => user.commComment)
+  // CommComment:User = N:1
+  @ManyToOne(() => User, (user) => user.commComments)
   @JoinColumn({
     name: 'user_id',
   })
   user!: User;
 
-  @ManyToOne(() => Commission, (commission) => commission.commComment)
+  // CommComment:Comm = N:1
+  @ManyToOne(() => Commission, (commission) => commission.commComments)
   @JoinColumn({
     name: 'comm_id',
   })
