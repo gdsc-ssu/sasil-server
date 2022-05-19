@@ -25,6 +25,9 @@ class Commission extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
+  @Column({ default: 'wait' })
+  state!: 'wait' | 'connected';
+
   // Comm:User = N:1
   @ManyToOne(() => User, (user) => user.commissions)
   @JoinColumn({
