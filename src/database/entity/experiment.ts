@@ -10,7 +10,7 @@ import {
 
 import BasicEntity from './basic-entity';
 import User from './user';
-import Commission from './commission';
+import Request from './request';
 import ExpComment from './exp-comment';
 import Category from './category';
 
@@ -32,12 +32,12 @@ class Experiment extends BasicEntity {
   })
   user!: User;
 
-  // Exp:Comm = N:1
-  @ManyToOne(() => Commission, (commission) => commission.experiments)
+  // Experiment:Request = N:1
+  @ManyToOne(() => Request, (request) => request.experiments)
   @JoinColumn({
-    name: 'comm_id',
+    name: 'req_id',
   })
-  commission!: Commission;
+  request!: Request;
 
   // Exp:ExpComment = 1:N
   @OneToMany(() => ExpComment, (expComment) => expComment.experiment)

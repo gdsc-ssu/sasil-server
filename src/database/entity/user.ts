@@ -3,8 +3,8 @@ import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import Experiment from './experiment';
-import Commission from './commission';
-import CommComment from './comm-comment';
+import Request from './request';
+import ReqComment from './req-comment';
 import ExpComment from './exp-comment';
 import Notification from './notification';
 
@@ -28,13 +28,13 @@ class User extends BasicEntity {
   @OneToMany(() => Experiment, (experiment) => experiment.user)
   experiments!: Experiment[];
 
-  // User:Comm = 1:N
-  @OneToMany(() => Commission, (commission) => commission.user)
-  commissions!: Commission[];
+  // User:Request = 1:N
+  @OneToMany(() => Request, (request) => request.user)
+  requests!: Request[];
 
-  // User:CommComment = 1:N
-  @OneToMany(() => CommComment, (commComment) => commComment.user)
-  commComments!: CommComment[];
+  // User:ReqComment = 1:N
+  @OneToMany(() => ReqComment, (reqComment) => reqComment.user)
+  reqComments!: ReqComment[];
 
   // User:ExpComment = 1:N
   @OneToMany(() => ExpComment, (expComment) => expComment.user)
@@ -74,31 +74,31 @@ class User extends BasicEntity {
   })
   likeExps!: Experiment[];
 
-  // User:Comm = M:N -> comm_bookmark
-  @ManyToMany(() => Commission, (commission) => commission.userBookmarks)
+  // User:Request = M:N -> req_bookmark
+  @ManyToMany(() => Request, (request) => request.userBookmarks)
   @JoinTable({
-    name: 'comm_bookmark',
+    name: 'req_bookmark',
     joinColumn: {
       name: 'user_id',
     },
     inverseJoinColumn: {
-      name: 'comm_id',
+      name: 'req_id',
     },
   })
-  bookmarkComms!: Commission[];
+  bookmarkReqs!: Request[];
 
-  // User:Comm = M:N -> comm_like
-  @ManyToMany(() => Commission, (commission) => commission.likes)
+  // User:Request = M:N -> req_like
+  @ManyToMany(() => Request, (request) => request.likes)
   @JoinTable({
-    name: 'comm_like',
+    name: 'req_like',
     joinColumn: {
       name: 'user_id',
     },
     inverseJoinColumn: {
-      name: 'comm_id',
+      name: 'req_id',
     },
   })
-  likeComms!: Commission[];
+  likeReqs!: Request[];
 }
 
 export default User;
