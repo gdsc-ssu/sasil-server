@@ -12,6 +12,7 @@ import BasicEntity from './basic-entity';
 import User from './user';
 import Request from './request';
 import ExpComment from './exp-comment';
+import ExpLike from './exp-like';
 import Category from './category';
 
 @Entity()
@@ -43,9 +44,9 @@ class Experiment extends BasicEntity {
   @OneToMany(() => ExpComment, (expComment) => expComment.experiment)
   expComments!: ExpComment[];
 
-  // Exp:User = M:N -> exp_like
-  @ManyToMany(() => User, (user) => user.likeExps)
-  likes!: User[];
+  // Exp:ExpLike = 1:N
+  @OneToMany(() => ExpLike, (expLike) => expLike.experiment)
+  expLikes!: ExpLike[];
 
   // Exp:User = M:N -> exp_bookmark
   @ManyToMany(() => User, (user) => user.bookmarkExps)

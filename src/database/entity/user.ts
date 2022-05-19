@@ -3,10 +3,12 @@ import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import Experiment from './experiment';
+import ExpComment from './exp-comment';
+import ExpLike from './exp-like';
 import Request from './request';
 import ReqComment from './req-comment';
-import ExpComment from './exp-comment';
 import Notification from './notification';
+import ReqLike from './req-like';
 
 export type LoginTypes = 'apple' | 'google' | 'kakao';
 
@@ -48,6 +50,14 @@ class User extends BasicEntity {
   @OneToMany(() => Notification, (notification) => notification.receiverId)
   receiveNotifications!: Notification[];
 
+  // User:ExpLike = 1:N
+  @OneToMany(() => ExpLike, (expLike) => expLike.user)
+  expLikes!: ExpLike[];
+
+  // User:ReqLike = 1:N
+  @OneToMany(() => ReqLike, (reqLike) => reqLike.user)
+  reqLikes!: ReqLike[];
+
   // User:Exp = M:N -> exp_bookmark
   @ManyToMany(() => Experiment, (experiment) => experiment.userBookmarks)
   @JoinTable({
@@ -61,19 +71,6 @@ class User extends BasicEntity {
   })
   bookmarkExps!: Experiment[];
 
-  // User:Exp = M:N -> exp_like
-  @ManyToMany(() => Experiment, (experiment) => experiment.likes)
-  @JoinTable({
-    name: 'exp_like',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'exp_id',
-    },
-  })
-  likeExps!: Experiment[];
-
   // User:Request = M:N -> req_bookmark
   @ManyToMany(() => Request, (request) => request.userBookmarks)
   @JoinTable({
@@ -86,19 +83,6 @@ class User extends BasicEntity {
     },
   })
   bookmarkReqs!: Request[];
-
-  // User:Request = M:N -> req_like
-  @ManyToMany(() => Request, (request) => request.likes)
-  @JoinTable({
-    name: 'req_like',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'req_id',
-    },
-  })
-  likeReqs!: Request[];
 }
 
 export default User;
