@@ -26,7 +26,7 @@ class Request extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @Column({ default: 'wait' })
+  @Column({ type: 'enum', enum: ['wait', 'connected'], default: 'wait' })
   state!: 'wait' | 'connected';
 
   // Request:User = N:1
