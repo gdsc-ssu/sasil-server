@@ -15,7 +15,7 @@ components:
           type: 'string'
         nickname:
           type: 'string'
-        profile:
+        profile_img:
           type: 'string'
       example:
         id: 1
@@ -24,4 +24,4 @@ components:
         email: test@google.com
         login_type: google
         nickname: test
-        profile: null
+        profile_img: null

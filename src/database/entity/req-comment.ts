@@ -3,27 +3,29 @@ import { Entity, ManyToOne, Column, JoinColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
-import Commission from './commission';
+import Request from './request';
 
 @Entity()
-class CommComment extends BasicEntity {
+class ReqComment extends BasicEntity {
   @Column('text')
   content!: string;
 
   @Column('int', { nullable: true })
   parent_id!: number;
 
-  @ManyToOne(() => User, (user) => user.commComment)
+  // ReqComment:User = N:1
+  @ManyToOne(() => User, (user) => user.reqComments)
   @JoinColumn({
     name: 'user_id',
   })
   user!: User;
 
-  @ManyToOne(() => Commission, (commission) => commission.commComment)
+  // ReqComment:Request = N:1
+  @ManyToOne(() => Request, (request) => request.reqComments)
   @JoinColumn({
-    name: 'comm_id',
+    name: 'req_id',
   })
-  commission!: Commission;
+  request!: Request;
 }
 
-export default CommComment;
+export default ReqComment;

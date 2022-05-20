@@ -3,10 +3,12 @@ import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import Experiment from './experiment';
-import Commission from './commission';
-import CommComment from './comm-comment';
 import ExpComment from './exp-comment';
+import ExpLike from './exp-like';
+import Request from './request';
+import ReqComment from './req-comment';
 import Notification from './notification';
+import ReqLike from './req-like';
 
 export type LoginTypes = 'apple' | 'google' | 'kakao';
 
@@ -22,27 +24,42 @@ class User extends BasicEntity {
   nickname!: string;
 
   @Column('varchar', { length: 255, nullable: true })
-  profile!: string;
+  profile_img!: string;
 
+  // User:Exp = 1:N
   @OneToMany(() => Experiment, (experiment) => experiment.user)
-  experiment!: Experiment;
+  experiments!: Experiment[];
 
-  @OneToMany(() => Commission, (commission) => commission.user)
-  commission!: Commission;
+  // User:Request = 1:N
+  @OneToMany(() => Request, (request) => request.user)
+  requests!: Request[];
 
-  @OneToMany(() => CommComment, (commComment) => commComment.user)
-  commComment!: CommComment;
+  // User:ReqComment = 1:N
+  @OneToMany(() => ReqComment, (reqComment) => reqComment.user)
+  reqComments!: ReqComment[];
 
+  // User:ExpComment = 1:N
   @OneToMany(() => ExpComment, (expComment) => expComment.user)
-  expComment!: ExpComment;
+  expComments!: ExpComment[];
 
+  // User:Notification = 1:N -> sender_id
   @OneToMany(() => Notification, (notification) => notification.senderId)
-  senderId!: Notification;
+  sendNotifications!: Notification[];
 
+  // User:Notification = 1:N -> receiver_id
   @OneToMany(() => Notification, (notification) => notification.receiverId)
-  receiverId!: Notification;
+  receiveNotifications!: Notification[];
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.user)
+  // User:ExpLike = 1:N
+  @OneToMany(() => ExpLike, (expLike) => expLike.user)
+  expLikes!: ExpLike[];
+
+  // User:ReqLike = 1:N
+  @OneToMany(() => ReqLike, (reqLike) => reqLike.user)
+  reqLikes!: ReqLike[];
+
+  // User:Exp = M:N -> exp_bookmark
+  @ManyToMany(() => Experiment, (experiment) => experiment.userBookmarks)
   @JoinTable({
     name: 'exp_bookmark',
     joinColumn: {
@@ -52,43 +69,20 @@ class User extends BasicEntity {
       name: 'exp_id',
     },
   })
-  expBookmark!: Experiment;
+  bookmarkExps!: Experiment[];
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.user)
+  // User:Request = M:N -> req_bookmark
+  @ManyToMany(() => Request, (request) => request.userBookmarks)
   @JoinTable({
-    name: 'exp_like',
+    name: 'req_bookmark',
     joinColumn: {
       name: 'user_id',
     },
     inverseJoinColumn: {
-      name: 'exp_id',
+      name: 'req_id',
     },
   })
-  expLike!: Experiment;
-
-  @ManyToMany(() => Commission, (commission) => commission.user)
-  @JoinTable({
-    name: 'comm_bookmark',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'comm_id',
-    },
-  })
-  commBookmark!: Commission;
-
-  @ManyToMany(() => Commission, (commission) => commission.user)
-  @JoinTable({
-    name: 'comm_like',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'comm_id',
-    },
-  })
-  commLike!: Commission;
+  bookmarkReqs!: Request[];
 }
 
 export default User;
