@@ -18,8 +18,14 @@ const getExperiments = async (
   sort: 'popular' | 'date',
 ) => {
   const sortType = {
-    popular: 'likeCount',
-    date: 'subexp.created_at',
+    popular: {
+      first: 'likeCount',
+      second: 'topExps.likeCount',
+    },
+    date: {
+      first: 'subexp.created_at',
+      second: 'experiment.created_at',
+    },
   };
 
   const expData = await getRepository(ExperimentEntity)
@@ -45,14 +51,14 @@ const getExperiments = async (
           .groupBy('subexp.id')
           .offset((page - 1) * display)
           .limit(display)
-          .orderBy(sortType[sort], 'DESC'),
+          .orderBy(sortType[sort].first, 'DESC'),
       'topExps',
       'topExps.subexp_id = experiment.id',
     )
     .leftJoin('experiment.user', 'user')
     .leftJoin('experiment.categories', 'categories')
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
-    .orderBy('topExps.likeCount', 'DESC')
+    .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
   return expData;
@@ -74,8 +80,14 @@ const getRequests = async (
   state: 'all' | 'wait' | 'connected',
 ) => {
   const sortType = {
-    popular: 'likeCount',
-    date: 'subreq.created_at',
+    popular: {
+      first: 'likeCount',
+      second: 'topReqs.likeCount',
+    },
+    date: {
+      first: 'subreq.created_at',
+      second: 'request.created_at',
+    },
   };
 
   const reverseState = {
@@ -111,14 +123,14 @@ const getRequests = async (
           .groupBy('subreq.id')
           .offset((page - 1) * display)
           .limit(display)
-          .orderBy(sortType[sort], 'DESC'),
+          .orderBy(sortType[sort].first, 'DESC'),
       'topReqs',
       'topReqs.subreq_id = request.id',
     )
     .leftJoin('request.user', 'user')
     .leftJoin('request.categories', 'categories')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
-    .orderBy('topReqs.likeCount', 'DESC')
+    .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
   return reqData;
