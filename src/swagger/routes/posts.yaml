@@ -59,7 +59,7 @@ paths:
           name: state
           schema:
             type: string
-            enum: ['all', 'wait', 'connected']
+            enum: ['all', 'wait', 'answered']
           description: 조회할 의뢰 게시물의 상태 (default 'all')
       responses:
         '200':

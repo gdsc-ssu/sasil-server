@@ -64,7 +64,7 @@ components:
           type: 'integer'
         state:
           type: string
-          enum: ['wait', 'connected']
+          enum: ['wait', 'answered']
         user:
           type: 'object'
           properties:
@@ -89,7 +89,7 @@ components:
         title: 의뢰 게시물 제목
         thumbnail: 의뢰 게시물 썸네일
         likeCount: 3
-        state: wait (or connected)
+        state: wait (or answered)
         user:
           id: 1
           nickname: test

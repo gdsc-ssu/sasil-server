@@ -26,8 +26,8 @@ class Request extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @Column({ type: 'enum', enum: ['wait', 'connected'], default: 'wait' })
-  state!: 'wait' | 'connected';
+  @Column({ type: 'enum', enum: ['wait', 'answered'], default: 'wait' })
+  state!: 'wait' | 'answered';
 
   // Request:User = N:1
   @ManyToOne(() => User, (user) => user.requests)

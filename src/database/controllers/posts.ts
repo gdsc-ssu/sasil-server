@@ -70,14 +70,14 @@ const getExperiments = async (
  * @param display posts number
  * @param page page number
  * @param sort 정렬 기준 (popular | date)
- * @param state request에 experiment가 있는지에 따른 구분 (all | wait | connected)
+ * @param state request에 experiment가 있는지에 따른 구분 (all | wait | answered)
  * @returns request posts
  */
 const getRequests = async (
   display: number,
   page: number,
   sort: 'popular' | 'date',
-  state: 'all' | 'wait' | 'connected',
+  state: 'all' | 'wait' | 'answered',
 ) => {
   const sortType = {
     popular: {
@@ -92,8 +92,8 @@ const getRequests = async (
 
   const reverseState = {
     all: 'all',
-    wait: 'connected',
-    connected: 'wait',
+    wait: 'answered',
+    answered: 'wait',
   };
 
   const reqData = await getRepository(RequestEntity)

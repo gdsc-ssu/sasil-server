@@ -43,7 +43,7 @@ router.get(
       displayNum > 0 &&
       pageNum > 0 &&
       (sort === 'date' || sort === 'popular') &&
-      (state === 'all' || state === 'wait' || state === 'connected')
+      (state === 'all' || state === 'wait' || state === 'answered')
     ) {
       const expData = await getRequests(displayNum, pageNum, sort, state);
       return res.json(expData);
