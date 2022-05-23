@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import wrapAsync from '@/errors/util';
+import wrapAsync from '@/utils/wrapAsync';
 
 import { getExperiments, getRequests } from '@/database/controllers/posts';
 

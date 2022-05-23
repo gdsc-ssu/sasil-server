@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 
-import wrapAsync from '@/errors/util';
+import wrapAsync from '@/utils/wrapAsync';
 import { getUserById } from '@/database/controllers/user';
 import checkLoggedIn from './middleware';
 

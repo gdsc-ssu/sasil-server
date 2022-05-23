@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { AuthenticationError } from '@/errors/customErrors';
-import wrapAsync from '@/errors/util';
+import wrapAsync from '@/utils/wrapAsync';
 import { jwtVerify } from '@/auth/jwt';
 
 /**

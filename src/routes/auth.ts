@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 
 import { AuthenticationError } from '@/errors/customErrors';
-import wrapAsync from '@/errors/util';
+import wrapAsync from '@/utils/wrapAsync';
 import { makeJWTToken } from '@/auth/jwt';
 import verifyGoogle from '@/auth/social/google';
 import verifyKakao from '@/auth/social/kakao';
