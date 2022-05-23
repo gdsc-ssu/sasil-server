@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-// import { DatabaseError } from '@/errors/customErrors';
+import { ServerError } from '@/errors/customErrors';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 
@@ -60,6 +60,10 @@ const getExperiments = async (
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
+
+  if (!expData) {
+    throw new ServerError('DB에서 expData 조회를 실패하였습니다.');
+  }
 
   return expData;
 };
@@ -132,6 +136,10 @@ const getRequests = async (
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
+
+  if (!reqData) {
+    throw new ServerError('DB에서 reqData 조회를 실패하였습니다.');
+  }
 
   return reqData;
 };

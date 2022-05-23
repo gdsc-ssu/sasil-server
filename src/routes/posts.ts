@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import wrapAsync from '@/utils/wrapAsync';
 
 import { getExperiments, getRequests } from '@/database/controllers/posts';
+import { BadRequestError } from '@/errors/customErrors';
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get(
       return res.json(expData);
     }
 
-    throw new Error(); // TODO: 주소가 이상하게 들어온 경우 클라이언트 에러 처리
+    throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
   }),
 );
 
@@ -49,7 +50,7 @@ router.get(
       return res.json(expData);
     }
 
-    throw new Error(); // TODO: 주소가 이상하게 들어온 경우 클라이언트 에러 처리
+    throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
   }),
 );
 
