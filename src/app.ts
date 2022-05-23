@@ -9,9 +9,10 @@ import { createConnection } from 'typeorm';
 
 import { DEV_SETTING, PROD_SETTING } from '@/constants/index';
 import ormconfig from '@/database/config/ormconfig';
+import swaggerRouter from '@/routes/docs';
 import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
-import swaggerRouter from '@/routes/docs';
+import postsRouter from '@/routes/posts';
 import errorHandler, { noExistReqErrorHandler } from '@/errors/errorHandler';
 
 dotenv.config();
@@ -53,6 +54,7 @@ app.use(
 app.use('/docs', swaggerRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/posts', postsRouter);
 
 // 연결 확인용
 app.get('/', (req, res) => {
