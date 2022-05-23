@@ -18,7 +18,7 @@ class ReqLike {
 
   @ManyToOne(() => Request, (request) => request.reqLikes)
   @JoinColumn({
-    name: 'exp_id',
+    name: 'req_id',
   })
   request!: Request;
 }
