@@ -12,7 +12,7 @@ import RequestEntity from '@/database/entity/request';
  * @param sort 정렬 기준 (popular | date)
  * @returns experiment posts
  */
-const getExperiments = async (
+const getExperimentList = async (
   display: number,
   page: number,
   sort: 'popular' | 'date',
@@ -28,7 +28,7 @@ const getExperiments = async (
     },
   };
 
-  const expData = await getRepository(ExperimentEntity)
+  const expListData = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .select([
       'experiment.id',
@@ -61,11 +61,11 @@ const getExperiments = async (
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
-  if (!expData) {
-    throw new ServerError('DB에서 expData 조회를 실패하였습니다.');
+  if (!expListData) {
+    throw new ServerError('DB에서 expListData 조회를 실패하였습니다.');
   }
 
-  return expData;
+  return expListData;
 };
 
 /**
@@ -77,7 +77,7 @@ const getExperiments = async (
  * @param state request에 experiment가 있는지에 따른 구분 (all | wait | answered)
  * @returns request posts
  */
-const getRequests = async (
+const getRequestList = async (
   display: number,
   page: number,
   sort: 'popular' | 'date',
@@ -100,7 +100,7 @@ const getRequests = async (
     answered: 'wait',
   };
 
-  const reqData = await getRepository(RequestEntity)
+  const reqListData = await getRepository(RequestEntity)
     .createQueryBuilder('request')
     .select([
       'request.id',
@@ -137,11 +137,11 @@ const getRequests = async (
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
-  if (!reqData) {
-    throw new ServerError('DB에서 reqData 조회를 실패하였습니다.');
+  if (!reqListData) {
+    throw new ServerError('DB에서 reqListData 조회를 실패하였습니다.');
   }
 
-  return reqData;
+  return reqListData;
 };
 
-export { getExperiments, getRequests };
+export { getExperimentList, getRequestList };

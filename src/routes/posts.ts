@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express';
 import wrapAsync from '@/utils/wrapAsync';
 
-import { getExperiments, getRequests } from '@/database/controllers/posts';
+import {
+  getExperimentList,
+  getRequestList,
+} from '@/database/controllers/posts';
 import { BadRequestError } from '@/errors/customErrors';
 
 const router = express.Router();
@@ -19,8 +22,8 @@ router.get(
       pageNum > 0 &&
       (sort === 'date' || sort === 'popular')
     ) {
-      const expData = await getExperiments(displayNum, pageNum, sort);
-      return res.json(expData);
+      const expListData = await getExperimentList(displayNum, pageNum, sort);
+      return res.json(expListData);
     }
 
     throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
@@ -46,8 +49,13 @@ router.get(
       (sort === 'date' || sort === 'popular') &&
       (state === 'all' || state === 'wait' || state === 'answered')
     ) {
-      const expData = await getRequests(displayNum, pageNum, sort, state);
-      return res.json(expData);
+      const reqListData = await getRequestList(
+        displayNum,
+        pageNum,
+        sort,
+        state,
+      );
+      return res.json(reqListData);
     }
 
     throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
