@@ -13,7 +13,7 @@ import swaggerRouter from '@/routes/docs';
 import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
 import postsRouter from '@/routes/posts';
-import errorHandler, { noExistReqErrorHandler } from '@/errors/errorHandler';
+import errorHandler, { notFoundErrorHandler } from '@/errors/errorHandler';
 
 dotenv.config();
 
@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
 });
 
 // 에러 처리
-app.use(noExistReqErrorHandler);
+app.use(notFoundErrorHandler);
 app.use(errorHandler);
 
 app.listen(REAL_SETTING.port, () => {

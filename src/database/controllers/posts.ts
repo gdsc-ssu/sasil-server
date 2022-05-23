@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import { DatabaseError } from '@/errors/customErrors';
+// import { DatabaseError } from '@/errors/customErrors';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 
