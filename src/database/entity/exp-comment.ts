@@ -13,13 +13,15 @@ class ExpComment extends BasicEntity {
   @Column('int', { nullable: true })
   parent_id!: number;
 
-  @ManyToOne(() => User, (user) => user.expComment)
+  // ExpComment:User = N:1
+  @ManyToOne(() => User, (user) => user.expComments)
   @JoinColumn({
     name: 'user_id',
   })
   user!: User;
 
-  @ManyToOne(() => Experiment, (experiment) => experiment.expComment)
+  // ExpComment:Exp = N:1
+  @ManyToOne(() => Experiment, (experiment) => experiment.expComments)
   @JoinColumn({
     name: 'exp_id',
   })

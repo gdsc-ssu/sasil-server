@@ -10,8 +10,9 @@ import {
 
 import BasicEntity from './basic-entity';
 import User from './user';
-import Commission from './commission';
+import Request from './request';
 import ExpComment from './exp-comment';
+import ExpLike from './exp-like';
 import Category from './category';
 
 @Entity()
@@ -25,21 +26,35 @@ class Experiment extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @OneToMany(() => ExpComment, (expComment) => expComment.experiment)
-  expComment!: ExpComment;
-
-  @ManyToOne(() => Commission, (commission) => commission.experiment)
+  // Exp:User = N:1
+  @ManyToOne(() => User, (user) => user.experiments)
   @JoinColumn({
-    name: 'comm_id',
+    name: 'user_id',
   })
-  commission!: Commission;
-
-  @ManyToOne(() => User, (user) => user.experiment)
-  @ManyToMany(() => User, (user) => user.experiment) // exp_bookmark, exp_like
   user!: User;
 
-  @ManyToMany(() => Category, (category) => category.expCategory) // exp_category
-  expCategory!: Category;
+  // Experiment:Request = N:1
+  @ManyToOne(() => Request, (request) => request.experiments)
+  @JoinColumn({
+    name: 'req_id',
+  })
+  request!: Request;
+
+  // Exp:ExpComment = 1:N
+  @OneToMany(() => ExpComment, (expComment) => expComment.experiment)
+  expComments!: ExpComment[];
+
+  // Exp:ExpLike = 1:N
+  @OneToMany(() => ExpLike, (expLike) => expLike.experiment)
+  expLikes!: ExpLike[];
+
+  // Exp:User = M:N -> exp_bookmark
+  @ManyToMany(() => User, (user) => user.bookmarkExps)
+  userBookmarks!: User[];
+
+  // Exp:Category = M:N -> exp_category
+  @ManyToMany(() => Category, (category) => category.experiments)
+  categories!: Category[];
 }
 
 export default Experiment;

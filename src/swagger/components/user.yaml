@@ -13,10 +13,12 @@ components:
           type: 'string'
         login_type:
           type: 'string'
+          enum: ['google', 'kakao', 'apple']
         nickname:
           type: 'string'
-        profile:
+        profile_img:
           type: 'string'
+          nullable: true
       example:
         id: 1
         created_at: 2022-03-27T15:56:04.904Z
@@ -24,4 +26,4 @@ components:
         email: test@google.com
         login_type: google
         nickname: test
-        profile: null
+        profile_img: null

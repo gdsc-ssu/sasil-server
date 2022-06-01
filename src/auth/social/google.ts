@@ -1,7 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 import dotenv from 'dotenv';
 
-import { AuthenticationError } from '@/errors/customErrors';
+import { ForbiddenError } from '@/errors/customErrors';
 import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
 dotenv.config();
@@ -36,8 +36,7 @@ const verifyGoogle = async (token: string, deviceType: DeviceTypes) => {
 
     payload = ticket.getPayload() as UserAuthData;
   } catch (error) {
-    throw new AuthenticationError(
-      403,
+    throw new ForbiddenError(
       '프론트에서 구글 로그인 후 전달받은 토큰이 유효하지 않습니다.',
     );
   }

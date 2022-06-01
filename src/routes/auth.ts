@@ -1,7 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express';
 
-import { AuthenticationError } from '@/errors/customErrors';
-import wrapAsync from '@/errors/util';
+import {
+  BadRequestError,
+  UnauthorizedError,
+  ServerError,
+} from '@/errors/customErrors';
+import wrapAsync from '@/utils/wrapAsync';
 import { makeJWTToken } from '@/auth/jwt';
 import verifyGoogle from '@/auth/social/google';
 import verifyKakao from '@/auth/social/kakao';
@@ -40,15 +44,13 @@ router.post(
           userData = await verifyKakao(authValue);
           break;
         default:
-          throw new AuthenticationError(
-            404,
+          throw new BadRequestError(
             '지원하지 않는 로그인 타입의 로그인 요청입니다.',
           );
       }
     } else {
-      throw new AuthenticationError(
-        403,
-        '요청의 Authorization Header에 소셜로그인 인증 토큰(access_token)이 포함되어 있지 않습니다.',
+      throw new UnauthorizedError(
+        '요청의 Authorization Header에 소셜로그인 인증 토큰이 포함되어 있지 않습니다.',
       );
     }
 
@@ -59,7 +61,7 @@ router.post(
     }
 
     // 중간 과정에 문제가 없었는데도 userData에 값이 들어오지 않은 경우 에러 처리
-    throw new Error('userData가 존재하지 않습니다.');
+    throw new ServerError('자동 회원가입 처리가 정상적으로 동작하지 않습니다.');
   }),
 );
 

@@ -1,39 +1,69 @@
 /* eslint-disable max-classes-per-file */
-class HttpException extends Error {
-  status: number;
-  message: string;
-
-  constructor(status: number, message: string) {
-    super(message);
-    this.status = status;
-    this.message = message;
-  }
-}
 
 /**
- * 인증 관련 오류 생성자
- *
- * @param status 상태 코드
- * @param message 에러 메시지
+ * 400 Bad Request Error
+ * @param message 서버에서 확인하는 에러 발생 사유
  */
-class AuthenticationError extends HttpException {
-  constructor(status: number, message: string) {
-    super(status, message);
-    this.name = 'AuthenticationError';
-  }
-}
-
-/**
- * 데이터베이스 관련 오류 생성자 (오류 코드 503으로 고정)
- *
- * @param message 에러 메시지
- */
-class DatabaseError extends HttpException {
+class BadRequestError extends Error {
   constructor(message: string) {
-    super(503, message);
-    this.name = 'DatabaseError';
+    super(message);
+    this.message = message;
+    this.name = 'BadRequestError';
   }
 }
 
-export default HttpException;
-export { AuthenticationError, DatabaseError };
+/**
+ * 401 Unauthorized Error
+ * @param message 서버에서 확인하는 에러 발생 사유
+ */
+class UnauthorizedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.message = message;
+    this.name = 'UnauthorizedError';
+  }
+}
+
+/**
+ * 403 Forbidden Error (인증 실패)
+ * @param message 서버에서 확인하는 에러 발생 사유
+ */
+class ForbiddenError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.message = message;
+    this.name = 'ForbiddenError';
+  }
+}
+
+/**
+ * 404 Not Found Error
+ * @param message 서버에서 확인하는 에러 발생 사유
+ */
+class NotFoundError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.message = message;
+    this.name = 'NotFoundError';
+  }
+}
+
+/**
+ * 500 Server Error
+ * @param message 서버에서 확인하는 에러 발생 사유
+ */
+class ServerError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.message = message;
+    this.name = 'ServerError';
+  }
+}
+
+export {
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ServerError,
+};

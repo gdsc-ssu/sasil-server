@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { AuthenticationError } from '@/errors/customErrors';
-import wrapAsync from '@/errors/util';
+import { UnauthorizedError } from '@/errors/customErrors';
+import wrapAsync from '@/utils/wrapAsync';
 import { jwtVerify } from '@/auth/jwt';
 
 /**
@@ -16,8 +16,7 @@ const checkLoggedIn = wrapAsync(
       req.userId = userId;
       next();
     } else {
-      throw new AuthenticationError(
-        401,
+      throw new UnauthorizedError(
         '요청의 Authorization Header에 JWT 토큰이 포함되어 있지 않습니다.',
       );
     }

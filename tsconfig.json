@@ -15,7 +15,8 @@
       "@/routes/*": ["src/routes/*"],
       "@/auth/*": ["src/auth/*"],
       "@/constants/*": ["src/constants/*"],
-      "@/errors/*": ["src/errors/*"]
+      "@/errors/*": ["src/errors/*"],
+      "@/utils/*": ["src/utils/*"]
     }
   },
   "include": ["src/**/*.ts"],
