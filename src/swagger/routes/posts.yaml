@@ -32,7 +32,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Experiment'
-
+        '400':
+          description: 잘못된 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 존재하지 않는 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /posts/request:
     get:
       summary: 의뢰 게시물 목록 조회
@@ -68,3 +85,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Request'
+        '400':
+          description: 잘못된 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 존재하지 않는 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

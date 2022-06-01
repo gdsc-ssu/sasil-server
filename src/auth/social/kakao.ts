@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AuthenticationError } from '@/errors/customErrors';
+import { ForbiddenError } from '@/errors/customErrors';
 import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
 const kakaoVerifyURL = 'https://kapi.kakao.com/v2/user/me';
@@ -23,8 +23,7 @@ const verifyKakao = async (token: string) => {
 
     resData = response.data;
   } catch (error) {
-    throw new AuthenticationError(
-      403,
+    throw new ForbiddenError(
       '프론트에서 카카오 로그인 후 전달받은 토큰이 유효하지 않습니다.',
     );
   }
