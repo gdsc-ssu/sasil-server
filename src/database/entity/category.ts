@@ -2,7 +2,7 @@
 import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 
 import BasicEntity from './basic-entity';
-import Commission from './commission';
+import Request from './request';
 import Experiment from './experiment';
 
 @Entity()
@@ -10,19 +10,21 @@ class Category extends BasicEntity {
   @Column('varchar', { length: 30 })
   name!: string;
 
-  @ManyToMany(() => Commission, (commission) => commission.commCategory)
+  // Category:Request = M:N -> req_category
+  @ManyToMany(() => Request, (request) => request.categories)
   @JoinTable({
-    name: 'comm_category',
+    name: 'req_category',
     joinColumn: {
       name: 'category_id',
     },
     inverseJoinColumn: {
-      name: 'comm_id',
+      name: 'req_id',
     },
   })
-  commCategory!: string;
+  requests!: Request[];
 
-  @ManyToMany(() => Experiment, (experiment) => experiment.expCategory)
+  // Category:Exp = M:N -> exp_category
+  @ManyToMany(() => Experiment, (experiment) => experiment.categories)
   @JoinTable({
     name: 'exp_category',
     joinColumn: {
@@ -32,7 +34,7 @@ class Category extends BasicEntity {
       name: 'exp_id',
     },
   })
-  expCategory!: string;
+  experiments!: Experiment;
 }
 
 export default Category;

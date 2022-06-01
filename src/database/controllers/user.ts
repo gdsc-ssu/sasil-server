@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import { DatabaseError } from '@/errors/customErrors';
+import { ServerError } from '@/errors/customErrors';
 import UserEntity, { LoginTypes } from '@/database/entity/user';
 
 /**
@@ -16,9 +16,7 @@ export const getUserById = async (id: number) => {
     .getOne();
 
   if (!userData) {
-    throw new DatabaseError(
-      'userId로 DB에서 유저 데이터를 가져오는데 실패하였습니다.',
-    );
+    throw new ServerError('DB에서 userData 조회를 실패하였습니다.');
   }
 
   return userData;
@@ -40,6 +38,8 @@ export const getUserByLoginInfo = async (
     .where('user.email = :email', { email })
     .andWhere('user.login_type = :loginType', { loginType })
     .getOne();
+
+  //* userData 존재하지 않는다고 에러처리하지 말것!!
 
   return userData;
 };
@@ -66,7 +66,7 @@ export const addUser = async (
   });
 
   if (!newUserData) {
-    throw new DatabaseError('DB에서 유저 데이터를 생성하는데 실패하였습니다.');
+    throw new ServerError('DB에서 유저 데이터 생성에 실패하였습니다.');
   }
 
   await userRepository.save(newUserData);
