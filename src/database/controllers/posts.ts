@@ -9,20 +9,20 @@ import RequestEntity from '@/database/entity/request';
  *
  * @param display posts number
  * @param page page number
- * @param sort 정렬 기준 (popular | date)
+ * @param sort 정렬 기준 (popular | recent)
  * @returns experiment posts
  */
 const getExperimentList = async (
   display: number,
   page: number,
-  sort: 'popular' | 'date',
+  sort: 'popular' | 'recent',
 ) => {
   const sortType = {
     popular: {
       first: 'likeCount',
       second: 'topExps.likeCount',
     },
-    date: {
+    recent: {
       first: 'subexp.created_at',
       second: 'experiment.created_at',
     },
@@ -73,14 +73,14 @@ const getExperimentList = async (
  *
  * @param display posts number
  * @param page page number
- * @param sort 정렬 기준 (popular | date)
+ * @param sort 정렬 기준 (popular | recent)
  * @param state request에 experiment가 있는지에 따른 구분 (all | wait | answered)
  * @returns request posts
  */
 const getRequestList = async (
   display: number,
   page: number,
-  sort: 'popular' | 'date',
+  sort: 'popular' | 'recent',
   state: 'all' | 'wait' | 'answered',
 ) => {
   const sortType = {
@@ -88,7 +88,7 @@ const getRequestList = async (
       first: 'likeCount',
       second: 'topReqs.likeCount',
     },
-    date: {
+    recent: {
       first: 'subreq.created_at',
       second: 'request.created_at',
     },

@@ -23,8 +23,8 @@ paths:
           name: sort
           schema:
             type: string
-            enum: ['date', 'popular']
-          description: 정렬 기준 (default 'date')
+            enum: ['recent', 'popular']
+          description: 정렬 기준 (default 'recent')
       responses:
         '200':
           description: 실험 게시물 목록 조회 성공
@@ -70,8 +70,8 @@ paths:
           name: sort
           schema:
             type: string
-            enum: ['date', 'popular']
-          description: 정렬 기준 (default 'date')
+            enum: ['recent', 'popular']
+          description: 정렬 기준 (default 'recent')
         - in: query
           name: state
           schema:
