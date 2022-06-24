@@ -1,107 +1,144 @@
 components:
   schemas:
     Experiment:
-      type: 'object'
-      properties:
-        id:
-          type: 'integer'
-        created_at:
-          type: 'string'
-        updated_at:
-          type: 'string'
-        title:
-          type: 'string'
-        thumbnail:
-          type: 'string'
-        likeCount:
-          type: 'integer'
-        user:
-          type: 'object'
-          properties:
-            id:
-              type: 'integer'
-            nickname:
-              type: 'string'
-            profile_img:
-              type: 'string'
-              nullable: true
-        categories:
-          type: 'array'
-          items:
+      type: 'array'
+      items:
+        type: 'object'
+        properties:
+          id:
+            type: 'integer'
+          created_at:
+            type: 'string'
+          updated_at:
+            type: 'string'
+          title:
+            type: 'string'
+          thumbnail:
+            type: 'string'
+            nullable: true
+          likeCount:
+            type: 'integer'
+          user:
             type: 'object'
             properties:
               id:
                 type: 'integer'
-              name:
+              nickname:
                 type: 'string'
+              profile_img:
+                type: 'string'
+                nullable: true
+          categories:
+            type: 'array'
+            items:
+              type: 'object'
+              properties:
+                id:
+                  type: 'integer'
+                name:
+                  type: 'string'
       example:
-        id: 1
-        created_at: 2022-05-19T14:53:43.044Z
-        updated_at: 2022-05-19T14:53:43.044Z
-        title: 실험 게시물 제목
-        thumbnail: 실험 게시물 썸네일
-        likeCount: 3
-        user:
-          id: 1
-          nickname: test
-          profile_img: null(or img url)
-        categories:
-          - id: 1
-            name: test
-          - id: 2
-            name: test2
+        - id: 1
+          created_at: 2022-05-19T14:53:43.044Z
+          updated_at: 2022-05-19T14:53:43.044Z
+          title: 실험 게시물 제목
+          thumbnail: 실험 게시물 썸네일
+          likeCount: 3
+          user:
+            id: 1
+            nickname: test
+            profile_img: null(or img url)
+          categories:
+            - id: 1
+              name: test
+            - id: 2
+              name: test2
+        - id: 2
+          created_at: 2022-05-19T14:53:43.044Z
+          updated_at: 2022-05-19T14:53:43.044Z
+          title: 실험 게시물 제목
+          thumbnail: 실험 게시물 썸네일
+          likeCount: 3
+          user:
+            id: 1
+            nickname: test
+            profile_img: null(or img url)
+          categories:
+            - id: 1
+              name: test
+            - id: 2
+              name: test2
 
     Request:
-      type: 'object'
-      properties:
-        id:
-          type: 'integer'
-        created_at:
-          type: 'string'
-        updated_at:
-          type: 'string'
-        title:
-          type: 'string'
-        thumbnail:
-          type: 'string'
-        likeCount:
-          type: 'integer'
-        state:
-          type: string
-          enum: ['wait', 'answered']
-        user:
-          type: 'object'
-          properties:
-            id:
-              type: 'integer'
-            nickname:
-              type: 'string'
-            profile_img:
-              type: 'string'
-              nullable: true
-        categories:
-          type: 'array'
-          items:
+      type: 'array'
+      items:
+        type: 'object'
+        properties:
+          id:
+            type: 'integer'
+          created_at:
+            type: 'string'
+          updated_at:
+            type: 'string'
+          title:
+            type: 'string'
+          thumbnail:
+            type: 'string'
+            nullable: true
+          likeCount:
+            type: 'integer'
+          state:
+            type: string
+            enum: ['wait', 'answered']
+          user:
             type: 'object'
             properties:
               id:
                 type: 'integer'
-              name:
+              nickname:
                 type: 'string'
+              profile_img:
+                type: 'string'
+                nullable: true
+          categories:
+            type: 'array'
+            items:
+              type: 'object'
+              properties:
+                id:
+                  type: 'integer'
+                name:
+                  type: 'string'
       example:
-        id: 1
-        created_at: 2022-05-19T14:53:43.044Z
-        updated_at: 2022-05-19T14:53:43.044Z
-        title: 의뢰 게시물 제목
-        thumbnail: 의뢰 게시물 썸네일
-        likeCount: 3
-        state: wait (or answered)
-        user:
-          id: 1
-          nickname: test
-          profile_img: null(or imgUrl)
-        categories:
-          - id: 1
-            name: test
-          - id: 2
-            name: test2
+        - id: 1
+          created_at: 2022-05-19T14:53:43.044Z
+          updated_at: 2022-05-19T14:53:43.044Z
+          title: 의뢰 게시물 제목
+          thumbnail: 의뢰 게시물 썸네일
+          likeCount: 3
+          state: wait (or answered)
+          user:
+            id: 1
+            nickname: test
+            profile_img: null(or imgUrl)
+          categories:
+            - id: 1
+              name: test
+            - id: 2
+              name: test2
+        - id: 2
+          created_at: 2022-05-19T14:53:43.044Z
+          updated_at: 2022-05-19T14:53:43.044Z
+          title: 의뢰 게시물 제목
+          thumbnail: 의뢰 게시물 썸네일
+          likeCount: 3
+          state: wait (or answered)
+          user:
+            id: 1
+            nickname: test
+            profile_img: null(or imgUrl)
+          categories:
+            - id: 1
+              name: test
+            - id: 2
+              name: test2
