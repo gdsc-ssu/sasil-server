@@ -13,6 +13,7 @@ import User from './user';
 import Experiment from './experiment';
 import ReqComment from './req-comment';
 import ReqLike from './req-like';
+import ReqBookmark from './req-bookmark';
 import Category from './category';
 
 @Entity()
@@ -48,9 +49,9 @@ class Request extends BasicEntity {
   @OneToMany(() => ReqLike, (reqLike) => reqLike.request)
   reqLikes!: ReqLike[];
 
-  // Request:User = M:N -> req_bookmark
-  @ManyToMany(() => User, (user) => user.bookmarkReqs)
-  userBookmarks!: User[];
+  // Request:ReqBookmark = 1:N
+  @OneToMany(() => ReqBookmark, (reqBookmark) => reqBookmark.request)
+  reqBookmarks!: ReqBookmark[];
 
   // Request:Category = M:N -> req_category
   @ManyToMany(() => Category, (category) => category.requests) // req_category
