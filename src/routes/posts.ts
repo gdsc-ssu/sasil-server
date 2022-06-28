@@ -10,17 +10,17 @@ import { BadRequestError } from '@/errors/customErrors';
 const router = express.Router();
 
 // GET posts/experiment
-// query: display(default: 12), page(default: 1), sort(default: date)
+// query: display(default: 12), page(default: 1), sort(default: recent)
 router.get(
   '/experiment',
   wrapAsync(async (req: Request, res: Response) => {
-    const { display = '12', page = '1', sort = 'date' } = req.query;
+    const { display = '12', page = '1', sort = 'recent' } = req.query;
     const [displayNum, pageNum] = [Number(display), Number(page)];
 
     if (
       displayNum > 0 &&
       pageNum > 0 &&
-      (sort === 'date' || sort === 'popular')
+      (sort === 'recent' || sort === 'popular')
     ) {
       const expListData = await getExperimentList(displayNum, pageNum, sort);
       return res.json(expListData);
@@ -31,14 +31,14 @@ router.get(
 );
 
 // GET posts/request
-// query: display(default: 12), page(default: 1), sort(default: date), state(default: all)
+// query: display(default: 12), page(default: 1), sort(default: recent), state(default: all)
 router.get(
   '/request',
   wrapAsync(async (req: Request, res: Response) => {
     const {
       display = '12',
       page = '1',
-      sort = 'date',
+      sort = 'recent',
       state = 'all',
     } = req.query;
     const [displayNum, pageNum] = [Number(display), Number(page)];
@@ -46,7 +46,7 @@ router.get(
     if (
       displayNum > 0 &&
       pageNum > 0 &&
-      (sort === 'date' || sort === 'popular') &&
+      (sort === 'recent' || sort === 'popular') &&
       (state === 'all' || state === 'wait' || state === 'answered')
     ) {
       const reqListData = await getRequestList(
