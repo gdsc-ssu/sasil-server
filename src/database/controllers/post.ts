@@ -3,17 +3,21 @@ import { getRepository } from 'typeorm';
 import { ServerError } from '@/errors/customErrors';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
+import ReqCommentEntity from '@/database/entity/req-comment';
+import ExpCommentEntity from '@/database/entity/exp-comment';
+
+type PostType = 'experiment' | 'request';
 
 // 만약 의뢰에 따른 실험 게시물 목록 정보를 불러오는 것을 분리하면,
 // getExperimentPost와 getRequestPost 통일 가능
 
 /**
- * id값에 따른 실험 게시물 정보를 반환
+ * postId값에 따른 실험 게시물 정보를 반환
  *
  * @param postId 실험 게시물의 id값
  * @returns request post info | undefined
  */
-const getExperimentPost = async (postId: number) => {
+export const getExperimentPost = async (postId: number) => {
   const expPostData = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .where('experiment.id = :postId', { postId })
@@ -45,7 +49,7 @@ const getExperimentPost = async (postId: number) => {
  * @param postId 의뢰 게시물의 id값
  * @returns request posts info | undefined
  */
-const getRequestPost = async (postId: number) => {
+export const getRequestPost = async (postId: number) => {
   const reqPostData = await getRepository(RequestEntity)
     .createQueryBuilder('request')
     .where('request.id = :postId', { postId })
@@ -68,7 +72,37 @@ const getRequestPost = async (postId: number) => {
   return reqPostData;
 };
 
-// 의뢰 게시물에 응답한 실험 게시물 목록
+// 의뢰 게시물에 응답한 실험 게시물 목록 정보
+// 실험 게시물이 응답한 의뢰 게시물 정보
+
+/**
+ * postId값에 따른 게시물의 댓글 목록을 반환
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @returns request post info | undefined
+ */
+export const getComments = async (postType: PostType, postId: number) => {
+  const [repository, entity, id] =
+    postType === 'request'
+      ? [ReqCommentEntity, 'req_comment', 'req_id']
+      : [ExpCommentEntity, 'exp_comment', 'exp_id'];
+
+  const commentsData = await getRepository(repository)
+    .createQueryBuilder(entity)
+    .where(`${entity}.${id} = :postId`, { postId })
+    .select([
+      `${entity}.id`,
+      `${entity}.content`,
+      'commWriter.id',
+      'commWriter.nickname',
+      'commWriter.profile_img',
+    ])
+    .leftJoin(`${entity}.user`, 'commWriter')
+    .getMany();
+
+  return commentsData;
+};
 
 // 댓글 작성 (로그인)
 
@@ -81,5 +115,3 @@ const getRequestPost = async (postId: number) => {
 // 북마크 추가 (로그인)
 
 // 북마크 삭제 (로그인)
-
-export { getExperimentPost, getRequestPost };
