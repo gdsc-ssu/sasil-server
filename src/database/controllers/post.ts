@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import { ServerError } from '@/errors/customErrors';
+import { ForbiddenError } from '@/errors/customErrors';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 import ReqCommentEntity from '@/database/entity/req-comment';
@@ -84,12 +84,12 @@ export const getRequestPost = async (postId: number) => {
  * @returns request post info | undefined
  */
 export const getComments = async (postType: PostType, postId: number) => {
-  const [targetEntity, entityName, idName] =
+  const [TargetEntity, entityName, idName] =
     postType === 'request'
       ? [ReqCommentEntity, 'req_comment', 'req_id']
       : [ExpCommentEntity, 'exp_comment', 'exp_id'];
 
-  const commentsData = await getRepository(targetEntity)
+  const commentsData = await getRepository(TargetEntity)
     .createQueryBuilder(entityName)
     .where(`${entityName}.${idName} = :postId`, { postId })
     .select([
@@ -135,6 +135,31 @@ export const writeComment = async (
 };
 
 // 댓글 삭제 (로그인, 본인 권한)
+export const deleteComment = async (
+  postType: PostType,
+  commentId: number,
+  userId: number,
+) => {
+  const [TargetEntity, entityName] =
+    postType === 'request'
+      ? [ReqCommentEntity, 'req_comment']
+      : [ExpCommentEntity, 'exp_comment'];
+
+  const deleteResult = await getRepository(TargetEntity)
+    .createQueryBuilder(entityName)
+    .delete()
+    .where(`${entityName}.id = :commentId`, { commentId })
+    .andWhere(`${entityName}.user_id = :userId`, { userId })
+    .execute();
+
+  if (deleteResult.affected === 0) {
+    throw new ForbiddenError(
+      '존재하지 않는 댓글입니다. (혹은 본인 댓글이 아닙니다.)',
+    );
+  }
+
+  return deleteResult; // TODO: 어떤 값을 반환할지 결정
+};
 
 // 좋아요 (로그인)
 

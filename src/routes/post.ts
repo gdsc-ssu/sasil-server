@@ -1,12 +1,17 @@
 import express, { Request, Response } from 'express';
 import wrapAsync from '@/utils/wrapAsync';
 
-import { BadRequestError, NotFoundError } from '@/errors/customErrors';
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from '@/errors/customErrors';
 import {
   getExperimentPost,
   getRequestPost,
   getComments,
   writeComment,
+  deleteComment,
 } from '@/database/controllers/post';
 import checkLoggedIn from './middleware';
 
@@ -66,15 +71,45 @@ router.post(
       throw new NotFoundError('존재하지 않는 요청입니다.');
     }
 
-    if (!postId || !userId) {
-      throw new BadRequestError(
-        '올바르지 않은 query or body를 포함한 요청입니다.',
-      );
+    if (!postId) {
+      throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
     }
 
-    const test = await writeComment(postType, postId, userId, content);
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
 
-    return res.json(test);
+    const commentData = await writeComment(postType, postId, userId, content);
+    return res.json(commentData);
+  }),
+);
+
+// 댓글 삭제 (로그인, 본인 권한)
+router.delete(
+  '/:postType/comment/:commentId',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const [postType, commentId] = [
+      req.params.postType,
+      Number(req.params.commentId),
+    ];
+
+    const { userId } = req;
+
+    if (!(postType === 'experiment' || postType === 'request')) {
+      throw new NotFoundError('존재하지 않는 요청입니다.');
+    }
+
+    if (!commentId) {
+      throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
+    }
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    const deleteResult = await deleteComment(postType, commentId, userId);
+    return res.json(deleteResult);
   }),
 );
 
