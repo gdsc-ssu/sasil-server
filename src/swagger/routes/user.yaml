@@ -24,13 +24,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '401':
-          description: 인증 오류 (Authorization Header에 인증 토큰 미포함)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: 요청 거부 오류 (유효하지 않은 인증 토큰)
+          description: 인증 오류
           content:
             application/json:
               schema:
