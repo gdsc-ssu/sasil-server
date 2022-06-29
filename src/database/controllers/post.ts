@@ -5,6 +5,7 @@ import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 import ReqCommentEntity from '@/database/entity/req-comment';
 import ExpCommentEntity from '@/database/entity/exp-comment';
+import UserEntity from '@/database/entity/user';
 
 type PostType = 'experiment' | 'request';
 
@@ -83,28 +84,55 @@ export const getRequestPost = async (postId: number) => {
  * @returns request post info | undefined
  */
 export const getComments = async (postType: PostType, postId: number) => {
-  const [repository, entity, id] =
+  const [targetEntity, entityName, idName] =
     postType === 'request'
       ? [ReqCommentEntity, 'req_comment', 'req_id']
       : [ExpCommentEntity, 'exp_comment', 'exp_id'];
 
-  const commentsData = await getRepository(repository)
-    .createQueryBuilder(entity)
-    .where(`${entity}.${id} = :postId`, { postId })
+  const commentsData = await getRepository(targetEntity)
+    .createQueryBuilder(entityName)
+    .where(`${targetEntity}.${idName} = :postId`, { postId })
     .select([
-      `${entity}.id`,
-      `${entity}.content`,
+      `${targetEntity}`,
       'commWriter.id',
       'commWriter.nickname',
       'commWriter.profile_img',
     ])
-    .leftJoin(`${entity}.user`, 'commWriter')
+    .leftJoin(`${targetEntity}.user`, 'commWriter')
     .getMany();
 
   return commentsData;
 };
 
 // 댓글 작성 (로그인)
+export const writeComment = async (
+  postType: PostType,
+  postId: number,
+  userId: number,
+  content: string,
+) => {
+  const [TargetEntity, PostEntity] = (
+    postType === 'request'
+      ? [ReqCommentEntity, RequestEntity]
+      : [ExpCommentEntity, ExperimentEntity]
+  ) as any;
+
+  const repository = getRepository(TargetEntity);
+
+  const user = new UserEntity();
+  user.id = userId;
+
+  const post = new PostEntity();
+  post.id = postId;
+
+  const newComment = new TargetEntity();
+  newComment.content = content;
+  newComment.user = user;
+  newComment[postType] = post;
+
+  await repository.save(newComment);
+  return newComment;
+};
 
 // 댓글 삭제 (로그인)
 
@@ -115,3 +143,7 @@ export const getComments = async (postType: PostType, postId: number) => {
 // 북마크 추가 (로그인)
 
 // 북마크 삭제 (로그인)
+
+// 의뢰에 응답한 실험 게시물 목록 조회
+
+// 실험이 응답한 의뢰 게시물 조회
