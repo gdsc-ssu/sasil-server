@@ -91,14 +91,14 @@ export const getComments = async (postType: PostType, postId: number) => {
 
   const commentsData = await getRepository(targetEntity)
     .createQueryBuilder(entityName)
-    .where(`${targetEntity}.${idName} = :postId`, { postId })
+    .where(`${entityName}.${idName} = :postId`, { postId })
     .select([
-      `${targetEntity}`,
+      `${entityName}`,
       'commWriter.id',
       'commWriter.nickname',
       'commWriter.profile_img',
     ])
-    .leftJoin(`${targetEntity}.user`, 'commWriter')
+    .leftJoin(`${entityName}.user`, 'commWriter')
     .getMany();
 
   return commentsData;
@@ -134,7 +134,7 @@ export const writeComment = async (
   return newComment;
 };
 
-// 댓글 삭제 (로그인)
+// 댓글 삭제 (로그인, 본인 권한)
 
 // 좋아요 (로그인)
 

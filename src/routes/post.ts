@@ -59,7 +59,8 @@ router.post(
   checkLoggedIn,
   wrapAsync(async (req: Request, res: Response) => {
     const [postType, postId] = [req.params.postType, Number(req.params.postId)];
-    const [content, userId] = [req.body.content, Number(req.body.userId)];
+    const { content } = req.body;
+    const { userId } = req; // chckedLoggedIn middleware를 거치면서 생성
 
     if (!(postType === 'experiment' || postType === 'request')) {
       throw new NotFoundError('존재하지 않는 요청입니다.');
