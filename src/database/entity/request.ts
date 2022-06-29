@@ -41,7 +41,7 @@ class Request extends BasicEntity {
   @OneToMany(() => Experiment, (experiment) => experiment.request)
   experiments!: Experiment[];
 
-  // Request: ExpComment = 1:N
+  // Request:ReqComment = 1:N
   @OneToMany(() => ReqComment, (reqComment) => reqComment.request)
   reqComments!: ReqComment[];
 
