@@ -1,42 +1,42 @@
 components:
   schemas:
     ExperimentList:
-      type: 'array'
+      type: array
       items:
-        type: 'object'
+        type: object
         properties:
           id:
-            type: 'integer'
+            type: integer
           created_at:
-            type: 'string'
+            type: string
           updated_at:
-            type: 'string'
+            type: string
           title:
-            type: 'string'
+            type: string
           thumbnail:
-            type: 'string'
+            type: string
             nullable: true
           likeCount:
-            type: 'integer'
+            type: integer
           user:
-            type: 'object'
+            type: object
             properties:
               id:
-                type: 'integer'
+                type: integer
               nickname:
-                type: 'string'
+                type: string
               profile_img:
-                type: 'string'
+                type: string
                 nullable: true
           categories:
-            type: 'array'
+            type: array
             items:
-              type: 'object'
+              type: object
               properties:
                 id:
-                  type: 'integer'
+                  type: integer
                 name:
-                  type: 'string'
+                  type: string
       example:
         - id: 1
           created_at: 2022-05-19T14:53:43.044Z
@@ -70,45 +70,45 @@ components:
               name: test2
 
     RequestList:
-      type: 'array'
+      type: array
       items:
-        type: 'object'
+        type: object
         properties:
           id:
-            type: 'integer'
+            type: integer
           created_at:
-            type: 'string'
+            type: string
           updated_at:
-            type: 'string'
+            type: string
           title:
-            type: 'string'
+            type: string
           thumbnail:
-            type: 'string'
+            type: string
             nullable: true
           likeCount:
-            type: 'integer'
+            type: integer
           state:
             type: string
-            enum: ['wait', 'answered']
+            enum: [wait, answered]
           user:
-            type: 'object'
+            type: object
             properties:
               id:
-                type: 'integer'
+                type: integer
               nickname:
-                type: 'string'
+                type: string
               profile_img:
-                type: 'string'
+                type: string
                 nullable: true
           categories:
-            type: 'array'
+            type: array
             items:
-              type: 'object'
+              type: object
               properties:
                 id:
-                  type: 'integer'
+                  type: integer
                 name:
-                  type: 'string'
+                  type: string
       example:
         - id: 1
           created_at: 2022-05-19T14:53:43.044Z
