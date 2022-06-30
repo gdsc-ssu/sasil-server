@@ -31,7 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Experiment'
+                $ref: '#/components/schemas/ExperimentList'
         '400':
           description: 잘못된 요청 오류
           content:
@@ -84,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Request'
+                $ref: '#/components/schemas/RequestList'
         '400':
           description: 잘못된 요청 오류
           content:
