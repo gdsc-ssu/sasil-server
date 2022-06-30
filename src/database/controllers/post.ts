@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import { ForbiddenError } from '@/errors/customErrors';
+import { BadRequestError } from '@/errors/customErrors';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 import ReqCommentEntity from '@/database/entity/req-comment';
@@ -112,7 +112,7 @@ export const getRequestPost = async (
 };
 
 /**
- * 의뢰 게시물에 응답한 실험 게시물 목록 반환 (최신순)
+ * 특정 의뢰에 응답한 실험 게시물 목록 반환 (최신순)
  *
  * @param reqId 의뢰 게시물의 id값
  * @returns experiment posts list
@@ -167,7 +167,7 @@ export const getReqPostByExpId = async (expId: number) => {
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .getOne();
 
-  return reqPost;
+  return reqPost?.request;
 };
 
 /**
@@ -278,8 +278,8 @@ export const deleteComment = async (
     .execute();
 
   if (deleteCommResult.affected === 0) {
-    throw new ForbiddenError(
-      '존재하지 않는 게시물입니다. (혹은 본인 댓글이 아닙니다.)',
+    throw new BadRequestError(
+      '존재하지 않는 게시물/댓글에 대한 요청입니다. (혹은 본인 댓글이 아닙니다.)',
     );
   }
 };
@@ -346,7 +346,7 @@ export const deleteLike = async (
     .execute();
 
   if (deleteLikeResult.affected === 0) {
-    throw new ForbiddenError('존재하지 않는 게시물입니다.');
+    throw new BadRequestError('존재하지 않는 게시물에 대한 요청입니다.');
   }
 };
 
@@ -412,6 +412,6 @@ export const deleteBookmark = async (
     .execute();
 
   if (deleteBookmarkResult.affected === 0) {
-    throw new ForbiddenError('존재하지 않는 게시물입니다.');
+    throw new BadRequestError('존재하지 않는 게시물에 대한 요청입니다.');
   }
 };

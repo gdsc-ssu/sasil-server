@@ -32,11 +32,11 @@ router.get(
     const { userId } = req; // 비회원이 요청 시, userId === undefined
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     const getPostData =
@@ -48,14 +48,14 @@ router.get(
   }),
 );
 
-// 의뢰 게시물에 응답한 실험 게시물 목록 조회 (최신순)
+// 특정 의뢰에 응답한 실험 게시물 목록 조회 (최신순)
 router.get(
   '/request/:reqId/experiments',
   wrapAsync(async (req: Request, res: Response) => {
     const postId = Number(req.params.reqId);
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     const expListByReqId = await getExpListByReqId(postId);
@@ -63,14 +63,14 @@ router.get(
   }),
 );
 
-// 실험 게시물이 응답한 의뢰 게시물 조회
+// 특정 실험 게시물이 응답한 의뢰 게시물 정보 조회
 router.get(
   '/experiment/:expId/request',
   wrapAsync(async (req: Request, res: Response) => {
     const postId = Number(req.params.expId);
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     const reqPostByExpId = await getReqPostByExpId(postId);
@@ -87,7 +87,7 @@ router.get(
     const [displayNum, pageNum] = [Number(display), Number(page)];
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
@@ -115,11 +115,11 @@ router.post(
     const { userId } = req;
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     if (!userId) {
@@ -145,11 +145,11 @@ router.delete(
     const { userId } = req;
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!commentId || !postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     if (!userId) {
@@ -162,7 +162,7 @@ router.delete(
   }),
 );
 
-// 좋아요 (로그인)
+// 좋아요 추가 (로그인)
 router.post(
   '/:postType/:postId/like',
   checkLoggedIn,
@@ -171,11 +171,11 @@ router.post(
     const { userId } = req;
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     if (!userId) {
@@ -197,11 +197,11 @@ router.delete(
     const { userId } = req;
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     if (!userId) {
@@ -223,11 +223,11 @@ router.post(
     const { userId } = req;
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     if (!userId) {
@@ -249,11 +249,11 @@ router.delete(
     const { userId } = req;
 
     if (!(postType === 'experiment' || postType === 'request')) {
-      throw new NotFoundError('존재하지 않는 요청입니다.');
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
     }
 
     if (!postId) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
     if (!userId) {

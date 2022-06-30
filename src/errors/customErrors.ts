@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 /**
- * 400 Bad Request Error
+ * 400 Bad Request Error (요청 실패)
  * @param message 서버에서 확인하는 에러 발생 사유
  */
 class BadRequestError extends Error {
@@ -13,7 +13,7 @@ class BadRequestError extends Error {
 }
 
 /**
- * 401 Unauthorized Error
+ * 401 Unauthorized Error (인증 실패)
  * @param message 서버에서 확인하는 에러 발생 사유
  */
 class UnauthorizedError extends Error {
@@ -25,7 +25,7 @@ class UnauthorizedError extends Error {
 }
 
 /**
- * 403 Forbidden Error (인증 실패)
+ * 403 Forbidden Error (권한 없음)
  * @param message 서버에서 확인하는 에러 발생 사유
  */
 class ForbiddenError extends Error {
