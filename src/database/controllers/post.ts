@@ -14,10 +14,11 @@ import ExpBookmarkEntity from '@/database/entity/exp-bookmark';
 type PostType = 'experiment' | 'request';
 
 /**
- * postId값에 따른 실험 게시물 정보를 반환
+ * 실험 게시물 정보 반환
  *
  * @param postId 실험 게시물의 id값
- * @returns request post info | undefined
+ * @param userId 유저의 id값 (좋아요, 북마크 여부를 파악하기 위해)
+ * @returns experiment post info
  */
 export const getExperimentPost = async (
   postId: number,
@@ -43,6 +44,7 @@ export const getExperimentPost = async (
     )
     .getOne();
 
+  // 좋아요, 북마크 여부 파악 (with userId)
   const isLike = userId
     ? !!(await getRepository(ExpLikeEntity)
         .createQueryBuilder('exp_like')
@@ -63,10 +65,11 @@ export const getExperimentPost = async (
 };
 
 /**
- * id값에 따른 의뢰 게시물 정보를 반환
+ * 의뢰 게시물 정보 반환
  *
  * @param postId 의뢰 게시물의 id값
- * @returns request posts info | undefined
+ * @param userId 유저의 id값 (좋아요, 북마크 여부를 파악하기 위해)
+ * @returns request posts info
  */
 export const getRequestPost = async (
   postId: number,
@@ -108,11 +111,16 @@ export const getRequestPost = async (
   return { ...reqPostData, isLike, isBookmark };
 };
 
-// 의뢰 게시물에 응답한 실험 게시물 목록 조회 (최신순)
+/**
+ * 의뢰 게시물에 응답한 실험 게시물 목록 반환 (최신순)
+ *
+ * @param reqId 의뢰 게시물의 id값
+ * @returns experiment posts list
+ */
 export const getExpListByReqId = async (reqId: number) => {
   const sortType = 'experiment.created_at';
 
-  const expListByReqId = await getRepository(ExperimentEntity)
+  const expPostList = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .where('experiment.req_id = :reqId', { reqId })
     .select([
@@ -130,10 +138,15 @@ export const getExpListByReqId = async (reqId: number) => {
     .orderBy(`${sortType}`, 'DESC')
     .getMany();
 
-  return expListByReqId;
+  return expPostList;
 };
 
-// 실험 게시물이 응답한 의뢰 게시물 조회
+/**
+ * 실험 게시물이 응답한 의뢰 게시물 반환
+ *
+ * @param expId 실험 게시물의 id값
+ * @returns request post info
+ */
 export const getReqPostByExpId = async (expId: number) => {
   const reqPost = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
@@ -158,17 +171,19 @@ export const getReqPostByExpId = async (expId: number) => {
 };
 
 /**
- * postId값에 따른 게시물의 댓글 목록을 반환 (최신순)
+ * 게시물의 댓글 목록 반환 (최신순)
  *
  * @param postType 게시물 타입 (request | experiment)
  * @param postId 게시물의 id값
- * @returns request post info | undefined
+ * @param page page number
+ * @param display comments number
+ * @returns comments list
  */
 export const getComments = async (
   postType: PostType,
   postId: number,
-  display: number,
   page: number,
+  display: number,
 ) => {
   const [TargetEntity, entityName, idName] =
     postType === 'request'
@@ -195,7 +210,14 @@ export const getComments = async (
   return commentsData;
 };
 
-// 댓글 작성 (로그인)
+/**
+ * 댓글 작성
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @param userId 유저의 id값
+ * @param content 댓글 내용
+ */
 export const addComment = async (
   postType: PostType,
   postId: number,
@@ -228,7 +250,14 @@ export const addComment = async (
     .execute();
 };
 
-// 댓글 삭제 (로그인, 본인 권한)
+/**
+ * 댓글 삭제
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @param commentId 댓글 id값
+ * @param userId 유저의 id값
+ */
 export const deleteComment = async (
   postType: PostType,
   postId: number,
@@ -255,7 +284,13 @@ export const deleteComment = async (
   }
 };
 
-// 좋아요 (로그인)
+/**
+ * 좋아요
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @param userId 유저의 id값
+ */
 export const addLike = async (
   postType: PostType,
   postId: number,
@@ -286,7 +321,13 @@ export const addLike = async (
     .execute();
 };
 
-// 좋아요 취소 (로그인)
+/**
+ * 좋아요 취소
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @param userId 유저의 id값
+ */
 export const deleteLike = async (
   postType: PostType,
   postId: number,
@@ -309,7 +350,13 @@ export const deleteLike = async (
   }
 };
 
-// 북마크 추가 (로그인)
+/**
+ * 북마크 추가
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @param userId 유저의 id값
+ */
 export const addBookmark = async (
   postType: PostType,
   postId: number,
@@ -340,7 +387,13 @@ export const addBookmark = async (
     .execute();
 };
 
-// 북마크 삭제 (로그인)
+/**
+ * 북마크 삭제
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물의 id값
+ * @param userId 유저의 id값
+ */
 export const deleteBookmark = async (
   postType: PostType,
   postId: number,

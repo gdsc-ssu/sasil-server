@@ -23,7 +23,7 @@ import { checkLoggedIn, getUserId } from './middleware';
 
 const router = express.Router();
 
-// 게시물 정보 조회
+// 게시물 정보 조회 (로그인 [선택])
 router.get(
   '/:postType/:postId',
   getUserId,
@@ -78,7 +78,7 @@ router.get(
   }),
 );
 
-// 게시물에 대한 댓글 목록 조회 (최신순)
+// 게시물의 댓글 목록 조회 (최신순)
 router.get(
   '/:postType/:postId/comments',
   wrapAsync(async (req: Request, res: Response) => {
@@ -97,8 +97,8 @@ router.get(
     const commentsData = await getComments(
       postType,
       postId,
-      displayNum,
       pageNum,
+      displayNum,
     );
 
     return res.json(commentsData);
@@ -132,7 +132,7 @@ router.post(
   }),
 );
 
-// 댓글 삭제 (로그인, 본인 권한)
+// 댓글 삭제 (로그인, 본인만)
 router.delete(
   '/:postType/:postId/comment/:commentId',
   checkLoggedIn,
