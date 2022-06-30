@@ -42,12 +42,12 @@ components:
           created_at: 2022-05-19T14:53:43.044Z
           updated_at: 2022-05-19T14:53:43.044Z
           title: 실험 게시물 제목
-          thumbnail: 실험 게시물 썸네일
+          thumbnail: 실험 게시물 썸네일 url (or null)
           likeCount: 3
           user:
             id: 1
             nickname: test
-            profile_img: null(or img url)
+            profile_img: 프로필 사진 url (or null)
           categories:
             - id: 1
               name: test
@@ -57,12 +57,12 @@ components:
           created_at: 2022-05-19T14:53:43.044Z
           updated_at: 2022-05-19T14:53:43.044Z
           title: 실험 게시물 제목
-          thumbnail: 실험 게시물 썸네일
+          thumbnail: 실험 게시물 썸네일 url (or null)
           likeCount: 3
           user:
             id: 1
             nickname: test
-            profile_img: null(or img url)
+            profile_img: 프로필 사진 url (or null)
           categories:
             - id: 1
               name: test
@@ -114,13 +114,13 @@ components:
           created_at: 2022-05-19T14:53:43.044Z
           updated_at: 2022-05-19T14:53:43.044Z
           title: 의뢰 게시물 제목
-          thumbnail: 의뢰 게시물 썸네일
+          thumbnail: 의뢰 게시물 썸네일 url (or null)
           likeCount: 3
           state: wait (or answered)
           user:
             id: 1
             nickname: test
-            profile_img: null(or imgUrl)
+            profile_img: 프로필 사진 url (or null)
           categories:
             - id: 1
               name: test
@@ -130,13 +130,13 @@ components:
           created_at: 2022-05-19T14:53:43.044Z
           updated_at: 2022-05-19T14:53:43.044Z
           title: 의뢰 게시물 제목
-          thumbnail: 의뢰 게시물 썸네일
+          thumbnail: 의뢰 게시물 썸네일 url (or null)
           likeCount: 3
           state: wait (or answered)
           user:
             id: 1
             nickname: test
-            profile_img: null(or imgUrl)
+            profile_img: 프로필 사진 url (or null)
           categories:
             - id: 1
               name: test

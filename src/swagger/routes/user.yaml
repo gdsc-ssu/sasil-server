@@ -9,7 +9,7 @@ paths:
       tags:
         - User
       security:
-        - sasil-jwt: []
+        - sasil-access-token: []
       responses:
         '200':
           description: 유저 기본 정보 조회 성공

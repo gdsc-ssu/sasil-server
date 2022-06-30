@@ -1,6 +1,6 @@
 tags:
   - name: Posts
-    description: 게시물 목록 관련 API
+    description: 실험/의뢰 게시물 목록 페이지 관련 API
 
 paths:
   /posts/experiment:
@@ -50,6 +50,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
   /posts/request:
     get:
       summary: 의뢰 게시물 목록 조회
