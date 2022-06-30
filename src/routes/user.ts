@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 
 import wrapAsync from '@/utils/wrapAsync';
 import { getUserById } from '@/database/controllers/user';
-import checkLoggedIn from './middleware';
+import { checkLoggedIn } from './middleware';
 
 const router = express.Router();
 
