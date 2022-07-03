@@ -30,16 +30,10 @@ export const getExperimentPost = async (
   const expPostData = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .where('experiment.id = :postId', { postId })
-    .select([
-      'experiment',
-      'user.id',
-      'user.nickname',
-      'user.profile_img',
-      'categories.id',
-      'categories.name',
-    ])
+    .select(['experiment', 'user.id', 'user.nickname', 'user.profile_img'])
     .leftJoin('experiment.user', 'user')
-    .leftJoin('experiment.categories', 'categories')
+    .leftJoinAndSelect('experiment.expCategories', 'expCategories')
+    .leftJoinAndSelect('expCategories.category', 'categories')
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
     .loadRelationCountAndMap(
       'experiment.bookmarkCount',
@@ -81,16 +75,10 @@ export const getRequestPost = async (
   const reqPostData = await getRepository(RequestEntity)
     .createQueryBuilder('request')
     .where('request.id = :postId', { postId })
-    .select([
-      'request',
-      'user.id',
-      'user.nickname',
-      'user.profile_img',
-      'categories.id',
-      'categories.name',
-    ])
+    .select(['request', 'user.id', 'user.nickname', 'user.profile_img'])
     .leftJoin('request.user', 'user')
-    .leftJoin('request.categories', 'categories')
+    .leftJoinAndSelect('request.reqCategories', 'reqCategories')
+    .leftJoinAndSelect('reqCategories.category', 'categories')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .loadRelationCountAndMap('request.bookmarkCount', 'request.reqBookmarks')
     .getOne();

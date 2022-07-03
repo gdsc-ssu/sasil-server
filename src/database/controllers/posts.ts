@@ -39,8 +39,6 @@ const getExperimentList = async (
       'user.id',
       'user.nickname',
       'user.profile_img',
-      'categories.id',
-      'categories.name',
     ])
     .innerJoin(
       (qb) =>
@@ -56,7 +54,8 @@ const getExperimentList = async (
       'topExps.subexp_id = experiment.id',
     )
     .leftJoin('experiment.user', 'user')
-    .leftJoin('experiment.categories', 'categories')
+    .leftJoinAndSelect('experiment.expCategories', 'expCategories')
+    .leftJoinAndSelect('expCategories.category', 'categories')
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
@@ -112,8 +111,6 @@ const getRequestList = async (
       'user.id',
       'user.nickname',
       'user.profile_img',
-      'categories.id',
-      'categories.name',
     ])
     .innerJoin(
       (qb) =>
@@ -132,7 +129,8 @@ const getRequestList = async (
       'topReqs.subreq_id = request.id',
     )
     .leftJoin('request.user', 'user')
-    .leftJoin('request.categories', 'categories')
+    .leftJoinAndSelect('request.reqCategories', 'reqCategories')
+    .leftJoinAndSelect('reqCategories.category', 'categories')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
