@@ -18,6 +18,7 @@ import {
   deleteLike,
   addBookmark,
   deleteBookmark,
+  addPost,
 } from '@/database/controllers/post';
 import { checkLoggedIn, getUserId } from './middleware';
 
@@ -265,5 +266,40 @@ router.delete(
     res.end();
   }),
 );
+
+// 게시글 추가
+router.post(
+  '/:postType',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const { postType } = req.params;
+    const { title, content, thumbnail, categories, reqId } = req.body;
+    const { userId } = req;
+
+    if (!(postType === 'experiment' || postType === 'request')) {
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
+    }
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    await addPost(
+      postType,
+      userId,
+      title,
+      content,
+      thumbnail,
+      categories,
+      reqId,
+    );
+
+    res.end();
+  }),
+);
+
+// 게시글 삭제
+
+// 게시글 수정
 
 export default router;
