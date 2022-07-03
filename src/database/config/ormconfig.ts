@@ -19,7 +19,7 @@ const ormconfig: ormconfigType = {
     password: process.env.DEV_DB_PASSWORD,
     database: DEV_SETTING.db.database,
     synchronize: true,
-    logging: false,
+    logging: true,
     entities: ['src/database/entity/**/*.ts'],
     migrations: ['src/database/migration/**/*.ts'],
     subscribers: ['src/database/subscriber/**/*.ts'],

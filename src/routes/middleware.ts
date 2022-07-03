@@ -5,9 +5,9 @@ import wrapAsync from '@/utils/wrapAsync';
 import { jwtVerify } from '@/auth/jwt';
 
 /**
- * 로그인한 유저만 해당 API 요청에 대한 응답을 받을 수 있도록 만드는 미들웨어 (각 router에서는 req.userId로 controller를 불러와 원하는 결과를 전송)
+ * access token을 검증 후, userId 값을 req에 담아서 넘겨주는 미들웨어 (인증 과정에서 실패 시, 오류 발생)
  */
-const checkLoggedIn = wrapAsync(
+export const checkLoggedIn = wrapAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -23,4 +23,18 @@ const checkLoggedIn = wrapAsync(
   },
 );
 
-export default checkLoggedIn;
+/**
+ * access token이 있다면 userId 값을 req에 담아주고, 없다면 그냥 스킵하는 미들웨어
+ */
+export const getUserId = wrapAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization;
+
+    if (token) {
+      const userId = await jwtVerify(token);
+      req.userId = userId;
+    }
+
+    next();
+  },
+);

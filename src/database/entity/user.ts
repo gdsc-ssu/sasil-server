@@ -1,14 +1,16 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import Experiment from './experiment';
 import ExpComment from './exp-comment';
 import ExpLike from './exp-like';
+import ExpBookmark from './exp-bookmark';
 import Request from './request';
 import ReqComment from './req-comment';
-import Notification from './notification';
 import ReqLike from './req-like';
+import ReqBookmark from './req-bookmark';
+import Notification from './notification';
 
 export type LoginTypes = 'apple' | 'google' | 'kakao';
 
@@ -58,31 +60,13 @@ class User extends BasicEntity {
   @OneToMany(() => ReqLike, (reqLike) => reqLike.user)
   reqLikes!: ReqLike[];
 
-  // User:Exp = M:N -> exp_bookmark
-  @ManyToMany(() => Experiment, (experiment) => experiment.userBookmarks)
-  @JoinTable({
-    name: 'exp_bookmark',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'exp_id',
-    },
-  })
-  bookmarkExps!: Experiment[];
+  // User:ExpBookmark = 1:N
+  @OneToMany(() => ExpBookmark, (expBookmark) => expBookmark.user)
+  expBookmarks!: ExpBookmark[];
 
-  // User:Request = M:N -> req_bookmark
-  @ManyToMany(() => Request, (request) => request.userBookmarks)
-  @JoinTable({
-    name: 'req_bookmark',
-    joinColumn: {
-      name: 'user_id',
-    },
-    inverseJoinColumn: {
-      name: 'req_id',
-    },
-  })
-  bookmarkReqs!: Request[];
+  // User:ReqBookmark = 1:N
+  @OneToMany(() => ReqBookmark, (reqBookmark) => reqBookmark.user)
+  reqBookmarks!: ReqBookmark[];
 }
 
 export default User;
