@@ -6,14 +6,17 @@ import User from './user';
 
 @Entity()
 class Notification extends BasicEntity {
-  @Column({ type: 'enum', enum: ['exp', 'req', 'req-exp', 'recomment'] })
-  noti_type!: string;
+  @Column('enum', {
+    name: 'noti_type',
+    enum: ['exp', 'req', 'req-exp', 'recomment'],
+  })
+  notiType!: string;
 
-  @Column('int', { nullable: true })
+  @Column('int', { name: 'post_id', nullable: true })
   postId!: string;
 
-  @Column({ type: 'enum', enum: ['exp', 'req'] })
-  post_type!: string;
+  @Column('enum', { name: 'post_type', enum: ['exp', 'req'] })
+  postType!: string;
 
   // Notification:User = N:1 -> sender_id
   @ManyToOne(() => User, (user) => user.sendNotifications)

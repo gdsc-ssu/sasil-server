@@ -8,9 +8,9 @@ components:
           properties:
             id:
               type: integer
-            created_at:
+            createdAt:
               type: string
-            updated_at:
+            updatedAt:
               type: string
             title:
               type: string
@@ -26,7 +26,7 @@ components:
                   type: integer
                 nickname:
                   type: string
-                profile_img:
+                profileImg:
                   type: string
                   nullable: true
             categories:
@@ -40,30 +40,30 @@ components:
                     type: string
         example:
           - id: 1
-            created_at: 2022-05-19T14:53:43.044Z
-            updated_at: 2022-05-19T14:53:43.044Z
+            createdAt: 2022-05-19T14:53:43.044Z
+            updatedAt: 2022-05-19T14:53:43.044Z
             title: 실험 게시물 제목
             thumbnail: 실험 게시물 썸네일 url (or null)
             likeCount: 3
             user:
               id: 1
               nickname: test
-              profile_img: 프로필 사진 url (or null)
+              profileImg: 프로필 사진 url (or null)
             categories:
               - id: 1
                 name: test
               - id: 2
                 name: test2
           - id: 2
-            created_at: 2022-05-19T14:53:43.044Z
-            updated_at: 2022-05-19T14:53:43.044Z
+            createdAt: 2022-05-19T14:53:43.044Z
+            updatedAt: 2022-05-19T14:53:43.044Z
             title: 실험 게시물 제목
             thumbnail: 실험 게시물 썸네일 url (or null)
             likeCount: 3
             user:
               id: 1
               nickname: test
-              profile_img: 프로필 사진 url (or null)
+              profileImg: 프로필 사진 url (or null)
             categories:
               - id: 1
                 name: test
@@ -77,9 +77,9 @@ components:
           properties:
             id:
               type: integer
-            created_at:
+            createdAt:
               type: string
-            updated_at:
+            updatedAt:
               type: string
             title:
               type: string
@@ -98,7 +98,7 @@ components:
                   type: integer
                 nickname:
                   type: string
-                profile_img:
+                profileImg:
                   type: string
                   nullable: true
             categories:
@@ -112,8 +112,8 @@ components:
                     type: string
         example:
           - id: 1
-            created_at: 2022-05-19T14:53:43.044Z
-            updated_at: 2022-05-19T14:53:43.044Z
+            createdAt: 2022-05-19T14:53:43.044Z
+            updatedAt: 2022-05-19T14:53:43.044Z
             title: 의뢰 게시물 제목
             thumbnail: 의뢰 게시물 썸네일 url (or null)
             likeCount: 3
@@ -121,15 +121,15 @@ components:
             user:
               id: 1
               nickname: test
-              profile_img: 프로필 사진 url (or null)
+              profileImg: 프로필 사진 url (or null)
             categories:
               - id: 1
                 name: test
               - id: 2
                 name: test2
           - id: 2
-            created_at: 2022-05-19T14:53:43.044Z
-            updated_at: 2022-05-19T14:53:43.044Z
+            createdAt: 2022-05-19T14:53:43.044Z
+            updatedAt: 2022-05-19T14:53:43.044Z
             title: 의뢰 게시물 제목
             thumbnail: 의뢰 게시물 썸네일 url (or null)
             likeCount: 3
@@ -137,7 +137,7 @@ components:
             user:
               id: 1
               nickname: test
-              profile_img: 프로필 사진 url (or null)
+              profileImg: 프로필 사진 url (or null)
             categories:
               - id: 1
                 name: test

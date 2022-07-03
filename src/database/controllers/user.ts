@@ -61,7 +61,7 @@ export const addUser = async (
 
   const newUserData = userRepository.create({
     email,
-    login_type: loginType,
+    loginType,
     nickname, // TODO: random 생성
   });
 

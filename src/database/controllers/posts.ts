@@ -19,12 +19,12 @@ const getExperimentList = async (
 ) => {
   const sortType = {
     popular: {
-      first: 'like_count',
-      second: 'topExps.like_count',
+      first: 'likeCount',
+      second: 'topExps.likeCount',
     },
     recent: {
-      first: 'subexp.created_at',
-      second: 'experiment.created_at',
+      first: 'subexp.createdAt',
+      second: 'experiment.createdAt',
     },
   };
 
@@ -32,18 +32,18 @@ const getExperimentList = async (
     .createQueryBuilder('experiment')
     .select([
       'experiment.id',
-      'experiment.created_at',
-      'experiment.updated_at',
+      'experiment.createdAt',
+      'experiment.updatedAt',
       'experiment.title',
       'experiment.thumbnail',
       'user.id',
       'user.nickname',
-      'user.profile_img',
+      'user.profileImg',
     ])
     .innerJoin(
       (qb) =>
         qb
-          .select(['subexp.id', 'COUNT(likes.id) as like_count'])
+          .select(['subexp.id', 'COUNT(likes.id) as likeCount'])
           .from(ExperimentEntity, 'subexp')
           .leftJoin('subexp.expLikes', 'likes')
           .groupBy('subexp.id')
@@ -56,7 +56,7 @@ const getExperimentList = async (
     .leftJoin('experiment.user', 'user')
     .leftJoinAndSelect('experiment.expCategories', 'expCategories')
     .leftJoinAndSelect('expCategories.category', 'category')
-    .loadRelationCountAndMap('experiment.like_count', 'experiment.expLikes')
+    .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
@@ -67,12 +67,12 @@ const getExperimentList = async (
   const result = expListData.map((expData) => {
     const { expCategories, ...data } = expData;
 
-    const categoriesData = expCategories.map((categoryData) => ({
+    const categories = expCategories.map((categoryData) => ({
       id: categoryData.category.id,
       name: categoryData.category.name,
     }));
 
-    return { ...data, categories: categoriesData };
+    return { ...data, categories };
   });
 
   return result;
@@ -95,12 +95,12 @@ const getRequestList = async (
 ) => {
   const sortType = {
     popular: {
-      first: 'like_count',
-      second: 'topReqs.like_count',
+      first: 'likeCount',
+      second: 'topReqs.likeCount',
     },
     recent: {
-      first: 'subreq.created_at',
-      second: 'request.created_at',
+      first: 'subreq.createdAt',
+      second: 'request.createdAt',
     },
   };
 
@@ -114,19 +114,19 @@ const getRequestList = async (
     .createQueryBuilder('request')
     .select([
       'request.id',
-      'request.created_at',
-      'request.updated_at',
+      'request.createdAt',
+      'request.updatedAt',
       'request.title',
       'request.thumbnail',
       'request.state',
       'user.id',
       'user.nickname',
-      'user.profile_img',
+      'user.profileImg',
     ])
     .innerJoin(
       (qb) =>
         qb
-          .select(['subreq.id', 'COUNT(likes.id) as like_count'])
+          .select(['subreq.id', 'COUNT(likes.id) as likeCount'])
           .from(RequestEntity, 'subreq')
           .where('subreq.state != :reverseState ', {
             reverseState: reverseState[state],
@@ -142,7 +142,7 @@ const getRequestList = async (
     .leftJoin('request.user', 'user')
     .leftJoinAndSelect('request.reqCategories', 'reqCategories')
     .leftJoinAndSelect('reqCategories.category', 'category')
-    .loadRelationCountAndMap('request.like_count', 'request.reqLikes')
+    .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
@@ -153,12 +153,12 @@ const getRequestList = async (
   const result = reqListData.map((expData) => {
     const { reqCategories, ...data } = expData;
 
-    const categoriesData = reqCategories.map((categoryData) => ({
+    const categories = reqCategories.map((categoryData) => ({
       id: categoryData.category.id,
       name: categoryData.category.name,
     }));
 
-    return { ...data, categories: categoriesData };
+    return { ...data, categories };
   });
 
   return result;
