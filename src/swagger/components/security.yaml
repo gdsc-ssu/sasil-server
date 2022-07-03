@@ -1,6 +1,6 @@
 components:
   securitySchemes:
-    sasil-jwt:
+    sasil-access-token:
       description: sasil에서 로그인 후 받은 jwt
       in: header
       name: Authorization
