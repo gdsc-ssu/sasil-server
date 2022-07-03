@@ -19,8 +19,8 @@ const getExperimentList = async (
 ) => {
   const sortType = {
     popular: {
-      first: 'likeCount',
-      second: 'topExps.likeCount',
+      first: 'like_count',
+      second: 'topExps.like_count',
     },
     recent: {
       first: 'subexp.created_at',
@@ -43,7 +43,7 @@ const getExperimentList = async (
     .innerJoin(
       (qb) =>
         qb
-          .select(['subexp.id', 'COUNT(likes.id) as likeCount'])
+          .select(['subexp.id', 'COUNT(likes.id) as like_count'])
           .from(ExperimentEntity, 'subexp')
           .leftJoin('subexp.expLikes', 'likes')
           .groupBy('subexp.id')
@@ -55,8 +55,8 @@ const getExperimentList = async (
     )
     .leftJoin('experiment.user', 'user')
     .leftJoinAndSelect('experiment.expCategories', 'expCategories')
-    .leftJoinAndSelect('expCategories.category', 'categories')
-    .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
+    .leftJoinAndSelect('expCategories.category', 'category')
+    .loadRelationCountAndMap('experiment.like_count', 'experiment.expLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
@@ -64,7 +64,18 @@ const getExperimentList = async (
     throw new ServerError('DB에서 expListData 조회를 실패하였습니다.');
   }
 
-  return expListData;
+  const result = expListData.map((expData) => {
+    const { expCategories, ...data } = expData;
+
+    const categoriesData = expCategories.map((categoryData) => ({
+      id: categoryData.category.id,
+      name: categoryData.category.name,
+    }));
+
+    return { ...data, categories: categoriesData };
+  });
+
+  return result;
 };
 
 /**
@@ -84,8 +95,8 @@ const getRequestList = async (
 ) => {
   const sortType = {
     popular: {
-      first: 'likeCount',
-      second: 'topReqs.likeCount',
+      first: 'like_count',
+      second: 'topReqs.like_count',
     },
     recent: {
       first: 'subreq.created_at',
@@ -115,7 +126,7 @@ const getRequestList = async (
     .innerJoin(
       (qb) =>
         qb
-          .select(['subreq.id', 'COUNT(likes.id) as likeCount'])
+          .select(['subreq.id', 'COUNT(likes.id) as like_count'])
           .from(RequestEntity, 'subreq')
           .where('subreq.state != :reverseState ', {
             reverseState: reverseState[state],
@@ -130,8 +141,8 @@ const getRequestList = async (
     )
     .leftJoin('request.user', 'user')
     .leftJoinAndSelect('request.reqCategories', 'reqCategories')
-    .leftJoinAndSelect('reqCategories.category', 'categories')
-    .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
+    .leftJoinAndSelect('reqCategories.category', 'category')
+    .loadRelationCountAndMap('request.like_count', 'request.reqLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
@@ -139,7 +150,18 @@ const getRequestList = async (
     throw new ServerError('DB에서 reqListData 조회를 실패하였습니다.');
   }
 
-  return reqListData;
+  const result = reqListData.map((expData) => {
+    const { reqCategories, ...data } = expData;
+
+    const categoriesData = reqCategories.map((categoryData) => ({
+      id: categoryData.category.id,
+      name: categoryData.category.name,
+    }));
+
+    return { ...data, categories: categoriesData };
+  });
+
+  return result;
 };
 
 export { getExperimentList, getRequestList };

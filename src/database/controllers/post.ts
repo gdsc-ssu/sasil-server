@@ -34,12 +34,16 @@ export const getExperimentPost = async (
     .leftJoin('experiment.user', 'user')
     .leftJoinAndSelect('experiment.expCategories', 'expCategories')
     .leftJoinAndSelect('expCategories.category', 'categories')
-    .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
+    .loadRelationCountAndMap('experiment.like_count', 'experiment.expLikes')
     .loadRelationCountAndMap(
-      'experiment.bookmarkCount',
+      'experiment.bookmark_count',
       'experiment.expBookmarks',
     )
     .getOne();
+
+  if (!expPostData) {
+    throw new BadRequestError('존재하지 않는 게시물입니다.');
+  }
 
   // 좋아요, 북마크 여부 파악 (with userId)
   const isLike = userId
@@ -58,7 +62,20 @@ export const getExperimentPost = async (
         .getOne())
     : false;
 
-  return { ...expPostData, isLike, isBookmark };
+  const { expCategories, ...data } = expPostData;
+  const categoriesData = expCategories.map((categoryData) => ({
+    id: categoryData.category.id,
+    name: categoryData.category.name,
+  }));
+
+  const result = {
+    ...data,
+    categories: categoriesData,
+    is_like: isLike,
+    is_bookmark: isBookmark,
+  };
+
+  return result;
 };
 
 /**
@@ -79,9 +96,13 @@ export const getRequestPost = async (
     .leftJoin('request.user', 'user')
     .leftJoinAndSelect('request.reqCategories', 'reqCategories')
     .leftJoinAndSelect('reqCategories.category', 'categories')
-    .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
-    .loadRelationCountAndMap('request.bookmarkCount', 'request.reqBookmarks')
+    .loadRelationCountAndMap('request.like_count', 'request.reqLikes')
+    .loadRelationCountAndMap('request.bookmark_count', 'request.reqBookmarks')
     .getOne();
+
+  if (!reqPostData) {
+    throw new BadRequestError('존재하지 않는 게시물입니다.');
+  }
 
   const isLike = userId
     ? !!(await getRepository(ReqLikeEntity)
@@ -99,7 +120,20 @@ export const getRequestPost = async (
         .getOne())
     : false;
 
-  return { ...reqPostData, isLike, isBookmark };
+  const { reqCategories, ...data } = reqPostData;
+  const categoriesData = reqCategories.map((categoryData) => ({
+    id: categoryData.category.id,
+    name: categoryData.category.name,
+  }));
+
+  const result = {
+    ...data,
+    categories: categoriesData,
+    is_like: isLike,
+    is_bookmark: isBookmark,
+  };
+
+  return result;
 };
 
 /**
@@ -125,7 +159,7 @@ export const getExpListByReqId = async (reqId: number) => {
       'user.profile_img',
     ])
     .leftJoin('experiment.user', 'user')
-    .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
+    .loadRelationCountAndMap('experiment.like_count', 'experiment.expLikes')
     .orderBy(`${sortType}`, 'DESC')
     .getMany();
 
@@ -155,8 +189,8 @@ export const getReqPostByExpId = async (expId: number) => {
     ])
     .leftJoin('experiment.request', 'request')
     .leftJoin('request.user', 'user')
-    .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
-    .loadRelationCountAndMap('request.bookmarkCount', 'request.reqBookmarks')
+    .loadRelationCountAndMap('request.like_count', 'request.reqLikes')
+    .loadRelationCountAndMap('request.bookmark_count', 'request.reqBookmarks')
     .getOne();
 
   return reqPost?.request;
