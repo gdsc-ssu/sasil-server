@@ -3,7 +3,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 
-import { ForbiddenError } from '@/errors/customErrors';
+import { UnauthorizedError } from '@/errors/customErrors';
 import { PROD_SETTING } from '@/constants/index';
 import { getUserByLoginInfo, addUser } from '@/database/controllers/user';
 
@@ -80,7 +80,7 @@ const verifyApple = async (token: string, deviceType: DeviceTypes) => {
   try {
     idToken = await getAppleToken(token, deviceType);
   } catch (error) {
-    throw new ForbiddenError(
+    throw new UnauthorizedError(
       '프론트에서 애플 로그인 후 전달받은 토큰이 유효하지 않습니다.',
     );
   }
