@@ -564,3 +564,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/responseBodies/Error'
+
+  /post/image:
+    get:
+      summary: 이미지 업로드 URL
+      tags:
+        - Post
+      security:
+        - sasil-access-token: []
+      responses:
+        '200':
+          description: 수신 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imgUploadURL:
+                    type: string
