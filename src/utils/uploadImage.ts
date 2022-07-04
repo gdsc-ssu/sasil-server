@@ -29,7 +29,7 @@ export const getImgUploadURL = async () => {
       },
     );
 
-    return imageResponse.data.result.uploadURL;
+    return { imgUploadURL: imageResponse.data.result.uploadURL };
   } catch (error) {
     throw new ServerError('이미지 업로드 URL을 받아오는데 실패하였습니다.');
   }
