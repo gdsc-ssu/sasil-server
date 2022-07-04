@@ -21,6 +21,7 @@ import {
   addPost,
 } from '@/database/controllers/post';
 import { checkLoggedIn, getUserId } from './middleware';
+import { getImgUploadURL } from '@/utils/uploadImage';
 
 const router = express.Router();
 
@@ -295,6 +296,17 @@ router.post(
     );
 
     res.end();
+  }),
+);
+
+// 이미지 업로드 URL 반환
+router.get(
+  '/:image',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const imgUploadURL = await getImgUploadURL();
+
+    return res.json(imgUploadURL);
   }),
 );
 
