@@ -519,7 +519,7 @@ paths:
 
   /post/{postType}:
     post:
-      summary: 게시물 추가
+      summary: 게시물 작성
       tags:
         - Post
       parameters:
