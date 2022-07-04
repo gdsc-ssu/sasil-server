@@ -18,22 +18,19 @@ interface ResponseType {
 
 // Direct Creator Upload 방식
 export const getImgUploadURL = async () => {
-  const imageResponse = await axios.post<ResponseType>(
-    `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ACCOUNT_ID}/images/v2/direct_upload`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.CF_API_TOKEN}`,
+  try {
+    const imageResponse = await axios.post<ResponseType>(
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ACCOUNT_ID}/images/v2/direct_upload`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CF_API_TOKEN}`,
+        },
       },
-    },
-  );
+    );
 
-  if (!imageResponse.data.success) {
+    return imageResponse.data.result.uploadURL;
+  } catch (error) {
     throw new ServerError('이미지 업로드 URL을 받아오는데 실패하였습니다.');
   }
-
-  const { uploadURL } = imageResponse.data.result;
-
-  return uploadURL;
 };
