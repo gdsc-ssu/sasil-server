@@ -23,25 +23,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExperimentDetail'
+                $ref: '#/components/schemas/responseBodies/ExperimentDetail'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/request/{postId}:
     get:
@@ -63,25 +63,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RequestDetail'
+                $ref: '#/components/schemas/responseBodies/RequestDetail'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/request/{reqId}/experiments:
     get:
@@ -101,25 +101,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExperimentListByReq'
+                $ref: '#/components/schemas/responseBodies/ExperimentListByReq'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/experiment/{expId}/request:
     get:
@@ -139,25 +139,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RequestForExp'
+                $ref: '#/components/schemas/responseBodies/RequestForExp'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/{postType}/{postId}/comments:
     get:
@@ -194,25 +194,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comments'
+                $ref: '#/components/schemas/responseBodies/Comments'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/{postType}/{postId}/comment:
     post:
@@ -233,6 +233,11 @@ paths:
           description: 게시물 id값
           schema:
             type: number
+        - in: body
+          name: comment
+          description: 댓글 내용
+          schema:
+            $ref: '#/components/schemas/requestBodies/Comments'
       security:
         - sasil-access-token: []
       responses:
@@ -243,25 +248,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/{postType}/{postId}/comment/{commentId}:
     delete:
@@ -298,25 +303,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/{postType}/{postId}/like:
     post:
@@ -347,25 +352,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
     delete:
       summary: 좋아요 삭제
@@ -395,25 +400,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /post/{postType}/{postId}/bookmark:
     post:
@@ -444,25 +449,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
     delete:
       summary: 북마크 삭제
@@ -492,22 +497,88 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
+
+  /post/{postType}:
+    post:
+      summary: 게시물 작성
+      tags:
+        - Post
+      parameters:
+        - in: path
+          name: postType
+          required: true
+          description: 게시물 종류
+          schema:
+            type: string
+            enum: ['experiment', 'request']
+        - in: body
+          name: postData
+          description: 게시물 데이터
+          schema:
+            $ref: '#/components/schemas/requestBodies/PostData'
+      security:
+        - sasil-access-token: []
+      responses:
+        '200':
+          description: 요청 성공 (body X)
+        '400':
+          description: 잘못된 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseBodies/Error'
+        '401':
+          description: 인증 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseBodies/Error'
+        '404':
+          description: 존재하지 않는 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseBodies/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseBodies/Error'
+
+  /post/image:
+    get:
+      summary: 이미지 업로드 URL
+      tags:
+        - Post
+      security:
+        - sasil-access-token: []
+      responses:
+        '200':
+          description: 수신 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imgUploadURL:
+                    type: string

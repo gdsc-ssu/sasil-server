@@ -1,12 +1,5 @@
 /* eslint-disable import/no-cycle */
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  OneToMany,
-  ManyToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -14,7 +7,7 @@ import Experiment from './experiment';
 import ReqComment from './req-comment';
 import ReqLike from './req-like';
 import ReqBookmark from './req-bookmark';
-import Category from './category';
+import ReqCategory from './req-category';
 
 @Entity()
 class Request extends BasicEntity {
@@ -27,7 +20,7 @@ class Request extends BasicEntity {
   @Column('varchar', { length: 255, nullable: true })
   thumbnail!: string;
 
-  @Column({ type: 'enum', enum: ['wait', 'answered'], default: 'wait' })
+  @Column('enum', { enum: ['wait', 'answered'], default: 'wait' })
   state!: 'wait' | 'answered';
 
   // Request:User = N:1
@@ -53,9 +46,9 @@ class Request extends BasicEntity {
   @OneToMany(() => ReqBookmark, (reqBookmark) => reqBookmark.request)
   reqBookmarks!: ReqBookmark[];
 
-  // Request:Category = M:N -> req_category
-  @ManyToMany(() => Category, (category) => category.requests) // req_category
-  categories!: Category[];
+  // Request:ReqCategory = 1:N
+  @OneToMany(() => ReqCategory, (reqCategory) => reqCategory.request)
+  reqCategories!: ReqCategory[];
 }
 
 export default Request;

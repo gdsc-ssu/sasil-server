@@ -11,15 +11,16 @@ export const checkLoggedIn = wrapAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
-    if (token) {
-      const userId = await jwtVerify(token);
-      req.userId = userId;
-      next();
-    } else {
+    if (!token) {
       throw new UnauthorizedError(
         '요청의 Authorization Header에 JWT 토큰이 포함되어 있지 않습니다.',
       );
     }
+
+    const userId = await jwtVerify(token);
+    req.userId = userId;
+
+    next();
   },
 );
 

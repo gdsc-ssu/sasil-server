@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import { BadRequestError } from '@/errors/customErrors';
+import { BadRequestError, ServerError } from '@/errors/customErrors';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 import ReqCommentEntity from '@/database/entity/req-comment';
@@ -10,6 +10,9 @@ import ReqLikeEntity from '@/database/entity/req-like';
 import ExpLikeEntity from '@/database/entity/exp-like';
 import ReqBookmarkEntity from '@/database/entity/req-bookmark';
 import ExpBookmarkEntity from '@/database/entity/exp-bookmark';
+import CategoryEntity from '@/database/entity/category';
+import ReqCategoryEntity from '@/database/entity/req-category';
+import ExpCategoryEntity from '@/database/entity/exp-category';
 
 type PostType = 'experiment' | 'request';
 
@@ -27,22 +30,20 @@ export const getExperimentPost = async (
   const expPostData = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .where('experiment.id = :postId', { postId })
-    .select([
-      'experiment',
-      'user.id',
-      'user.nickname',
-      'user.profile_img',
-      'categories.id',
-      'categories.name',
-    ])
+    .select(['experiment', 'user.id', 'user.nickname', 'user.profileImg'])
     .leftJoin('experiment.user', 'user')
-    .leftJoin('experiment.categories', 'categories')
+    .leftJoinAndSelect('experiment.expCategories', 'expCategories')
+    .leftJoinAndSelect('expCategories.category', 'categories')
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
     .loadRelationCountAndMap(
       'experiment.bookmarkCount',
       'experiment.expBookmarks',
     )
     .getOne();
+
+  if (!expPostData) {
+    throw new BadRequestError('존재하지 않는 게시물입니다.');
+  }
 
   // 좋아요, 북마크 여부 파악 (with userId)
   const isLike = userId
@@ -61,7 +62,20 @@ export const getExperimentPost = async (
         .getOne())
     : false;
 
-  return { ...expPostData, isLike, isBookmark };
+  const { expCategories, ...data } = expPostData;
+  const categories = expCategories.map((categoryData) => ({
+    id: categoryData.category.id,
+    name: categoryData.category.name,
+  }));
+
+  const result = {
+    ...data,
+    isLike,
+    isBookmark,
+    categories,
+  };
+
+  return result;
 };
 
 /**
@@ -78,19 +92,17 @@ export const getRequestPost = async (
   const reqPostData = await getRepository(RequestEntity)
     .createQueryBuilder('request')
     .where('request.id = :postId', { postId })
-    .select([
-      'request',
-      'user.id',
-      'user.nickname',
-      'user.profile_img',
-      'categories.id',
-      'categories.name',
-    ])
+    .select(['request', 'user.id', 'user.nickname', 'user.profileImg'])
     .leftJoin('request.user', 'user')
-    .leftJoin('request.categories', 'categories')
+    .leftJoinAndSelect('request.reqCategories', 'reqCategories')
+    .leftJoinAndSelect('reqCategories.category', 'categories')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .loadRelationCountAndMap('request.bookmarkCount', 'request.reqBookmarks')
     .getOne();
+
+  if (!reqPostData) {
+    throw new BadRequestError('존재하지 않는 게시물입니다.');
+  }
 
   const isLike = userId
     ? !!(await getRepository(ReqLikeEntity)
@@ -108,7 +120,20 @@ export const getRequestPost = async (
         .getOne())
     : false;
 
-  return { ...reqPostData, isLike, isBookmark };
+  const { reqCategories, ...data } = reqPostData;
+  const categories = reqCategories.map((categoryData) => ({
+    id: categoryData.category.id,
+    name: categoryData.category.name,
+  }));
+
+  const result = {
+    ...data,
+    isLike,
+    isBookmark,
+    categories,
+  };
+
+  return result;
 };
 
 /**
@@ -118,20 +143,20 @@ export const getRequestPost = async (
  * @returns experiment posts list
  */
 export const getExpListByReqId = async (reqId: number) => {
-  const sortType = 'experiment.created_at';
+  const sortType = 'experiment.createdAt';
 
   const expPostList = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .where('experiment.req_id = :reqId', { reqId })
     .select([
       'experiment.id',
-      'experiment.created_at',
-      'experiment.updated_at',
+      'experiment.createdAt',
+      'experiment.updatedAt',
       'experiment.title',
       'experiment.thumbnail',
       'user.id',
       'user.nickname',
-      'user.profile_img',
+      'user.profileImg',
     ])
     .leftJoin('experiment.user', 'user')
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
@@ -154,13 +179,13 @@ export const getReqPostByExpId = async (expId: number) => {
     .select([
       'experiment.id',
       'request.id',
-      'request.created_at',
-      'request.updated_at',
+      'request.createdAt',
+      'request.updatedAt',
       'request.title',
       'request.thumbnail',
       'user.id',
       'user.nickname',
-      'user.profile_img',
+      'user.profileImg',
     ])
     .leftJoin('experiment.request', 'request')
     .leftJoin('request.user', 'user')
@@ -191,7 +216,7 @@ export const getComments = async (
       ? [ReqCommentEntity, 'req_comment', 'req_id']
       : [ExpCommentEntity, 'exp_comment', 'exp_id'];
 
-  const sortType = `${entityName}.created_at`;
+  const sortType = `${entityName}.createdAt`;
 
   const commentsData = await getRepository(TargetEntity)
     .createQueryBuilder(entityName)
@@ -200,7 +225,7 @@ export const getComments = async (
       `${entityName}`,
       'commWriter.id',
       'commWriter.nickname',
-      'commWriter.profile_img',
+      'commWriter.profileImg',
     ])
     .orderBy(sortType, 'DESC')
     .offset((page - 1) * display)
@@ -278,7 +303,7 @@ export const deleteComment = async (
     .andWhere(`${entityName}.user_id = :userId`, { userId })
     .execute();
 
-  if (deleteCommResult.affected === 0) {
+  if (deleteCommResult.affected !== 1) {
     throw new BadRequestError(
       '존재하지 않는 게시물/댓글에 대한 요청입니다. (혹은 본인 댓글이 아닙니다.)',
     );
@@ -346,7 +371,7 @@ export const deleteLike = async (
     .andWhere(`${entityName}.user_id = :userId`, { userId })
     .execute();
 
-  if (deleteLikeResult.affected === 0) {
+  if (deleteLikeResult.affected !== 1) {
     throw new BadRequestError('존재하지 않는 게시물에 대한 요청입니다.');
   }
 };
@@ -412,7 +437,203 @@ export const deleteBookmark = async (
     .andWhere(`${entityName}.user_id = :userId`, { userId })
     .execute();
 
-  if (deleteBookmarkResult.affected === 0) {
+  if (deleteBookmarkResult.affected !== 1) {
     throw new BadRequestError('존재하지 않는 게시물에 대한 요청입니다.');
   }
 };
+
+/**
+ * 게시글 추가
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param userId 유저의 id값
+ * @param title 게시물 제목
+ * @param content 게시물 내용
+ * @param thumbnail 게시물 썸네일 (nullable)
+ * @param categories 게시물의 카테고리 배열
+ * @param reqId 실험 게시물이 수행한 의뢰 게시물의 id값
+ */
+export const addPost = async (
+  postType: PostType,
+  userId: number,
+  title: string,
+  content: string,
+  thumbnail: string | undefined,
+  categories: string[],
+  reqId: number | undefined,
+) => {
+  const [PostEntity, PostCategoryEntity, postEntityName, categoryEntityName] = (
+    postType === 'request'
+      ? [RequestEntity, ReqCategoryEntity, 'request', 'req_category']
+      : [ExperimentEntity, ExpCategoryEntity, 'experiment', 'exp_category']
+  ) as any;
+
+  // 유저 정보
+  const newUser = new UserEntity();
+  newUser.id = userId;
+
+  // 게시물 정보
+  const newPost = new PostEntity();
+  newPost.user = newUser;
+  newPost.title = title;
+  newPost.content = content;
+
+  if (thumbnail) {
+    newPost.thumbnail = thumbnail;
+  }
+
+  // 실험 게시물 작성글이면서, 선택한 의뢰 게시물이 있는 경우
+  if (postType === 'experiment' && reqId) {
+    const reqPost = await getRepository(RequestEntity)
+      .createQueryBuilder('request')
+      .where('request.id = :reqId', { reqId })
+      .select(['request.id', 'request.state'])
+      .getOne();
+
+    // 선택된 의뢰 게시물의 state가 'wait'인 경우, 'answered'로 변경
+    if (reqPost?.state === 'wait') {
+      const editRequStateResult = await getRepository(RequestEntity)
+        .createQueryBuilder('request')
+        .update()
+        .set({ state: 'answered' })
+        .where('request.id = :reqId', { reqId })
+        .execute();
+
+      if (editRequStateResult.affected !== 1) {
+        throw new BadRequestError(
+          '존재하지 않는 실험 게시물에 대한 요청입니다.',
+        );
+      }
+    }
+
+    newPost.request = reqPost;
+  }
+
+  const insertPostResult = await getRepository(PostEntity)
+    .createQueryBuilder()
+    .insert()
+    .into(postEntityName)
+    .values(newPost)
+    .updateEntity(false)
+    .execute();
+
+  const postId = insertPostResult.raw.insertId; // insert 후, 해당 id값
+
+  // 카테고리 처리 로직
+  if (categories.length > 0) {
+    categories.forEach(async (category) => {
+      // 카테고리 이름으로 조회
+      const categoryData = await getRepository(CategoryEntity)
+        .createQueryBuilder('category')
+        .where('category.name = :category', { category })
+        .select()
+        .getOne();
+
+      let categoryId = categoryData?.id;
+
+      // 없으면 추가
+      if (!categoryData) {
+        const insertCategoryResult = await getRepository(CategoryEntity)
+          .createQueryBuilder()
+          .insert()
+          .into('category')
+          .values({ name: category })
+          .updateEntity(false)
+          .execute();
+
+        categoryId = insertCategoryResult.raw.insertId;
+      }
+
+      // 게시물-카테고리 추가
+      if (!categoryId || !postId) {
+        throw new ServerError(
+          '카테고리 혹은 게시물 데이터가 정상적으로 생성되지 않았습니다.',
+        );
+      }
+
+      const newCategory = new CategoryEntity();
+      newCategory.id = categoryId;
+
+      newPost.id = postId;
+
+      const newPostCategory = new PostCategoryEntity();
+      newPostCategory.category = newCategory;
+      newPostCategory[postEntityName] = newPost;
+
+      await getRepository(PostCategoryEntity)
+        .createQueryBuilder()
+        .insert()
+        .into(categoryEntityName)
+        .values(newPostCategory)
+        .updateEntity(false)
+        .execute();
+    });
+  }
+};
+
+// TODO: 삭제
+// /**
+//  * 게시글 삭제
+//  *
+//  * @param postType 게시물 타입 (request | experiment)
+//  * @param postId 게시물 id값
+//  * @param userId 유저의 id값
+//  */
+// export const deletePost = async (
+//   postType: PostType,
+//   postId: number,
+//   userId: number,
+// ) => {
+//   const [PostEntity, entityName, entityId] =
+//     postType === 'request'
+//       ? [RequestEntity, 'request', 'req_id']
+//       : [ExperimentEntity, 'experiment', 'exp_id'];
+
+//   const deletePostResult = await getRepository(PostEntity)
+//     .createQueryBuilder(entityName)
+//     .delete()
+//     .where(`${entityName}.id = :postId`, { postId })
+//     .andWhere(`${entityName}.user_id = :userId`, { userId })
+//     .execute();
+
+//   if (deletePostResult.affected !== 1) {
+//     throw new BadRequestError(
+//       '존재하지 않는 게시물에 대한 요청입니다. (혹은 본인 게시물이 아닙니다.)',
+//     );
+//   }
+// };
+
+// TODO: 수정
+// /**
+//  * 게시글 수정
+//  *
+//  * @param postType 게시물 타입 (request | experiment)
+//  * @param postId 게시물 id값
+//  * @param userId 유저의 id값
+//  */
+// export const editPost = async (
+//   postType: PostType,
+//   postId: number,
+//   userId: number,
+//   title: string,
+//   content: string,
+//   thumbnail: string | undefined,
+//   reqId: number | undefined,
+// ) => {
+//   const [PostEntity, entityName, entityId] =
+//     postType === 'request'
+//       ? [RequestEntity, 'request', 'req_id']
+//       : [ExperimentEntity, 'experiment', 'exp_id'];
+
+//   const editRequStateResult = await getRepository(PostEntity)
+//     .createQueryBuilder(entityName)
+//     .update()
+//     .set({ title, content, thumbnail })
+//     .where(`${entityName}.id = :postId`, { postId })
+//     .andWhere(`${entityName}.user_id = :userId`, { userId })
+//     .execute();
+
+//   if (editRequStateResult.affected !== 1) {
+//     throw new BadRequestError('존재하지 않는 실험 게시물에 대한 요청입니다.');
+//   }
+// };

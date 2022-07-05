@@ -19,14 +19,14 @@ class User extends BasicEntity {
   @Column('varchar', { length: 255 })
   email!: string;
 
-  @Column({ type: 'enum', enum: ['kakao', 'google', 'apple'] })
-  login_type!: LoginTypes;
+  @Column('enum', { name: 'login_type', enum: ['kakao', 'google', 'apple'] })
+  loginType!: LoginTypes;
 
   @Column('varchar', { length: 30 })
   nickname!: string;
 
-  @Column('varchar', { length: 255, nullable: true })
-  profile_img!: string;
+  @Column('varchar', { name: 'profile_img', length: 255, nullable: true })
+  profileImg!: string;
 
   // User:Exp = 1:N
   @OneToMany(() => Experiment, (experiment) => experiment.user)
