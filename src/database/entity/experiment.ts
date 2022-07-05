@@ -1,12 +1,5 @@
 /* eslint-disable import/no-cycle */
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  ManyToMany,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -14,7 +7,7 @@ import Request from './request';
 import ExpComment from './exp-comment';
 import ExpLike from './exp-like';
 import ExpBookmark from './exp-bookmark';
-import Category from './category';
+import ExpCategory from './exp-category';
 
 @Entity()
 class Experiment extends BasicEntity {
@@ -49,13 +42,13 @@ class Experiment extends BasicEntity {
   @OneToMany(() => ExpLike, (expLike) => expLike.experiment)
   expLikes!: ExpLike[];
 
-  // Exp:ExpBookmark = M:N -> exp_bookmark
+  // Exp:ExpBookmark = 1:N
   @OneToMany(() => ExpBookmark, (expBookmark) => expBookmark.experiment)
   expBookmarks!: ExpBookmark[];
 
-  // Exp:Category = M:N -> exp_category
-  @ManyToMany(() => Category, (category) => category.experiments)
-  categories!: Category[];
+  // Exp:ExpCategory = 1:N
+  @OneToMany(() => ExpCategory, (expCategory) => expCategory.experiment)
+  expCategories!: ExpCategory[];
 }
 
 export default Experiment;
