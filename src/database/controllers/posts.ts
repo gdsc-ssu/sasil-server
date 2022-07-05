@@ -23,8 +23,8 @@ const getExperimentList = async (
       second: 'topExps.likeCount',
     },
     recent: {
-      first: 'subexp.created_at',
-      second: 'experiment.created_at',
+      first: 'subexp.createdAt',
+      second: 'experiment.createdAt',
     },
   };
 
@@ -32,15 +32,13 @@ const getExperimentList = async (
     .createQueryBuilder('experiment')
     .select([
       'experiment.id',
-      'experiment.created_at',
-      'experiment.updated_at',
+      'experiment.createdAt',
+      'experiment.updatedAt',
       'experiment.title',
       'experiment.thumbnail',
       'user.id',
       'user.nickname',
-      'user.profile_img',
-      'categories.id',
-      'categories.name',
+      'user.profileImg',
     ])
     .innerJoin(
       (qb) =>
@@ -56,7 +54,8 @@ const getExperimentList = async (
       'topExps.subexp_id = experiment.id',
     )
     .leftJoin('experiment.user', 'user')
-    .leftJoin('experiment.categories', 'categories')
+    .leftJoinAndSelect('experiment.expCategories', 'expCategories')
+    .leftJoinAndSelect('expCategories.category', 'category')
     .loadRelationCountAndMap('experiment.likeCount', 'experiment.expLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
@@ -65,7 +64,18 @@ const getExperimentList = async (
     throw new ServerError('DB에서 expListData 조회를 실패하였습니다.');
   }
 
-  return expListData;
+  const result = expListData.map((expData) => {
+    const { expCategories, ...data } = expData;
+
+    const categories = expCategories.map((categoryData) => ({
+      id: categoryData.category.id,
+      name: categoryData.category.name,
+    }));
+
+    return { ...data, categories };
+  });
+
+  return result;
 };
 
 /**
@@ -89,8 +99,8 @@ const getRequestList = async (
       second: 'topReqs.likeCount',
     },
     recent: {
-      first: 'subreq.created_at',
-      second: 'request.created_at',
+      first: 'subreq.createdAt',
+      second: 'request.createdAt',
     },
   };
 
@@ -104,16 +114,14 @@ const getRequestList = async (
     .createQueryBuilder('request')
     .select([
       'request.id',
-      'request.created_at',
-      'request.updated_at',
+      'request.createdAt',
+      'request.updatedAt',
       'request.title',
       'request.thumbnail',
       'request.state',
       'user.id',
       'user.nickname',
-      'user.profile_img',
-      'categories.id',
-      'categories.name',
+      'user.profileImg',
     ])
     .innerJoin(
       (qb) =>
@@ -132,7 +140,8 @@ const getRequestList = async (
       'topReqs.subreq_id = request.id',
     )
     .leftJoin('request.user', 'user')
-    .leftJoin('request.categories', 'categories')
+    .leftJoinAndSelect('request.reqCategories', 'reqCategories')
+    .leftJoinAndSelect('reqCategories.category', 'category')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
@@ -141,7 +150,18 @@ const getRequestList = async (
     throw new ServerError('DB에서 reqListData 조회를 실패하였습니다.');
   }
 
-  return reqListData;
+  const result = reqListData.map((expData) => {
+    const { reqCategories, ...data } = expData;
+
+    const categories = reqCategories.map((categoryData) => ({
+      id: categoryData.category.id,
+      name: categoryData.category.name,
+    }));
+
+    return { ...data, categories };
+  });
+
+  return result;
 };
 
 export { getExperimentList, getRequestList };

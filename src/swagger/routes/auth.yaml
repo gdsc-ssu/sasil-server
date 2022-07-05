@@ -34,28 +34,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '401':
           description: 인증 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '403':
           description: 요청 거부 오류 (권한 없음)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'

@@ -10,8 +10,8 @@ class ReqComment extends BasicEntity {
   @Column('text')
   content!: string;
 
-  @Column('int', { nullable: true })
-  parent_id!: number;
+  @Column('int', { name: 'parent_id', nullable: true })
+  parentId!: number;
 
   // ReqComment:User = N:1
   @ManyToOne(() => User, (user) => user.reqComments)

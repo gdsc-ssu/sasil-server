@@ -31,25 +31,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExperimentList'
+                $ref: '#/components/schemas/responseBodies/ExperimentList'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
 
   /posts/request:
     get:
@@ -85,22 +85,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RequestList'
+                $ref: '#/components/schemas/responseBodies/RequestList'
         '400':
           description: 잘못된 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '404':
           description: 존재하지 않는 요청 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'
         '500':
           description: 서버 오류
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/responseBodies/Error'

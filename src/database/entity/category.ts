@@ -1,40 +1,22 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 
 import BasicEntity from './basic-entity';
-import Request from './request';
-import Experiment from './experiment';
+import ReqCategory from './req-category';
+import ExpCategory from './exp-category';
 
 @Entity()
 class Category extends BasicEntity {
   @Column('varchar', { length: 30 })
   name!: string;
 
-  // Category:Request = M:N -> req_category
-  @ManyToMany(() => Request, (request) => request.categories)
-  @JoinTable({
-    name: 'req_category',
-    joinColumn: {
-      name: 'category_id',
-    },
-    inverseJoinColumn: {
-      name: 'req_id',
-    },
-  })
-  requests!: Request[];
+  // Category:ReqCategory = 1:N
+  @OneToMany(() => ReqCategory, (reqCategory) => reqCategory.category)
+  reqCategories!: ReqCategory[];
 
-  // Category:Exp = M:N -> exp_category
-  @ManyToMany(() => Experiment, (experiment) => experiment.categories)
-  @JoinTable({
-    name: 'exp_category',
-    joinColumn: {
-      name: 'category_id',
-    },
-    inverseJoinColumn: {
-      name: 'exp_id',
-    },
-  })
-  experiments!: Experiment;
+  // Category:ExpCategory = 1:N
+  @OneToMany(() => ExpCategory, (expCategory) => expCategory.category)
+  expCategories!: ExpCategory[];
 }
 
 export default Category;
