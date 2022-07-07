@@ -298,8 +298,4 @@ router.get(
   }),
 );
 
-// 게시물 삭제
-
-// 게시글 수정
-
 export default router;
