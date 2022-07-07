@@ -50,33 +50,21 @@ router.get(
   }),
 );
 
-// 특정 의뢰에 응답한 실험 게시물 목록 조회 (최신순)
+// 관련 게시물 목록 조회 (최신순)
 router.get(
-  '/request/:reqId/experiments',
+  '/:postType/:postId/relative',
   wrapAsync(async (req: Request, res: Response) => {
-    const postId = Number(req.params.reqId);
+    const [postType, postId] = [req.params.postType, Number(req.params.postId)];
 
     if (!postId) {
       throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
     }
 
-    const expListByReqId = await getExpListByReqId(postId);
-    return res.json(expListByReqId);
-  }),
-);
+    const getRelativePosts =
+      postType === 'experiment' ? getReqPostByExpId : getExpListByReqId;
 
-// 특정 실험 게시물이 응답한 의뢰 게시물 정보 조회
-router.get(
-  '/experiment/:expId/request',
-  wrapAsync(async (req: Request, res: Response) => {
-    const postId = Number(req.params.expId);
-
-    if (!postId) {
-      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
-    }
-
-    const reqPostByExpId = await getReqPostByExpId(postId);
-    return res.json(reqPostByExpId);
+    const result = await getRelativePosts(postId);
+    return res.json(result);
   }),
 );
 
@@ -310,7 +298,7 @@ router.get(
   }),
 );
 
-// 게시글 삭제
+// 게시물 삭제
 
 // 게시글 수정
 

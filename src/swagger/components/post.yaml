@@ -133,7 +133,7 @@ components:
             - id: 2
               name: test2
 
-      ExperimentListByReq:
+      RelativePosts:
         type: array
         items:
           type: object
@@ -182,47 +182,6 @@ components:
               id: 1
               nickname: test
               profileImg: 프로필 사진 url (or null)
-
-      RequestForExp:
-        type: object
-        properties:
-          id:
-            type: integer
-          createdAt:
-            type: string
-          updatedAt:
-            type: string
-          title:
-            type: string
-          thumbnail:
-            type: string
-            nullable: true
-          likeCount:
-            type: integer
-          bookmarkCount:
-            type: integer
-          user:
-            type: object
-            properties:
-              id:
-                type: integer
-              nickname:
-                type: string
-              profileImg:
-                type: string
-                nullable: true
-        example:
-          id: 1
-          createdAt: 2022-05-19T14:53:43.044Z
-          updatedAt: 2022-05-19T14:53:43.044Z
-          title: 의뢰 게시물 제목
-          thumbnail: 의뢰 게시물 썸네일 url (or null)
-          likeCount: 3
-          bookmarkCount: 1
-          user:
-            id: 1
-            nickname: test
-            profileImg: 프로필 사진 url (or null)
 
       Comments:
         type: array
