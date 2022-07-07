@@ -190,10 +190,9 @@ export const getReqPostByExpId = async (expId: number) => {
     .leftJoin('experiment.request', 'request')
     .leftJoin('request.user', 'user')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
-    .loadRelationCountAndMap('request.bookmarkCount', 'request.reqBookmarks')
     .getOne();
 
-  return reqPost?.request;
+  return reqPost && [reqPost.request];
 };
 
 /**
