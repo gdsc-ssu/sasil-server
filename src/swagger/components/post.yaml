@@ -239,10 +239,10 @@ components:
     PostWrite:
       type: object
       propertites:
-        postId:
+        id:
           type: number
       example:
-        postId: 1
+        id: 1
 
     PostWriteRequestBody:
       type: object

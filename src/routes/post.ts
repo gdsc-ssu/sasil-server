@@ -273,7 +273,7 @@ router.post(
       throw new UnauthorizedError('로그인이 필요한 요청입니다.');
     }
 
-    const postId = await addPost(
+    const result = await addPost(
       postType,
       userId,
       title,
@@ -283,7 +283,7 @@ router.post(
       reqId,
     );
 
-    return res.json(postId);
+    return res.json(result);
   }),
 );
 

@@ -569,5 +569,5 @@ export const addPost = async (
     });
   }
 
-  return { postId };
+  return { id: postId };
 };
