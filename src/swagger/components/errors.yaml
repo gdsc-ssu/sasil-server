@@ -1,8 +1,7 @@
 components:
   schemas:
-    responseBodies:
-      Error:
-        type: 'object'
-        properties:
-          msg:
-            type: 'string'
+    Error:
+      type: 'object'
+      properties:
+        msg:
+          type: 'string'

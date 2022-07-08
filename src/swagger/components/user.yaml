@@ -1,30 +1,29 @@
 components:
   schemas:
-    responseBodies:
-      User:
-        type: 'object'
-        properties:
-          id:
-            type: 'integer'
-          createdAt:
-            type: 'string'
-          updatedAt:
-            type: 'string'
-          email:
-            type: 'string'
-          loginType:
-            type: 'string'
-            enum: ['google', 'kakao', 'apple']
-          nickname:
-            type: 'string'
-          profileImg:
-            type: 'string'
-            nullable: true
-        example:
-          id: 1
-          createdAt: 2022-03-27T15:56:04.904Z
-          updatedAt: 2022-03-27T15:56:04.904Z
-          email: test@google.com
-          loginType: google
-          nickname: test
-          profileImg: null
+    User:
+      type: 'object'
+      properties:
+        id:
+          type: 'integer'
+        createdAt:
+          type: 'string'
+        updatedAt:
+          type: 'string'
+        email:
+          type: 'string'
+        loginType:
+          type: 'string'
+          enum: ['google', 'kakao', 'apple']
+        nickname:
+          type: 'string'
+        profileImg:
+          type: 'string'
+          nullable: true
+      example:
+        id: 1
+        createdAt: 2022-03-27T15:56:04.904Z
+        updatedAt: 2022-03-27T15:56:04.904Z
+        email: test@google.com
+        loginType: google
+        nickname: test
+        profileImg: null

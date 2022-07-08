@@ -190,10 +190,9 @@ export const getReqPostByExpId = async (expId: number) => {
     .leftJoin('experiment.request', 'request')
     .leftJoin('request.user', 'user')
     .loadRelationCountAndMap('request.likeCount', 'request.reqLikes')
-    .loadRelationCountAndMap('request.bookmarkCount', 'request.reqBookmarks')
     .getOne();
 
-  return reqPost?.request;
+  return reqPost && [reqPost.request];
 };
 
 /**
@@ -569,71 +568,6 @@ export const addPost = async (
         .execute();
     });
   }
+
+  return { id: postId };
 };
-
-// TODO: 삭제
-// /**
-//  * 게시글 삭제
-//  *
-//  * @param postType 게시물 타입 (request | experiment)
-//  * @param postId 게시물 id값
-//  * @param userId 유저의 id값
-//  */
-// export const deletePost = async (
-//   postType: PostType,
-//   postId: number,
-//   userId: number,
-// ) => {
-//   const [PostEntity, entityName, entityId] =
-//     postType === 'request'
-//       ? [RequestEntity, 'request', 'req_id']
-//       : [ExperimentEntity, 'experiment', 'exp_id'];
-
-//   const deletePostResult = await getRepository(PostEntity)
-//     .createQueryBuilder(entityName)
-//     .delete()
-//     .where(`${entityName}.id = :postId`, { postId })
-//     .andWhere(`${entityName}.user_id = :userId`, { userId })
-//     .execute();
-
-//   if (deletePostResult.affected !== 1) {
-//     throw new BadRequestError(
-//       '존재하지 않는 게시물에 대한 요청입니다. (혹은 본인 게시물이 아닙니다.)',
-//     );
-//   }
-// };
-
-// TODO: 수정
-// /**
-//  * 게시글 수정
-//  *
-//  * @param postType 게시물 타입 (request | experiment)
-//  * @param postId 게시물 id값
-//  * @param userId 유저의 id값
-//  */
-// export const editPost = async (
-//   postType: PostType,
-//   postId: number,
-//   userId: number,
-//   title: string,
-//   content: string,
-//   thumbnail: string | undefined,
-//   reqId: number | undefined,
-// ) => {
-//   const [PostEntity, entityName, entityId] =
-//     postType === 'request'
-//       ? [RequestEntity, 'request', 'req_id']
-//       : [ExperimentEntity, 'experiment', 'exp_id'];
-
-//   const editRequStateResult = await getRepository(PostEntity)
-//     .createQueryBuilder(entityName)
-//     .update()
-//     .set({ title, content, thumbnail })
-//     .where(`${entityName}.id = :postId`, { postId })
-//     .andWhere(`${entityName}.user_id = :userId`, { userId })
-//     .execute();
-
-//   if (editRequStateResult.affected !== 1) {
-//     throw new BadRequestError('존재하지 않는 실험 게시물에 대한 요청입니다.');
-//   }
-// };
