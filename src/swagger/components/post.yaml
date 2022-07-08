@@ -229,6 +229,14 @@ components:
               nickname: test
               profileImg: 프로필 사진 url (or null)
 
+      PostWrite:
+        type: object
+        propertites:
+          postId:
+            type: number
+        example:
+          postId: 1
+
     requestBodies:
       Comments:
         type: object

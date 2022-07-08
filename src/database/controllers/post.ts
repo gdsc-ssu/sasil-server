@@ -568,4 +568,6 @@ export const addPost = async (
         .execute();
     });
   }
+
+  return { postId };
 };

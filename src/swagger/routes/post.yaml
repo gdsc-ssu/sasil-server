@@ -508,7 +508,12 @@ paths:
         - sasil-access-token: []
       responses:
         '200':
-          description: 요청 성공 (body X)
+          description: 요청 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseBodies/PostWrite'
+
         '400':
           description: 잘못된 요청 오류
           content:
