@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import Experiment from './experiment';
@@ -67,6 +67,10 @@ class User extends BasicEntity {
   // User:ReqBookmark = 1:N
   @OneToMany(() => ReqBookmark, (reqBookmark) => reqBookmark.user)
   reqBookmarks!: ReqBookmark[];
+
+  //
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedDate!: Date;
 }
 
 export default User;
