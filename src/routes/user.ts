@@ -11,7 +11,13 @@ router.get(
   '/me',
   checkLoggedIn,
   wrapAsync(async (req: Request, res: Response) => {
-    const userData = await getUserById(req.userId!);
+    const { userId } = req;
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    const userData = await getUserById(userId);
     return res.json(userData);
   }),
 );
