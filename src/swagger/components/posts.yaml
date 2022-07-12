@@ -20,6 +20,7 @@ components:
             type: integer
           user:
             type: object
+            nullable: true
             properties:
               id:
                 type: integer
@@ -92,6 +93,7 @@ components:
             enum: [wait, answered]
           user:
             type: object
+            nullable: true
             properties:
               id:
                 type: integer

@@ -26,6 +26,7 @@ components:
           type: boolean
         user:
           type: object
+          nullable: true
           properties:
             id:
               type: integer
@@ -93,6 +94,7 @@ components:
           enum: [wait, answered]
         user:
           type: object
+          nullable: true
           properties:
             id:
               type: integer
@@ -152,6 +154,7 @@ components:
             type: integer
           user:
             type: object
+            nullable: true
             properties:
               id:
                 type: integer
@@ -200,6 +203,7 @@ components:
             nullable: true
           user:
             type: object
+            nullable: true
             properties:
               id:
                 type: integer
