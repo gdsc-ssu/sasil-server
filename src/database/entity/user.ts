@@ -72,7 +72,7 @@ class User extends BasicEntity {
   @OneToMany(() => ReqBookmark, (reqBookmark) => reqBookmark.user)
   reqBookmarks!: ReqBookmark[];
 
-  //
+  // 삭제된 날짜 (기본: Null)
   @DeleteDateColumn({ name: 'deleted_at', select: false })
   deletedDate!: Date;
 }
