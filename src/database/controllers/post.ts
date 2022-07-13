@@ -296,7 +296,7 @@ export const deleteComment = async (
 
   const deleteCommResult = await getRepository(TargetEntity)
     .createQueryBuilder(entityName)
-    .delete()
+    .softDelete()
     .where(`${entityName}.id = :commentId`, { commentId })
     .andWhere(`${entityName}.${entityId} = :postId`, { postId })
     .andWhere(`${entityName}.user_id = :userId`, { userId })
