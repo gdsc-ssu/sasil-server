@@ -598,7 +598,7 @@ export const deletePost = async (
       .leftJoinAndSelect('experiment.request', 'request')
       .getOne();
 
-    reqId = expPost?.request.id;
+    reqId = expPost?.request?.id;
   }
 
   const deletePostResult = await getRepository(PostEntity)
