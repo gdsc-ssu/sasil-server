@@ -21,7 +21,9 @@ class ReqComment extends BasicEntity {
   user!: User;
 
   // ReqComment:Request = N:1
-  @ManyToOne(() => Request, (request) => request.reqComments)
+  @ManyToOne(() => Request, (request) => request.reqComments, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'req_id',
   })

@@ -15,7 +15,9 @@ class ReqCategory {
   })
   category!: Cateogry;
 
-  @ManyToOne(() => Request, (request) => request.reqCategories)
+  @ManyToOne(() => Request, (request) => request.reqCategories, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'req_id',
   })

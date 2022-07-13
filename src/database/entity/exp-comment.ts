@@ -21,7 +21,9 @@ class ExpComment extends BasicEntity {
   user!: User;
 
   // ExpComment:Exp = N:1
-  @ManyToOne(() => Experiment, (experiment) => experiment.expComments)
+  @ManyToOne(() => Experiment, (experiment) => experiment.expComments, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'exp_id',
   })
