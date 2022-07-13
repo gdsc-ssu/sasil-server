@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import Experiment from './experiment';
@@ -16,10 +16,14 @@ export type LoginTypes = 'apple' | 'google' | 'kakao';
 
 @Entity()
 class User extends BasicEntity {
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, select: false })
   email!: string;
 
-  @Column('enum', { name: 'login_type', enum: ['kakao', 'google', 'apple'] })
+  @Column('enum', {
+    name: 'login_type',
+    enum: ['kakao', 'google', 'apple'],
+    select: false,
+  })
   loginType!: LoginTypes;
 
   @Column('varchar', { length: 30 })
@@ -67,6 +71,10 @@ class User extends BasicEntity {
   // User:ReqBookmark = 1:N
   @OneToMany(() => ReqBookmark, (reqBookmark) => reqBookmark.user)
   reqBookmarks!: ReqBookmark[];
+
+  // 삭제된 날짜 (기본: Null)
+  @DeleteDateColumn({ name: 'deleted_at', select: false })
+  deletedDate!: Date;
 }
 
 export default User;
