@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 
-import { ServerError } from '@/errors/customErrors';
 import UserEntity, { LoginTypes } from '@/database/entity/user';
+import { BadRequestError, ServerError } from '@/errors/customErrors';
 
 /**
  * id값으로 DB에서 유저 데이터 가져와 반환하는 함수
@@ -72,4 +72,22 @@ export const addUser = async (
   await userRepository.save(newUserData);
 
   return newUserData;
+};
+
+/**
+ * 회원탈퇴 기능을 하는 함수
+ *
+ * @param userId 유저의 id값
+ * @returns
+ */
+export const deleteUser = async (userId: number) => {
+  const deleteResult = await getRepository(UserEntity)
+    .createQueryBuilder('user')
+    .softDelete()
+    .where(`user.id = :userId`, { userId })
+    .execute();
+
+  if (deleteResult.affected !== 1) {
+    throw new BadRequestError('존재하지 않는 유저에 대한 삭제 요청입니다.');
+  }
 };

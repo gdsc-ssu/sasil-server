@@ -41,3 +41,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: 회원 탈퇴 (인증 필요)
+      tags:
+        - User
+      security:
+        - sasil-access-token: []
+      responses:
+        '200':
+          description: 요청 성공 (body X)
+        '400':
+          description: 잘못된 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 인증 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 존재하지 않는 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
