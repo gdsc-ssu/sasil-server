@@ -1,5 +1,11 @@
 /* eslint-disable import/no-cycle */
-import { Entity, ManyToOne, Column, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  ManyToOne,
+  Column,
+  JoinColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -28,6 +34,10 @@ class ExpComment extends BasicEntity {
     name: 'exp_id',
   })
   experiment!: Experiment;
+
+  // 삭제된 날짜 (기본: Null)
+  @DeleteDateColumn({ name: 'deleted_at', select: false })
+  deletedDate!: Date;
 }
 
 export default ExpComment;
