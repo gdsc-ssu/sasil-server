@@ -296,7 +296,7 @@ export const deleteComment = async (
 
   const deleteCommResult = await getRepository(TargetEntity)
     .createQueryBuilder(entityName)
-    .delete()
+    .softDelete()
     .where(`${entityName}.id = :commentId`, { commentId })
     .andWhere(`${entityName}.${entityId} = :postId`, { postId })
     .andWhere(`${entityName}.user_id = :userId`, { userId })
@@ -570,4 +570,76 @@ export const addPost = async (
   }
 
   return { id: postId };
+};
+
+/**
+ * 게시물 삭제
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물 id값
+ * @param userId 유저의 id값
+ */
+export const deletePost = async (
+  postType: PostType,
+  postId: number,
+  userId: number,
+) => {
+  const [PostEntity, entityName] =
+    postType === 'request'
+      ? [RequestEntity, 'request']
+      : [ExperimentEntity, 'experiment'];
+
+  // 실험 게시물인 경우, 의뢰 id값 파악
+  let reqId;
+  if (postType === 'experiment') {
+    const expPost = await getRepository(ExperimentEntity)
+      .createQueryBuilder('experiment')
+      .where('experiment.id = :postId', { postId })
+      .leftJoinAndSelect('experiment.request', 'request')
+      .getOne();
+
+    reqId = expPost?.request?.id;
+  }
+
+  const deletePostResult = await getRepository(PostEntity)
+    .createQueryBuilder(entityName)
+    .delete()
+    .where(`${entityName}.id = :postId`, { postId })
+    .andWhere(`${entityName}.user_id = :userId`, { userId })
+    .execute();
+
+  if (deletePostResult.affected !== 1) {
+    throw new BadRequestError(
+      '존재하지 않는 게시물에 대한 삭제 요청입니다. (혹은 본인 게시물이 아닙니다.)',
+    );
+  }
+
+  // 특정 의뢰에 대한 실험 삭제 후, 해당 의뢰에 대한 실험 게시물이 더이상 존재하지 않으면 의뢰의 state를 'wait'으로 변경
+  if (postType === 'experiment' && reqId) {
+    const otherExpPost = await getRepository(ExperimentEntity)
+      .createQueryBuilder('experiment')
+      .where('experiment.req_id = :reqId', { reqId })
+      .select([
+        'experiment.id',
+        'experiment.createdAt',
+        'experiment.updatedAt',
+        'experiment.title',
+      ])
+      .getOne();
+
+    if (!otherExpPost) {
+      const editRequStateResult = await getRepository(RequestEntity)
+        .createQueryBuilder('request')
+        .update()
+        .set({ state: 'wait' })
+        .where('request.id = :reqId', { reqId })
+        .execute();
+
+      if (editRequStateResult.affected !== 1) {
+        throw new BadRequestError(
+          '존재하지 않는 실험 게시물에 대한 요청입니다.',
+        );
+      }
+    }
+  }
 };

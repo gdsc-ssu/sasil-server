@@ -16,7 +16,9 @@ class ExpLike {
   })
   user!: User;
 
-  @ManyToOne(() => Experiment, (experiment) => experiment.expLikes)
+  @ManyToOne(() => Experiment, (experiment) => experiment.expLikes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'exp_id',
   })
