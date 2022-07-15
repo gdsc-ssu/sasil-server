@@ -20,6 +20,7 @@ import {
   deleteBookmark,
   addPost,
   deletePost,
+  editPost,
 } from '@/database/controllers/post';
 import { checkLoggedIn, getUserId } from './middleware';
 import { getImgUploadURL } from '@/utils/uploadImage';
@@ -320,6 +321,43 @@ router.delete(
     }
 
     await deletePost(postType, postId, userId);
+
+    res.end();
+  }),
+);
+
+// 게시물 수정
+router.patch(
+  '/:postType/:postId',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const [postType, postId] = [req.params.postType, Number(req.params.postId)];
+    const { userId } = req;
+    const { title, content, thumbnail, newCategories, delCategories } =
+      req.body;
+
+    if (!(postType === 'experiment' || postType === 'request')) {
+      throw new NotFoundError('잘못된 postType을 포함한 요청입니다.');
+    }
+
+    if (!postId) {
+      throw new BadRequestError('올바르지 않은 postId값을 포함한 요청입니다.');
+    }
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    await editPost(
+      postType,
+      postId,
+      userId,
+      title,
+      content,
+      thumbnail,
+      newCategories,
+      delCategories,
+    );
 
     res.end();
   }),

@@ -643,3 +643,139 @@ export const deletePost = async (
     }
   }
 };
+
+/**
+ * 게시글 수정
+ *
+ * @param postType 게시물 타입 (request | experiment)
+ * @param postId 게시물 id값
+ * @param userId 유저의 id값
+ * @param title 게시물 제목
+ * @param content 게시물 내용
+ * @param thumbnail 게시물 썸네일 (nullable)
+ * @param newCategories 게시물에 추가된 카테고리 배열
+ * @param delCategories 게시물에 삭제된 카테고리 배열
+ */
+export const editPost = async (
+  postType: PostType,
+  postId: number,
+  userId: number,
+  title: string,
+  content: string,
+  thumbnail: string | undefined,
+  newCategories: string[],
+  delCategories: string[],
+) => {
+  const [
+    PostEntity,
+    PostCategoryEntity,
+    postEntityName,
+    categoryEntityName,
+    postCategoryRelatedId,
+  ] = (
+    postType === 'request'
+      ? [RequestEntity, ReqCategoryEntity, 'request', 'req_category', 'req_id']
+      : [
+          ExperimentEntity,
+          ExpCategoryEntity,
+          'experiment',
+          'exp_category',
+          'exp_id',
+        ]
+  ) as any;
+
+  const editPostStateResult = await getRepository(PostEntity)
+    .createQueryBuilder(postEntityName)
+    .update()
+    .set({ title, content, thumbnail })
+    .where(`${postEntityName}.id = :postId`, { postId })
+    .andWhere(`${postEntityName}.user_id = :userId`, { userId })
+    .execute();
+
+  if (editPostStateResult.affected !== 1) {
+    throw new BadRequestError('존재하지 않는 실험 게시물에 대한 요청입니다.');
+  }
+
+  // 게시물-카테고리 추가
+  if (newCategories.length > 0) {
+    newCategories.forEach(async (category) => {
+      // 카테고리 이름으로 조회
+      const categoryData = await getRepository(CategoryEntity)
+        .createQueryBuilder('category')
+        .where('category.name = :category', { category })
+        .select()
+        .getOne();
+
+      let categoryId = categoryData?.id;
+
+      // 없으면 추가
+      if (!categoryData) {
+        const insertCategoryResult = await getRepository(CategoryEntity)
+          .createQueryBuilder()
+          .insert()
+          .into('category')
+          .values({ name: category })
+          .updateEntity(false)
+          .execute();
+
+        categoryId = insertCategoryResult.raw.insertId;
+      }
+
+      // 게시물-카테고리 추가
+      if (!categoryId || !postId) {
+        throw new ServerError('카테고리가 생성에 실패하였습니다.');
+      }
+
+      const newCategory = new CategoryEntity();
+      newCategory.id = categoryId;
+
+      const post = new PostEntity();
+      post.id = postId;
+
+      const newPostCategory = new PostCategoryEntity();
+      newPostCategory.category = newCategory;
+      newPostCategory[postEntityName] = post;
+
+      await getRepository(PostCategoryEntity)
+        .createQueryBuilder()
+        .insert()
+        .into(categoryEntityName)
+        .values(newPostCategory)
+        .updateEntity(false)
+        .execute();
+    });
+  }
+
+  // 게시물-카테고리 삭제
+  if (delCategories.length > 0) {
+    delCategories.forEach(async (category) => {
+      const categoryData = await getRepository(CategoryEntity)
+        .createQueryBuilder('category')
+        .where('category.name = :category', { category })
+        .select()
+        .getOne();
+
+      const categoryId = categoryData?.id;
+
+      if (categoryId) {
+        const deletePostCategoriesResult = await getRepository(
+          PostCategoryEntity,
+        )
+          .createQueryBuilder(categoryEntityName)
+          .delete()
+          .where(`${categoryEntityName}.category_id = :categoryId`, {
+            categoryId,
+          })
+          .andWhere(
+            `${categoryEntityName}.${postCategoryRelatedId} = :postId`,
+            { postId },
+          )
+          .execute();
+
+        if (deletePostCategoriesResult.affected !== 1) {
+          throw new BadRequestError('카테고리 삭제에 실패하였습니다.');
+        }
+      }
+    });
+  }
+};

@@ -262,8 +262,6 @@ components:
           type: array
           items:
             type: string
-            name:
-              type: string
         reqId:
           type: number
           nullable: true
@@ -275,3 +273,32 @@ components:
           - test1
           - test2
         reqId: 1 (실험 게시물인 경우, 의뢰에 대한 실험을 수행할 경우에만 or null)
+
+    PostEditRequestBody:
+      type: object
+      propertites:
+        title:
+          type: string
+        content:
+          type: string
+        thumbnail:
+          type: string
+          nullable: true
+        newCategories:
+          type: array
+          items:
+            type: string
+        delCategories:
+          type: array
+          items:
+            type: string
+      example:
+        title: 게시물 제목
+        content: 게시물 내용
+        thumbnail: 게시물 썸네일 url (or null)
+        newCategories:
+          - test1
+          - test2
+        delCategories:
+          - test3
+          - test4
