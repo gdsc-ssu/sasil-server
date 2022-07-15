@@ -15,7 +15,9 @@ class ExpCategory {
   })
   category!: Cateogry;
 
-  @ManyToOne(() => Experiment, (experiment) => experiment.expCategories)
+  @ManyToOne(() => Experiment, (experiment) => experiment.expCategories, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'exp_id',
   })

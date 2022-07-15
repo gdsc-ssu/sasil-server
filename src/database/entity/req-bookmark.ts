@@ -15,7 +15,9 @@ class ReqBookmark {
   })
   user!: User;
 
-  @ManyToOne(() => Request, (request) => request.reqBookmarks)
+  @ManyToOne(() => Request, (request) => request.reqBookmarks, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'req_id',
   })

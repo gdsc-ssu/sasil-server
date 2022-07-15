@@ -1,5 +1,11 @@
 /* eslint-disable import/no-cycle */
-import { Entity, ManyToOne, Column, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  ManyToOne,
+  Column,
+  JoinColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 
 import BasicEntity from './basic-entity';
 import User from './user';
@@ -21,11 +27,17 @@ class ReqComment extends BasicEntity {
   user!: User;
 
   // ReqComment:Request = N:1
-  @ManyToOne(() => Request, (request) => request.reqComments)
+  @ManyToOne(() => Request, (request) => request.reqComments, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'req_id',
   })
   request!: Request;
+
+  // 삭제된 날짜 (기본: Null)
+  @DeleteDateColumn({ name: 'deleted_at', select: false })
+  deletedDate!: Date;
 }
 
 export default ReqComment;

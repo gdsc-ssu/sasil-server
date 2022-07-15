@@ -28,7 +28,9 @@ class Experiment extends BasicEntity {
   user!: User;
 
   // Experiment:Request = N:1
-  @ManyToOne(() => Request, (request) => request.experiments)
+  @ManyToOne(() => Request, (request) => request.experiments, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({
     name: 'req_id',
   })

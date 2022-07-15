@@ -16,7 +16,9 @@ class ReqLike {
   })
   user!: User;
 
-  @ManyToOne(() => Request, (request) => request.reqLikes)
+  @ManyToOne(() => Request, (request) => request.reqLikes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'req_id',
   })

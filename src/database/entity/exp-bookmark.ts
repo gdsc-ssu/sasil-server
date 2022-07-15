@@ -15,7 +15,9 @@ class ExpBookmark {
   })
   user!: User;
 
-  @ManyToOne(() => Experiment, (experiment) => experiment.expBookmarks)
+  @ManyToOne(() => Experiment, (experiment) => experiment.expBookmarks, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'exp_id',
   })
