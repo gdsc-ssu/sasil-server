@@ -330,7 +330,6 @@ router.delete(
 router.patch(
   '/:postType/:postId',
   checkLoggedIn,
-
   wrapAsync(async (req: Request, res: Response) => {
     const [postType, postId] = [req.params.postType, Number(req.params.postId)];
     const { userId } = req;
