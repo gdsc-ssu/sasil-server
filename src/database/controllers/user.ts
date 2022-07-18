@@ -16,7 +16,7 @@ export const getUserById = async (id: number) => {
     .getOne();
 
   if (!userData) {
-    throw new ServerError('DB에서 userData 조회를 실패하였습니다.');
+    throw new BadRequestError('존재하지 않는 유저에 대한 조회 요청입니다.');
   }
 
   return userData;
