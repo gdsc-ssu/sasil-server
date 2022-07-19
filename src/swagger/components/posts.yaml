@@ -29,6 +29,10 @@ components:
               profileImg:
                 type: string
                 nullable: true
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
           categories:
             type: array
             items:
@@ -49,6 +53,8 @@ components:
             id: 1
             nickname: test
             profileImg: 프로필 사진 url (or null)
+            createdAt: 2022-06-29T01:08:22.853Z
+            updatedAt: 2022-06-29T01:08:22.853Z
           categories:
             - id: 1
               name: test
@@ -64,6 +70,8 @@ components:
             id: 1
             nickname: test
             profileImg: 프로필 사진 url (or null)
+            createdAt: 2022-06-29T01:08:22.853Z
+            updatedAt: 2022-06-29T01:08:22.853Z
           categories:
             - id: 1
               name: test
@@ -102,6 +110,10 @@ components:
               profileImg:
                 type: string
                 nullable: true
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
           categories:
             type: array
             items:
@@ -123,6 +135,8 @@ components:
             id: 1
             nickname: test
             profileImg: 프로필 사진 url (or null)
+            createdAt: 2022-06-29T01:08:22.853Z
+            updatedAt: 2022-06-29T01:08:22.853Z
           categories:
             - id: 1
               name: test
@@ -139,6 +153,8 @@ components:
             id: 1
             nickname: test
             profileImg: 프로필 사진 url (or null)
+            createdAt: 2022-06-29T01:08:22.853Z
+            updatedAt: 2022-06-29T01:08:22.853Z
           categories:
             - id: 1
               name: test
