@@ -3,6 +3,8 @@ import { getRepository } from 'typeorm';
 import UserEntity, { LoginTypes } from '@/database/entity/user';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
+import ExpBookmarkEntity from '@/database/entity/exp-bookmark';
+import ReqBookmarkEntity from '@/database/entity/req-bookmark';
 import { BadRequestError, ServerError } from '@/errors/customErrors';
 
 /**
@@ -207,5 +209,83 @@ export const getUserRequestList = async (
     return { ...data, user, categories };
   });
 
+  return result;
+};
+
+/**
+ * 유저가 북마크한 실험 게시물 목록 반환
+ *
+ * @param userId user id
+ * @param display posts number
+ * @param page page number
+ * @returns posts list
+ */
+export const getUserBookmarkExperimentList = async (
+  userId: number,
+  display: number,
+  page: number,
+) => {
+  const bookmarkExperimentList = await getRepository(ExpBookmarkEntity)
+    .createQueryBuilder('exp_bookmark')
+    .where(`exp_bookmark.user_id = :userId`, { userId })
+    .leftJoinAndSelect(`exp_bookmark.experiment`, 'expBookmarks')
+    .leftJoinAndSelect('expBookmarks.user', 'user')
+    .leftJoinAndSelect(`expBookmarks.expCategories`, `expCategories`)
+    .leftJoinAndSelect(`expCategories.category`, `category`)
+    .loadRelationCountAndMap(`expBookmarks.likeCount`, `expBookmarks.expLikes`)
+    .orderBy('expBookmarks.createdAt', 'DESC')
+    .offset((page - 1) * display)
+    .limit(display)
+    .getMany();
+
+  const result = bookmarkExperimentList.map((expData) => {
+    const { expCategories, content, ...data } = expData.experiment;
+
+    const categories = expCategories.map((categoryData) => ({
+      id: categoryData.category.id,
+      name: categoryData.category.name,
+    }));
+
+    return { ...data, categories };
+  });
+  return result;
+};
+
+/**
+ * 유저가 북마크한 의뢰 게시물 목록 반환
+ *
+ * @param userId user id
+ * @param display posts number
+ * @param page page number
+ * @returns posts list
+ */
+export const getUserBookmarkRequestList = async (
+  userId: number,
+  display: number,
+  page: number,
+) => {
+  const bookmarkRequestList = await getRepository(ReqBookmarkEntity)
+    .createQueryBuilder('req_bookmark')
+    .where(`req_bookmark.user_id = :userId`, { userId })
+    .leftJoinAndSelect(`req_bookmark.request`, 'reqBookmarks')
+    .leftJoinAndSelect('reqBookmarks.user', 'user')
+    .leftJoinAndSelect(`reqBookmarks.reqCategories`, `reqCategories`)
+    .leftJoinAndSelect(`reqCategories.category`, `category`)
+    .loadRelationCountAndMap(`reqBookmarks.likeCount`, `reqBookmarks.reqLikes`)
+    .orderBy('reqBookmarks.createdAt', 'DESC')
+    .offset((page - 1) * display)
+    .limit(display)
+    .getMany();
+
+  const result = bookmarkRequestList.map((reqData) => {
+    const { reqCategories, content, ...data } = reqData.request;
+
+    const categories = reqCategories.map((categoryData) => ({
+      id: categoryData.category.id,
+      name: categoryData.category.name,
+    }));
+
+    return { ...data, categories };
+  });
   return result;
 };
