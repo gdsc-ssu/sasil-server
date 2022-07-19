@@ -220,3 +220,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /user/profile/image:
+    patch:
+      summary: 유저 프로필 이미지 수정
+      tags:
+        - User
+      parameters:
+        - in: body
+          name: profileImg
+          description: 변경할 프로필 이미지 url
+          schema:
+            $ref: '#/components/schemas/EditProfileImgRequestBody'
+      security:
+        - sasil-access-token: []
+      responses:
+        '200':
+          description: 요청 성공
+        '400':
+          description: 잘못된 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 인증 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 존재하지 않는 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/profile/nickname:
+    patch:
+      summary: 유저 닉네임 수정
+      tags:
+        - User
+      parameters:
+        - in: body
+          name: nickname
+          description: 변경할 닉네임
+          schema:
+            $ref: '#/components/schemas/EditNicknameRequestBody'
+      security:
+        - sasil-access-token: []
+      responses:
+        '200':
+          description: 요청 성공
+        '400':
+          description: 잘못된 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 인증 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 존재하지 않는 요청 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
