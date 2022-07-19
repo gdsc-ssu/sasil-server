@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { editNickname } from '../database/controllers/user';
 
 import wrapAsync from '@/utils/wrapAsync';
 import {
@@ -133,7 +134,7 @@ router.get(
 );
 
 // 프로필 이미지 수정
-router.post(
+router.patch(
   '/me/profile',
   checkLoggedIn,
   wrapAsync(async (req: Request, res: Response) => {
@@ -145,6 +146,28 @@ router.post(
     }
 
     await editProfileImg(userId, profileImg);
+
+    res.end();
+  }),
+);
+
+// 닉네임 변경
+router.patch(
+  '/me/nickname',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const { userId } = req;
+    const { nickname } = req.body;
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    if (!nickname) {
+      throw new BadRequestError('요청에 nickname 값이 들어있지 않습니다.');
+    }
+
+    await editNickname(userId, nickname);
 
     res.end();
   }),

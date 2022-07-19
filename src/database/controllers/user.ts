@@ -312,3 +312,25 @@ export const editProfileImg = async (
     throw new BadRequestError('유저 프로필 이미지 변경에 실패하였습니다.');
   }
 };
+
+/**
+ * 유저 닉네임 수정
+ *
+ * @param userId user id
+ * @param nickname user nickname
+ */
+export const editNickname = async (
+  userId: number,
+  nickname: string | undefined,
+) => {
+  const editProfileResult = await getRepository(UserEntity)
+    .createQueryBuilder('user')
+    .update()
+    .set({ nickname })
+    .where('user.id = :userId', { userId })
+    .execute();
+
+  if (editProfileResult.affected !== 1) {
+    throw new BadRequestError('유저 닉네임 수정에 실패하였습니다.');
+  }
+};
