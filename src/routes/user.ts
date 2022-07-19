@@ -135,7 +135,7 @@ router.get(
 
 // 프로필 이미지 수정
 router.patch(
-  '/me/profile',
+  '/profile/image',
   checkLoggedIn,
   wrapAsync(async (req: Request, res: Response) => {
     const { userId } = req;
@@ -153,7 +153,7 @@ router.patch(
 
 // 닉네임 변경
 router.patch(
-  '/me/nickname',
+  '/profile/nickname',
   checkLoggedIn,
   wrapAsync(async (req: Request, res: Response) => {
     const { userId } = req;
