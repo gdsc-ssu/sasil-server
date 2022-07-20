@@ -14,6 +14,7 @@ import authRouter from '@/routes/auth';
 import userRouter from '@/routes/user';
 import postsRouter from '@/routes/posts';
 import postRouter from '@/routes/post';
+import searchRouter from '@/routes/search';
 import errorHandler, { notFoundErrorHandler } from '@/errors/errorHandler';
 
 dotenv.config();
@@ -57,6 +58,7 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/posts', postsRouter);
 app.use('/post', postRouter);
+app.use('/search', searchRouter);
 
 // 연결 확인용
 app.get('/', (req, res) => {
