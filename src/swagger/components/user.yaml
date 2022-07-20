@@ -20,3 +20,19 @@ components:
         updatedAt: 2022-03-27T15:56:04.904Z
         nickname: test
         profileImg: null
+
+    EditProfileImgRequestBody:
+      type: 'object'
+      properties:
+        profileImg:
+          type: 'string'
+      example:
+        profileImg: '변경할 프로필 이미지 url'
+
+    EditNicknameRequestBody:
+      type: 'object'
+      properties:
+        nickname:
+          type: 'string'
+      example:
+        nickname: '변경할 닉네임'
