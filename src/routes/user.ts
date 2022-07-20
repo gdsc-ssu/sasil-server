@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { editNickname } from '../database/controllers/user';
 
 import wrapAsync from '@/utils/wrapAsync';
 import {
@@ -8,6 +9,7 @@ import {
   getUserRequestList,
   getUserBookmarkExperimentList,
   getUserBookmarkRequestList,
+  editProfileImg,
 } from '@/database/controllers/user';
 import { checkLoggedIn } from './middleware';
 import {
@@ -128,6 +130,46 @@ router.get(
     }
 
     throw new BadRequestError('올바르지 않은 query를 포함한 요청입니다.');
+  }),
+);
+
+// 프로필 이미지 수정
+router.patch(
+  '/profile/image',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const { userId } = req;
+    const { profileImg } = req.body; // 없으면 기존 프로필 이미지 null로 변경
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    await editProfileImg(userId, profileImg);
+
+    res.end();
+  }),
+);
+
+// 닉네임 변경
+router.patch(
+  '/profile/nickname',
+  checkLoggedIn,
+  wrapAsync(async (req: Request, res: Response) => {
+    const { userId } = req;
+    const { nickname } = req.body;
+
+    if (!userId) {
+      throw new UnauthorizedError('로그인이 필요한 요청입니다.');
+    }
+
+    if (!nickname) {
+      throw new BadRequestError('요청에 nickname 값이 들어있지 않습니다.');
+    }
+
+    await editNickname(userId, nickname);
+
+    res.end();
   }),
 );
 
