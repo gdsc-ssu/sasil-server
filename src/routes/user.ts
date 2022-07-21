@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import { editNickname } from '../database/controllers/user';
 
 import wrapAsync from '@/utils/wrapAsync';
 import {
@@ -10,6 +9,7 @@ import {
   getUserBookmarkExperimentList,
   getUserBookmarkRequestList,
   editProfileImg,
+  editNickname,
 } from '@/database/controllers/user';
 import { checkLoggedIn } from './middleware';
 import {
