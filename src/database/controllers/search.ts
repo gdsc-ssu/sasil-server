@@ -144,9 +144,7 @@ export const searchExperimentListByTag = async (
     .leftJoinAndSelect(`experiment.expCategories`, `expCategories`)
     .leftJoinAndSelect(`expCategories.category`, `category`)
     .loadRelationCountAndMap(`experiment.likeCount`, `experiment.expLikes`)
-    .orderBy('experiment.createdAt', 'DESC')
-    .offset((page - 1) * display)
-    .limit(display)
+    .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
   const result = experimentListByTag.map((expData) => {
