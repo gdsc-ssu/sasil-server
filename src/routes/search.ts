@@ -16,7 +16,7 @@ router.get(
   '/tag/:postType',
   wrapAsync(async (req: Request, res: Response) => {
     const { postType } = req.params;
-    const { display = '12', page = '1', tag } = req.query;
+    const { display = '12', page = '1', sort = 'recent', tag } = req.query;
     const [displayNum, pageNum] = [Number(display), Number(page)];
 
     const tagName = decodeURIComponent(tag as string);
@@ -30,11 +30,16 @@ router.get(
         ? searchRequestListByTag
         : searchExperimentListByTag;
 
-    if (displayNum > 0 && pageNum > 0) {
+    if (
+      displayNum > 0 &&
+      pageNum > 0 &&
+      (sort === 'recent' || sort === 'popular')
+    ) {
       const searchPostsData = await searchPostListByTag(
         tagName,
         pageNum,
         displayNum,
+        sort,
       );
       return res.json(searchPostsData);
     }

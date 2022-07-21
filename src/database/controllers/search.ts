@@ -3,8 +3,6 @@ import { getRepository } from 'typeorm';
 import ExperimentEntity from '@/database/entity/experiment';
 import RequestEntity from '@/database/entity/request';
 import CategoryEntity from '@/database/entity/category';
-import ReqCategoryEntity from '@/database/entity/req-category';
-import ExpCategoryEntity from '@/database/entity/exp-category';
 
 /**
  * 태그 의뢰 검색
@@ -12,13 +10,26 @@ import ExpCategoryEntity from '@/database/entity/exp-category';
  * @param tag 카테고리 태그 이름
  * @param page page number
  * @param display posts count
+ * @param sort 정렬 기준 (popular | recent)
  * @returns posts list
  */
 export const searchRequestListByTag = async (
   tag: string,
   page: number,
   display: number,
+  sort: 'popular' | 'recent',
 ) => {
+  const sortType = {
+    popular: {
+      first: 'likeCount',
+      second: 'topReqs.likeCount',
+    },
+    recent: {
+      first: 'subreq.createdAt',
+      second: 'request.createdAt',
+    },
+  };
+
   const targetCategory = await getRepository(CategoryEntity)
     .createQueryBuilder('category')
     .where('category.name = :tag', { tag })
@@ -26,21 +37,40 @@ export const searchRequestListByTag = async (
 
   const categoryId = targetCategory?.id;
 
-  const requestListByTag = await getRepository(ReqCategoryEntity)
-    .createQueryBuilder('req_category')
-    .where('req_category.category_id = :categoryId', { categoryId })
-    .leftJoinAndSelect('req_category.request', 'request')
+  const requestListByTag = await getRepository(RequestEntity)
+    .createQueryBuilder('request')
+    .select([
+      'request.id',
+      'request.createdAt',
+      'request.updatedAt',
+      'request.title',
+      'request.thumbnail',
+      'request.state',
+    ])
+    .innerJoin(
+      (qb) =>
+        qb
+          .select(['subreq.id', 'COUNT(likes.id) as likeCount'])
+          .from(RequestEntity, 'subreq')
+          .where('reqCategories.category_id = :categoryId', { categoryId })
+          .leftJoin('subreq.reqCategories', 'reqCategories')
+          .leftJoin('subreq.reqLikes', 'likes')
+          .groupBy('subreq.id')
+          .offset((page - 1) * display)
+          .limit(display)
+          .orderBy(sortType[sort].first, 'DESC'),
+      'topReqs',
+      'topReqs.subreq_id = request.id',
+    )
     .leftJoinAndSelect('request.user', 'user')
     .leftJoinAndSelect(`request.reqCategories`, `reqCategories`)
     .leftJoinAndSelect(`reqCategories.category`, `category`)
     .loadRelationCountAndMap(`request.likeCount`, `request.reqLikes`)
-    .orderBy('request.createdAt', 'DESC')
-    .offset((page - 1) * display)
-    .limit(display)
+    .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
   const result = requestListByTag.map((reqData) => {
-    const { reqCategories, content, ...data } = reqData.request;
+    const { reqCategories, ...data } = reqData;
 
     const categories = reqCategories.map((categoryData) => ({
       id: categoryData.category.id,
@@ -59,13 +89,26 @@ export const searchRequestListByTag = async (
  * @param tag 카테고리 태그 이름
  * @param page page number
  * @param display posts count
+ * @param sort 정렬 기준 (popular | recent)
  * @returns posts list
  */
 export const searchExperimentListByTag = async (
   tag: string,
   page: number,
   display: number,
+  sort: 'popular' | 'recent',
 ) => {
+  const sortType = {
+    popular: {
+      first: 'likeCount',
+      second: 'topExps.likeCount',
+    },
+    recent: {
+      first: 'subexp.createdAt',
+      second: 'experiment.createdAt',
+    },
+  };
+
   const targetCategory = await getRepository(CategoryEntity)
     .createQueryBuilder('category')
     .where('category.name = :tag', { tag })
@@ -73,10 +116,30 @@ export const searchExperimentListByTag = async (
 
   const categoryId = targetCategory?.id;
 
-  const experimentListByTag = await getRepository(ExpCategoryEntity)
-    .createQueryBuilder('exp_category')
-    .where('exp_category.category_id = :categoryId', { categoryId })
-    .leftJoinAndSelect('exp_category.experiment', 'experiment')
+  const experimentListByTag = await getRepository(ExperimentEntity)
+    .createQueryBuilder('experiment')
+    .select([
+      'experiment.id',
+      'experiment.createdAt',
+      'experiment.updatedAt',
+      'experiment.title',
+      'experiment.thumbnail',
+    ])
+    .innerJoin(
+      (qb) =>
+        qb
+          .select(['subexp.id', 'COUNT(likes.id) as likeCount'])
+          .from(ExperimentEntity, 'subexp')
+          .where('expCategories.category_id = :categoryId', { categoryId })
+          .leftJoin('subexp.expCategories', 'expCategories')
+          .leftJoin('subexp.expLikes', 'likes')
+          .groupBy('subexp.id')
+          .offset((page - 1) * display)
+          .limit(display)
+          .orderBy(sortType[sort].first, 'DESC'),
+      'topExps',
+      'topExps.subexp_id = experiment.id',
+    )
     .leftJoinAndSelect('experiment.user', 'user')
     .leftJoinAndSelect(`experiment.expCategories`, `expCategories`)
     .leftJoinAndSelect(`expCategories.category`, `category`)
@@ -87,7 +150,7 @@ export const searchExperimentListByTag = async (
     .getMany();
 
   const result = experimentListByTag.map((expData) => {
-    const { expCategories, content, ...data } = expData.experiment;
+    const { expCategories, ...data } = expData;
 
     const categories = expCategories.map((categoryData) => ({
       id: categoryData.category.id,
@@ -126,7 +189,7 @@ export const searchRequestListByQuery = async (
     },
   };
 
-  const reqListData = await getRepository(RequestEntity)
+  const reqListByQuery = await getRepository(RequestEntity)
     .createQueryBuilder('request')
     .select([
       'request.id',
@@ -157,8 +220,8 @@ export const searchRequestListByQuery = async (
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
-  const result = reqListData.map((expData) => {
-    const { reqCategories, ...data } = expData;
+  const result = reqListByQuery.map((reqData) => {
+    const { reqCategories, ...data } = reqData;
 
     const categories = reqCategories.map((categoryData) => ({
       id: categoryData.category.id,
@@ -197,7 +260,7 @@ export const searchExperimentListByQuery = async (
     },
   };
 
-  const expListData = await getRepository(ExperimentEntity)
+  const expListByQuery = await getRepository(ExperimentEntity)
     .createQueryBuilder('experiment')
     .select([
       'experiment.id',
@@ -227,7 +290,7 @@ export const searchExperimentListByQuery = async (
     .orderBy(sortType[sort].second, 'DESC')
     .getMany();
 
-  const result = expListData.map((expData) => {
+  const result = expListByQuery.map((expData) => {
     const { expCategories, ...data } = expData;
 
     const categories = expCategories.map((categoryData) => ({
