@@ -176,6 +176,7 @@ export const getUserRequestList = async (
       `request.updatedAt`,
       `request.title`,
       `request.thumbnail`,
+      'request.state',
     ])
     .where(`request.user_id = :userId`, { userId })
     .innerJoin(
@@ -228,12 +229,12 @@ export const getUserBookmarkExperimentList = async (
   const bookmarkExperimentList = await getRepository(ExpBookmarkEntity)
     .createQueryBuilder('exp_bookmark')
     .where(`exp_bookmark.user_id = :userId`, { userId })
-    .leftJoinAndSelect(`exp_bookmark.experiment`, 'expBookmarks')
-    .leftJoinAndSelect('expBookmarks.user', 'user')
-    .leftJoinAndSelect(`expBookmarks.expCategories`, `expCategories`)
+    .leftJoinAndSelect(`exp_bookmark.experiment`, 'experiment')
+    .leftJoinAndSelect('experiment.user', 'user')
+    .leftJoinAndSelect(`experiment.expCategories`, `expCategories`)
     .leftJoinAndSelect(`expCategories.category`, `category`)
-    .loadRelationCountAndMap(`expBookmarks.likeCount`, `expBookmarks.expLikes`)
-    .orderBy('expBookmarks.createdAt', 'DESC')
+    .loadRelationCountAndMap(`experiment.likeCount`, `experiment.expLikes`)
+    .orderBy('experiment.createdAt', 'DESC')
     .offset((page - 1) * display)
     .limit(display)
     .getMany();
@@ -267,12 +268,12 @@ export const getUserBookmarkRequestList = async (
   const bookmarkRequestList = await getRepository(ReqBookmarkEntity)
     .createQueryBuilder('req_bookmark')
     .where(`req_bookmark.user_id = :userId`, { userId })
-    .leftJoinAndSelect(`req_bookmark.request`, 'reqBookmarks')
-    .leftJoinAndSelect('reqBookmarks.user', 'user')
-    .leftJoinAndSelect(`reqBookmarks.reqCategories`, `reqCategories`)
+    .leftJoinAndSelect(`req_bookmark.request`, 'request')
+    .leftJoinAndSelect('request.user', 'user')
+    .leftJoinAndSelect(`request.reqCategories`, `reqCategories`)
     .leftJoinAndSelect(`reqCategories.category`, `category`)
-    .loadRelationCountAndMap(`reqBookmarks.likeCount`, `reqBookmarks.reqLikes`)
-    .orderBy('reqBookmarks.createdAt', 'DESC')
+    .loadRelationCountAndMap(`request.likeCount`, `request.reqLikes`)
+    .orderBy('request.createdAt', 'DESC')
     .offset((page - 1) * display)
     .limit(display)
     .getMany();
